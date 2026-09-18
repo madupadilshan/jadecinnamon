@@ -20,40 +20,68 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('home');
 
+  const navLinks = [
+    { id: 'home', label: t.nav.home, href: '#home' },
+    { id: 'about', label: t.nav.about, href: '#about' },
+    { id: 'products', label: t.nav.products, href: '#products' },
+    { id: 'quality', label: t.nav.quality, href: '#quality' },
+    { id: 'logistics', label: t.nav.logistics, href: '#logistics' },
+    { id: 'gallery', label: t.nav.gallery, href: '#gallery' },
+    { id: 'rfq', label: t.nav.quoteBuilder, href: '#rfq' },
+  ];
+
+  // Scroll detection for backdrop blur and dynamic Active Section Scroll-Spy
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      setIsScrolled(window.scrollY > 15);
+
+      const sectionIds = ['rfq', 'gallery', 'logistics', 'quality', 'products', 'about', 'home'];
+      const scrollPosition = window.scrollY + 200;
+
+      for (const id of sectionIds) {
+        const element = document.getElementById(id);
+        if (element) {
+          const top = element.offsetTop;
+          if (scrollPosition >= top) {
+            setActiveSection(id);
+            break;
+          }
+        }
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial check
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const activeLangMeta = LANGUAGES.find((l) => l.code === currentLang) || LANGUAGES[0];
 
-  const navLinks = [
-    { label: t.nav.home, href: '#home' },
-    { label: t.nav.about, href: '#about' },
-    { label: t.nav.products, href: '#products' },
-    { label: t.nav.quality, href: '#quality' },
-    { label: t.nav.logistics, href: '#logistics' },
-    { label: t.nav.gallery, href: '#gallery' },
-    { label: t.nav.quoteBuilder, href: '#rfq' },
-  ];
+  const handleNavClick = (id: string, href: string) => {
+    setActiveSection(id);
+    setMobileMenuOpen(false);
+    const targetElement = document.querySelector(href);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 h-20 transition-colors duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 h-20 transition-all duration-300 ${
         isScrolled
           ? 'bg-[#03140e]/95 backdrop-blur-xl border-b border-ceylon-500/25 shadow-2xl shadow-black/80'
           : 'bg-[#03140e]/80 backdrop-blur-md border-b border-white/10'
       }`}
     >
-      <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Brand Logo - Official Generated Badge */}
+      <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+        {/* Brand Logo & Authority Emblem */}
         <a
           href="#home"
-          className="flex items-center gap-3.5 group focus:outline-none shrink-0"
+          onClick={() => handleNavClick('home', '#home')}
+          className="flex items-center gap-3.5 group focus:outline-none shrink-0 cursor-pointer"
           aria-label="Jade Cinnamon Lanka Home"
         >
           <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-ceylon-400/60 shadow-lg shadow-black/70 group-hover:border-ceylon-300 group-hover:scale-105 transition-all duration-300 bg-black/60 shrink-0">
@@ -78,34 +106,46 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </a>
 
-        {/* Desktop Navigation Links - Fixed Height & Centered */}
-        <nav className="hidden xl:flex items-center gap-1">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="px-3 py-2 rounded-lg text-sm font-medium text-gray-200 hover:text-white hover:bg-white/10 transition-all duration-150 whitespace-nowrap focus:outline-none"
-            >
-              {link.label}
-            </a>
-          ))}
+        {/* Fully Justified Desktop Navigation with Floating Active Highlight */}
+        <nav
+          className="hidden lg:flex items-center justify-between flex-1 max-w-2xl mx-4 xl:mx-8 relative"
+          aria-label="Primary Navigation"
+        >
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.id;
+            return (
+              <motion.a
+                key={link.id}
+                href={link.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(link.id, link.href);
+                }}
+                whileHover={{ y: -2, scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                className={`relative px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors duration-200 whitespace-nowrap focus:outline-none cursor-pointer ${
+                  isActive
+                    ? 'text-[#D48B38] font-bold'
+                    : 'text-gray-300 hover:text-[#D48B38]'
+                }`}
+              >
+                {/* Active Soft Glow Floating Pill */}
+                {isActive && (
+                  <motion.div
+                    layoutId="navbarActivePill"
+                    className="absolute inset-0 bg-ceylon-500/15 border-b-2 border-ceylon-400 rounded-lg shadow-[0_0_12px_rgba(212,139,56,0.35)]"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">{link.label}</span>
+              </motion.a>
+            );
+          })}
         </nav>
 
-        {/* For medium screens (lg: but not xl), compact nav */}
-        <nav className="hidden lg:flex xl:hidden items-center gap-0.5">
-          {navLinks.slice(0, 5).map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-200 hover:text-white hover:bg-white/10 transition-all duration-150 whitespace-nowrap"
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
-
-        {/* Right Action Cluster: Language Switcher & WhatsApp CTA - Fixed Alignment */}
-        <div className="flex items-center gap-3 shrink-0">
+        {/* Right Action Cluster: Language Switcher & Pulsating WhatsApp CTA */}
+        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
           {/* Language Switcher Dropdown */}
           <div className="relative">
             <button
@@ -170,16 +210,24 @@ export const Navbar: React.FC<NavbarProps> = ({
             </AnimatePresence>
           </div>
 
-          {/* Desktop WhatsApp CTA Button */}
-          <a
+          {/* Desktop WhatsApp CTA Button with Micro-Pulse Animation */}
+          <motion.a
             href="#rfq"
-            className="h-10 hidden sm:inline-flex items-center gap-2 px-4 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-xs sm:text-sm shadow-lg shadow-[#25D366]/30 hover:shadow-[#25D366]/50 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer whitespace-nowrap"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick('rfq', '#rfq');
+            }}
+            animate={{ scale: [1, 1.025, 1] }}
+            transition={{ repeat: Infinity, duration: 2.8, ease: 'easeInOut' }}
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.97 }}
+            className="h-10 hidden sm:inline-flex items-center gap-2 px-4 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-xs sm:text-sm shadow-lg shadow-[#25D366]/30 hover:shadow-[#25D366]/60 transition-all duration-200 cursor-pointer whitespace-nowrap"
           >
             <WhatsAppIcon className="w-4 h-4 text-white" />
             <span>{t.nav.quickRfq}</span>
-          </a>
+          </motion.a>
 
-          {/* Mobile Hamburger Button */}
+          {/* Mobile Hamburger Menu Toggle Button */}
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -201,20 +249,33 @@ export const Navbar: React.FC<NavbarProps> = ({
             transition={{ duration: 0.25 }}
             className="lg:hidden absolute top-20 left-0 right-0 bg-[#03140e]/98 border-b border-ceylon-500/25 px-4 pt-3 pb-6 space-y-2 shadow-2xl backdrop-blur-2xl"
           >
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-4 py-2.5 rounded-xl text-base font-medium text-gray-200 hover:text-white hover:bg-jade-900/80 transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id;
+              return (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(link.id, link.href);
+                  }}
+                  className={`block px-4 py-2.5 rounded-xl text-base font-medium transition-colors ${
+                    isActive
+                      ? 'bg-ceylon-500/20 text-[#D48B38] font-bold border-l-4 border-ceylon-400'
+                      : 'text-gray-200 hover:text-white hover:bg-jade-900/80'
+                  }`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
             <div className="pt-3 border-t border-white/10 flex flex-col gap-2">
               <a
                 href="#rfq"
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick('rfq', '#rfq');
+                }}
                 className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-sm shadow-lg shadow-[#25D366]/30"
               >
                 <WhatsAppIcon className="w-4 h-4 text-white" />
