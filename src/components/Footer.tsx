@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShieldCheck, Phone, Mail, MapPin, ArrowUp } from 'lucide-react';
 import { TranslationSchema } from '../data/translations';
+import { getAssetUrl } from '../utils/assets';
 
 interface FooterProps {
   t: TranslationSchema;
@@ -27,7 +28,7 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full overflow-hidden border border-ceylon-400/60 shadow-md bg-white dark:bg-black/60 shrink-0">
                 <img
-                  src="/images/logo.jpg"
+                  src={getAssetUrl('images/logo.jpg')}
                   alt="Jade Cinnamon Lanka Logo"
                   className="w-full h-full object-cover"
                 />

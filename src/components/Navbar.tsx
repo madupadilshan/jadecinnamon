@@ -5,6 +5,7 @@ import { WhatsAppIcon } from './WhatsAppIcon';
 import { LanguageCode, LANGUAGES, TranslationSchema } from '../data/translations';
 import { useCart } from '../context/CartContext';
 import { ThemeToggle } from './layout/ThemeToggle';
+import { getAssetUrl } from '../utils/assets';
 
 interface NavbarProps {
   currentLang: LanguageCode;
@@ -149,7 +150,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Official Generated Badge - Fixed & Crisp */}
           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-ceylon-400/70 shadow-md dark:shadow-black/80 group-hover:border-amber-400 transition-colors duration-200 bg-white dark:bg-black/80 shrink-0">
             <img
-              src="/images/logo.jpg"
+              src={getAssetUrl('images/logo.jpg')}
               alt="Jade Cinnamon Lanka Logo"
               className="w-full h-full object-cover"
             />

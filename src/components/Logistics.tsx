@@ -16,6 +16,7 @@ import {
   Globe2,
 } from 'lucide-react';
 import { LanguageCode, TranslationSchema } from '../data/translations';
+import { getAssetUrl } from '../utils/assets';
 
 // 7-Language Multilingual Dictionary with Safe Fallbacks
 export const whyChooseUsText = {
@@ -423,7 +424,7 @@ export const Logistics: React.FC<LogisticsProps> = ({ t, currentLang = 'en', isR
       <motion.div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none scale-110 opacity-30 dark:opacity-40 gpu-layer"
         style={{
-          backgroundImage: "url('/images/bg-logistics-port.jpg')",
+          backgroundImage: `url('${getAssetUrl('images/bg-logistics-port.jpg')}')`,
           y: bgY,
         }}
       />

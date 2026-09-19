@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Sparkles, Eye, X } from 'lucide-react';
 import { TranslationSchema } from '../data/translations';
+import { getAssetUrl } from '../utils/assets';
 
 interface GalleryItem {
   id: number;
@@ -31,42 +32,42 @@ export const Gallery: React.FC<GalleryProps> = ({ t }) => {
       id: 1,
       title: t.gallery.item1Title,
       desc: t.gallery.item1Desc,
-      imgUrl: '/images/gallery-plantation.jpg',
+      imgUrl: getAssetUrl('images/gallery-plantation.jpg'),
       tag: 'Ceylon Highlands Plantation',
     },
     {
       id: 2,
       title: t.gallery.item2Title,
       desc: t.gallery.item2Desc,
-      imgUrl: '/images/gallery-peeling.jpg',
+      imgUrl: getAssetUrl('images/gallery-peeling.jpg'),
       tag: 'Artisan Peeling & Layering',
     },
     {
       id: 3,
       title: t.gallery.item3Title,
       desc: t.gallery.item3Desc,
-      imgUrl: '/images/gallery-drying.jpg',
+      imgUrl: getAssetUrl('images/gallery-drying.jpg'),
       tag: 'Controlled Solar Drying',
     },
     {
       id: 4,
       title: t.gallery.item4Title,
       desc: t.gallery.item4Desc,
-      imgUrl: '/images/gallery-grading.jpg',
+      imgUrl: getAssetUrl('images/gallery-grading.jpg'),
       tag: 'Export Grade Calibration',
     },
     {
       id: 5,
       title: t.gallery.item5Title,
       desc: t.gallery.item5Desc,
-      imgUrl: '/images/gallery-distillation.jpg',
+      imgUrl: getAssetUrl('images/gallery-distillation.jpg'),
       tag: 'Steam Distillation Facility',
     },
     {
       id: 6,
       title: t.gallery.item6Title,
       desc: t.gallery.item6Desc,
-      imgUrl: '/images/gallery-shipping.jpg',
+      imgUrl: getAssetUrl('images/gallery-shipping.jpg'),
       tag: 'Container Freight Loading',
     },
   ];
@@ -102,7 +103,7 @@ export const Gallery: React.FC<GalleryProps> = ({ t }) => {
       <motion.div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none scale-110 opacity-25 dark:opacity-40 gpu-layer"
         style={{
-          backgroundImage: "url('/images/bg-about-plantation.jpg')",
+          backgroundImage: `url('${getAssetUrl('images/bg-about-plantation.jpg')}')`,
           y: bgY,
         }}
       />

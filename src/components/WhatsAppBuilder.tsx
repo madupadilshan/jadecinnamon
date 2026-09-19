@@ -24,6 +24,7 @@ import {
   buildMultiItemWhatsAppMessage,
   openWhatsAppQuotation,
 } from './cart/WhatsAppB2BBuilder';
+import { getAssetUrl } from '../utils/assets';
 
 interface WhatsAppBuilderProps {
   t: TranslationSchema;
@@ -150,7 +151,7 @@ export const WhatsAppBuilder: React.FC<WhatsAppBuilderProps> = ({
       <motion.div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none scale-110 opacity-30 dark:opacity-40 gpu-layer"
         style={{
-          backgroundImage: "url('/images/bg-about-plantation.jpg')",
+          backgroundImage: `url('${getAssetUrl('images/bg-about-plantation.jpg')}')`,
           y: bgY,
         }}
       />

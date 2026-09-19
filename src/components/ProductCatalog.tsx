@@ -5,6 +5,7 @@ import { WhatsAppIcon } from './WhatsAppIcon';
 import { Product } from '../data/products';
 import { TranslationSchema } from '../data/translations';
 import { ProductRowListView } from './narratives/ProductRowListView';
+import { getAssetUrl } from '../utils/assets';
 
 interface ProductCatalogProps {
   t: TranslationSchema;
@@ -49,7 +50,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
       <motion.div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none scale-110 opacity-30 dark:opacity-40 gpu-layer"
         style={{
-          backgroundImage: "url('/images/bg-products.jpg')",
+          backgroundImage: `url('${getAssetUrl('images/bg-products.jpg')}')`,
           y: bgY,
         }}
       />

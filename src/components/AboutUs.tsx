@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Sparkles, History, Microscope, Globe2 } from 'lucide-react';
 import { TranslationSchema } from '../data/translations';
+import { getAssetUrl } from '../utils/assets';
 
 interface AboutUsProps {
   t: TranslationSchema;
@@ -66,7 +67,7 @@ export const AboutUs: React.FC<AboutUsProps> = ({ t }) => {
       <motion.div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none scale-110 opacity-30 dark:opacity-40 gpu-layer"
         style={{
-          backgroundImage: "url('/images/bg-about-plantation.jpg')",
+          backgroundImage: `url('${getAssetUrl('images/bg-about-plantation.jpg')}')`,
           y: bgY,
         }}
       />

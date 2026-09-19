@@ -1,3 +1,5 @@
+import { getAssetUrl } from '../utils/assets';
+
 export interface ProductSpec {
   diameter?: string;
   moisture: string;
@@ -26,7 +28,7 @@ export interface Product {
   featured?: boolean;
 }
 
-export const PRODUCTS: Product[] = [
+const RAW_PRODUCTS: Product[] = [
   // CATEGORY 1: PURE CEYLON CINNAMON QUILLS (SLS CERTIFIED)
   {
     id: 'alba',
@@ -377,6 +379,11 @@ export const PRODUCTS: Product[] = [
     packaging: '25kg / 50kg poly-lined jute bags'
   }
 ];
+
+export const PRODUCTS: Product[] = RAW_PRODUCTS.map((product) => ({
+  ...product,
+  imageUrl: getAssetUrl(product.imageUrl),
+}));
 
 export const CATEGORIES = [
   { id: 'all', labelKey: 'catAll' },

@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { TranslationSchema } from '../data/translations';
+import { getAssetUrl } from '../utils/assets';
 
 interface HeroProps {
   t: TranslationSchema;
@@ -11,22 +12,22 @@ interface HeroProps {
 // 4 Curated Traditional Ceylon Cinnamon & Spice Marketing Visuals
 const HERO_SLIDES = [
   {
-    url: '/images/hero-bg-1.jpg',
+    url: getAssetUrl('images/hero-bg-1.jpg'),
     label: 'Traditional Harvest & Quills',
     desc: 'Pure Ceylon Cinnamon Quills from Southern Sri Lanka Heritage Estates',
   },
   {
-    url: '/images/hero-bg-2.jpg',
+    url: getAssetUrl('images/hero-bg-2.jpg'),
     label: 'Artisanal Hand Peeling',
     desc: 'Centuries-Old Traditional Sri Lankan Craftsmanship & Curing',
   },
   {
-    url: '/images/hero-bg-3.jpg',
+    url: getAssetUrl('images/hero-bg-3.jpg'),
     label: 'Sun-Drying & Golden Quills',
     desc: 'Premium Alba, C5-SP & Traditional Natural Sun-Drying Process',
   },
   {
-    url: '/images/hero-bg-4.jpg',
+    url: getAssetUrl('images/hero-bg-4.jpg'),
     label: 'Global Export Packing',
     desc: 'SLS 81 & ISO 6539 Certified Ceylon Bales for Worldwide Shipment',
   },
