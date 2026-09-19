@@ -97,7 +97,7 @@ export const Gallery: React.FC<GalleryProps> = ({ t }) => {
     <section
       ref={sectionRef}
       id="gallery"
-      className="py-24 sm:py-32 relative bg-[#FBF8F2] dark:bg-[#062319] overflow-hidden border-t border-[#E5D8C5] dark:border-ceylon-500/20 scroll-mt-20 transition-colors duration-300"
+      className="py-24 sm:py-32 relative bg-[#FBF8F2] dark:bg-[#062319] overflow-hidden border-t border-[#C87A28]/20 dark:border-[#C87A28]/30 scroll-mt-20 transition-colors duration-300"
     >
       {/* Clean Parallax Atmosphere Background */}
       <motion.div
@@ -126,14 +126,14 @@ export const Gallery: React.FC<GalleryProps> = ({ t }) => {
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           className="text-center max-w-3xl mx-auto mb-14 sm:mb-16 gpu-accelerate"
         >
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-black/70 backdrop-blur-md border border-[#E5D8C5] dark:border-ceylon-500/40 text-[#B86B1E] dark:text-ceylon-300 text-xs font-bold tracking-wider uppercase mb-3 shadow-md">
-            <Sparkles className="w-3 h-3 text-[#B86B1E] dark:text-ceylon-400" />
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-black/70 backdrop-blur-md border border-[#C87A28]/20 dark:border-[#C87A28]/30 text-[#9E5714] dark:text-[#E59A4D] text-xs font-bold tracking-wider uppercase mb-3 shadow-md">
+            <Sparkles className="w-3 h-3 text-[#9E5714] dark:text-[#E59A4D]" />
             <span>{t.gallery.badge}</span>
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#11281E] dark:text-white mb-4 tracking-tight drop-shadow-sm">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#11281E] dark:text-[#F9F6F0] mb-4 tracking-tight drop-shadow-sm">
             {t.gallery.title}
           </h2>
-          <p className="text-[#536B5C] dark:text-gray-200 text-sm sm:text-base leading-relaxed">
+          <p className="text-[#3B4D43] dark:text-[#D1DDD5] text-sm sm:text-base leading-relaxed">
             {t.gallery.subtitle}
           </p>
         </motion.div>
@@ -153,7 +153,7 @@ export const Gallery: React.FC<GalleryProps> = ({ t }) => {
               whileHover={{ y: -6, scale: 1.01 }}
               transition={{ duration: 0.15 }}
               onClick={() => setActiveImage(item)}
-              className="glass-card rounded-2xl overflow-hidden border border-[#E5D8C5] dark:border-ceylon-500/30 hover:border-[#C87A28]/70 dark:hover:border-ceylon-400/70 shadow-md dark:shadow-2xl group cursor-pointer relative bg-white/95 dark:bg-[#0A2F22]/85 backdrop-blur-md gpu-accelerate"
+              className="glass-card rounded-2xl overflow-hidden border border-[#C87A28]/20 dark:border-ceylon-500/30 hover:border-[#C87A28]/70 dark:hover:border-ceylon-400/70 shadow-md dark:shadow-2xl group cursor-pointer relative bg-white/95 dark:bg-[#0A2F22]/85 backdrop-blur-md gpu-accelerate"
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden bg-black/50">
                 <img
@@ -210,7 +210,7 @@ export const Gallery: React.FC<GalleryProps> = ({ t }) => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 16 }}
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="relative max-w-4xl w-full bg-white dark:bg-[#0A2F22] rounded-2xl border border-[#E5D8C5] dark:border-ceylon-500/40 overflow-hidden shadow-2xl z-10 gpu-accelerate"
+              className="relative max-w-4xl w-full bg-white dark:bg-[#0A2F22] rounded-2xl border border-[#C87A28]/20 dark:border-ceylon-500/40 overflow-hidden shadow-2xl z-10 gpu-accelerate"
             >
               <button
                 type="button"
@@ -229,14 +229,14 @@ export const Gallery: React.FC<GalleryProps> = ({ t }) => {
                 />
               </div>
 
-              <div className="p-6 bg-[#FBF8F2] dark:bg-jade-950/95 border-t border-[#E5D8C5] dark:border-white/10">
-                <span className="text-xs font-bold text-[#B86B1E] dark:text-ceylon-400 uppercase tracking-wider mb-1 block">
+              <div className="p-6 bg-[#FBF8F2] dark:bg-jade-950/95 border-t border-[#C87A28]/20 dark:border-white/10">
+                <span className="text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] uppercase tracking-wider mb-1 block">
                   {activeImage.tag}
                 </span>
-                <h3 className="font-serif text-2xl font-bold text-[#11281E] dark:text-white mb-2">
+                <h3 className="font-serif text-2xl font-bold text-[#11281E] dark:text-[#F9F6F0] mb-2">
                   {activeImage.title}
                 </h3>
-                <p className="text-sm text-[#536B5C] dark:text-gray-200 leading-relaxed">
+                <p className="text-sm text-[#3B4D43] dark:text-[#D1DDD5] leading-relaxed">
                   {activeImage.desc}
                 </p>
               </div>

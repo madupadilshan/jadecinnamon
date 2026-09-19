@@ -29,8 +29,8 @@ export const ProductListNavigator: React.FC<ProductListNavigatorProps> = ({
 
   return (
     <div className="flex flex-col items-center justify-center gap-3 mt-8 select-none">
-      {/* Pagination Number Buttons */}
-      <div className="flex items-center gap-1.5 sm:gap-2 p-1.5 rounded-2xl bg-white dark:bg-[#062319] border border-[#E5D8C5] dark:border-[#C87A28]/30 shadow-md dark:shadow-xl dark:shadow-black/80">
+      {/* Pagination Number Buttons with Generous Spacing */}
+      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-white dark:bg-[#062319] border border-[#E2D8C8] dark:border-[#C87A28]/30 shadow-md dark:shadow-xl dark:shadow-black/80">
         {/* Previous Button */}
         <button
           type="button"
@@ -38,7 +38,7 @@ export const ProductListNavigator: React.FC<ProductListNavigatorProps> = ({
           disabled={isRtl ? !canNext : !canPrev}
           className={`min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl transition-all cursor-pointer ${
             (isRtl ? canNext : canPrev)
-              ? 'bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/15 text-[#11281E] dark:text-white hover:text-[#B86B1E] dark:hover:text-amber-200 border border-[#E5D8C5] dark:border-white/10 active:scale-95'
+              ? 'bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/15 text-[#11281E] dark:text-[#F9F6F0] hover:text-[#9E5714] dark:hover:text-amber-200 border border-[#E2D8C8] dark:border-white/10 active:scale-95'
               : 'opacity-30 cursor-not-allowed text-gray-400 dark:text-gray-500 border border-transparent'
           }`}
           aria-label="Previous page"
@@ -47,7 +47,7 @@ export const ProductListNavigator: React.FC<ProductListNavigatorProps> = ({
         </button>
 
         {/* Dynamic Numbered Buttons [1], [2], ... [N] */}
-        <div className="flex items-center gap-1 sm:gap-1.5 px-1">
+        <div className="flex items-center gap-2 px-1">
           {pages.map((pageIndex) => {
             const isActive = pageIndex === currentPage;
 
@@ -56,10 +56,10 @@ export const ProductListNavigator: React.FC<ProductListNavigatorProps> = ({
                 key={pageIndex}
                 type="button"
                 onClick={() => onPageChange(pageIndex)}
-                className={`relative min-w-[44px] min-h-[44px] px-3 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer flex items-center justify-center ${
+                className={`relative min-w-[44px] min-h-[44px] px-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer flex items-center justify-center ${
                   isActive
                     ? 'bg-[#C87A28] text-white border border-white/40 shadow-lg shadow-[#C87A28]/40 scale-105 z-10 font-mono'
-                    : 'bg-[#F4EFE6] dark:bg-black/50 text-[#536B5C] dark:text-gray-300 hover:text-[#11281E] dark:hover:text-white hover:bg-[#ebd7ad] dark:hover:bg-white/10 border border-[#E5D8C5] dark:border-white/5 font-mono'
+                    : 'bg-[#F4EFE6] dark:bg-black/50 text-[#5A6D62] dark:text-[#A3B899] hover:text-[#11281E] dark:hover:text-white hover:bg-[#ebd7ad] dark:hover:bg-white/10 border border-[#E2D8C8] dark:border-white/5 font-mono'
                 }`}
                 aria-label={`Go to page ${pageIndex + 1}`}
                 aria-current={isActive ? 'page' : undefined}
@@ -84,7 +84,7 @@ export const ProductListNavigator: React.FC<ProductListNavigatorProps> = ({
           disabled={isRtl ? !canPrev : !canNext}
           className={`min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl transition-all cursor-pointer ${
             (isRtl ? canPrev : canNext)
-              ? 'bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/15 text-[#11281E] dark:text-white hover:text-[#B86B1E] dark:hover:text-amber-200 border border-[#E5D8C5] dark:border-white/10 active:scale-95'
+              ? 'bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/15 text-[#11281E] dark:text-[#F9F6F0] hover:text-[#9E5714] dark:hover:text-amber-200 border border-[#E2D8C8] dark:border-white/10 active:scale-95'
               : 'opacity-30 cursor-not-allowed text-gray-400 dark:text-gray-500 border border-transparent'
           }`}
           aria-label="Next page"
@@ -94,9 +94,9 @@ export const ProductListNavigator: React.FC<ProductListNavigatorProps> = ({
       </div>
 
       {/* Page count indicator text */}
-      <div className="text-[11px] font-mono text-[#536B5C] dark:text-gray-400">
-        Page <span className="text-[#B86B1E] dark:text-amber-300 font-bold">{currentPage + 1}</span> of{' '}
-        <span className="text-[#11281E] dark:text-gray-200 font-semibold">{totalPages}</span>
+      <div className="text-[11px] font-mono text-[#5A6D62] dark:text-[#A3B899]">
+        Page <span className="text-[#9E5714] dark:text-[#E5A855] font-bold">{currentPage + 1}</span> of{' '}
+        <span className="text-[#11281E] dark:text-[#F9F6F0] font-semibold">{totalPages}</span>
       </div>
     </div>
   );

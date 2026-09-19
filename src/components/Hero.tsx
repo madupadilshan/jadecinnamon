@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { TranslationSchema } from '../data/translations';
+import { HeroMetrics } from './sections/HeroMetrics';
 import { getAssetUrl } from '../utils/assets';
 
 interface HeroProps {
@@ -72,13 +73,6 @@ export const Hero: React.FC<HeroProps> = ({ t }) => {
     visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
   };
 
-  const statItems = [
-    { value: t.hero.statCoumarin, label: t.hero.statCoumarinLabel, highlight: 'Safe Daily Intake' },
-    { value: t.hero.statMoisture, label: t.hero.statMoistureLabel, highlight: 'Dry Stable Quality' },
-    { value: t.hero.statOrigin, label: t.hero.statOriginLabel, highlight: 'No Cassia Blends' },
-    { value: t.hero.statFob, label: t.hero.statFobLabel, highlight: 'Port of Colombo' },
-  ];
-
   return (
     <section
       ref={heroRef}
@@ -131,7 +125,7 @@ export const Hero: React.FC<HeroProps> = ({ t }) => {
             </span>
           </motion.div>
 
-          {/* Prominent Kinetic Headline (matching reference aesthetic) */}
+          {/* Prominent Kinetic Headline */}
           <motion.h1
             variants={itemVariants}
             className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.12] mb-6 drop-shadow-2xl"
@@ -173,30 +167,9 @@ export const Hero: React.FC<HeroProps> = ({ t }) => {
             </a>
           </motion.div>
 
-          {/* Bento Trust Chips / Stat Matrix */}
-          <motion.div
-            variants={itemVariants}
-            className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 w-full"
-          >
-            {statItems.map((stat, idx) => (
-              <motion.div
-                key={idx}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.15 }}
-                className="glass-card p-4 sm:p-5 rounded-2xl text-center flex flex-col justify-center items-center relative group border border-ceylon-500/40 bg-black/60 backdrop-blur-md shadow-xl gpu-accelerate"
-              >
-                <div className="text-2xl sm:text-3xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-ceylon-400 mb-1">
-                  {stat.value}
-                </div>
-                <div className="text-xs sm:text-sm font-semibold text-white mb-1">
-                  {stat.label}
-                </div>
-                <div className="text-[10px] text-jade-300 font-semibold flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3 text-jade-400" />
-                  <span>{stat.highlight}</span>
-                </div>
-              </motion.div>
-            ))}
+          {/* Bento Trust Chips / Stat Matrix with Explicit High-Contrast Tokens */}
+          <motion.div variants={itemVariants} className="w-full">
+            <HeroMetrics t={t} />
           </motion.div>
 
           {/* 3s Auto-Carousel Controls & Heritage Scene Tag */}
@@ -244,3 +217,5 @@ export const Hero: React.FC<HeroProps> = ({ t }) => {
     </section>
   );
 };
+
+export default Hero;

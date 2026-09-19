@@ -14,7 +14,7 @@ export const WhyChooseUs: React.FC<WhyChooseUsProps> = ({ currentLang = 'en', is
   return (
     <section
       id="why-choose-us"
-      className="py-24 sm:py-28 relative overflow-hidden bg-[#FBF8F2] dark:bg-[#062319] border-t border-[#E5D8C5] dark:border-ceylon-500/20 scroll-mt-20 transition-colors duration-300"
+      className="py-24 sm:py-28 relative overflow-hidden bg-[#FBF8F2] dark:bg-[#062319] border-t border-[#C87A28]/20 dark:border-[#C87A28]/30 scroll-mt-20 transition-colors duration-300"
     >
       {/* Ambient Focal Lighting Glows */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">

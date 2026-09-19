@@ -134,12 +134,12 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header
       className={`fixed top-0 left-0 right-0 z-50 h-20 transition-all duration-300 ${
         isScrolled
-          ? 'bg-[#FBF8F2]/95 dark:bg-[#020d09]/95 backdrop-blur-2xl border-b border-[#E5D8C5] dark:border-ceylon-500/35 shadow-md dark:shadow-2xl dark:shadow-black/90'
-          : 'bg-[#FBF8F2]/90 dark:bg-[#03140e]/90 backdrop-blur-xl border-b border-[#E5D8C5] dark:border-white/15 shadow-sm dark:shadow-xl dark:shadow-black/50'
+          ? 'bg-[#FBF8F2]/95 dark:bg-[#020d09]/95 backdrop-blur-2xl border-b border-[#C87A28]/20 dark:border-[#C87A28]/35 shadow-md dark:shadow-2xl dark:shadow-black/90'
+          : 'bg-[#FBF8F2]/90 dark:bg-[#03140e]/90 backdrop-blur-xl border-b border-[#C87A28]/20 dark:border-white/15 shadow-sm dark:shadow-xl dark:shadow-black/50'
       }`}
     >
       {/* Top subtle amber hairline accent */}
-      <div className="h-[1.5px] w-full bg-gradient-to-r from-transparent via-ceylon-400/80 to-transparent" />
+      <div className="h-[1.5px] w-full bg-gradient-to-r from-transparent via-[#C87A28]/80 to-transparent" />
 
       <div className="w-full h-full px-3 sm:px-5 lg:px-7 flex items-center justify-between gap-3">
         {/* 1. Left Branding: Logo + 3-Line Corporate Hierarchy */}
@@ -150,7 +150,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           aria-label="Jade Cinnamon Lanka Home"
         >
           {/* Circular Badge */}
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-ceylon-400/70 shadow-md dark:shadow-black/80 group-hover:border-amber-400 transition-colors duration-200 bg-white dark:bg-black/80 shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-[#C87A28]/70 shadow-md dark:shadow-black/80 group-hover:border-amber-400 transition-colors duration-200 bg-white dark:bg-black/80 shrink-0">
             <img
               src={getAssetUrl('images/logo.jpg')}
               alt="Jade Cinnamon Lanka Logo"
@@ -160,13 +160,13 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* 3-Line Brand Typography */}
           <div className="flex flex-col text-left justify-center">
-            <span className="font-serif font-bold text-base sm:text-xl tracking-tight text-[#11281E] dark:text-white group-hover:text-[#B86B1E] dark:group-hover:text-amber-200 transition-colors duration-200 leading-none">
+            <span className="font-serif font-bold text-base sm:text-xl tracking-tight text-[#11281E] dark:text-[#F9F6F0] group-hover:text-[#9E5714] dark:group-hover:text-[#E59A4D] transition-colors duration-200 leading-none">
               JADE CINNAMON
             </span>
-            <span className="font-serif font-semibold text-[11px] sm:text-sm tracking-wide text-[#B86B1E] dark:text-amber-200/90 mt-0.5 leading-tight">
+            <span className="font-serif font-semibold text-[11px] sm:text-sm tracking-wide text-[#9E5714] dark:text-[#E59A4D] mt-0.5 leading-tight">
               Lanka
             </span>
-            <span className="font-sans font-medium text-[9px] sm:text-[11px] uppercase tracking-wider text-[#169a61] dark:text-jade-300/90 whitespace-nowrap leading-tight mt-0.5">
+            <span className="font-sans font-medium text-[9px] sm:text-[11px] uppercase tracking-wider text-[#169a61] dark:text-emerald-400 whitespace-nowrap leading-tight mt-0.5">
               Direct Ceylon Origin • ISO 6539
             </span>
           </div>
@@ -174,7 +174,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* 2. Desktop Navigation: All 7 Links in Exact Order (lg: and up ONLY) */}
         <nav
-          className="hidden lg:flex items-center gap-0.5 xl:gap-1 p-1 rounded-2xl bg-white/80 dark:bg-black/40 border border-[#E5D8C5] dark:border-white/10 backdrop-blur-md relative shrink-0"
+          className="hidden lg:flex items-center gap-0.5 xl:gap-1 p-1 rounded-2xl bg-white/80 dark:bg-black/40 border border-[#C87A28]/20 dark:border-white/10 backdrop-blur-md relative shrink-0"
           onMouseLeave={() => setHoveredSection(null)}
           aria-label="Main Navigation"
         >
@@ -191,14 +191,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 title={link.label}
                 className={`relative w-[86px] xl:w-[104px] 2xl:w-[114px] h-9 flex items-center justify-center px-1.5 rounded-xl text-xs font-semibold transition-colors duration-150 focus:outline-none z-10 select-none shrink-0 ${
                   isHighlighted
-                    ? 'text-[#783C1D] dark:text-amber-100 drop-shadow-sm font-bold'
-                    : 'text-[#536B5C] dark:text-gray-200 hover:text-[#11281E] dark:hover:text-white'
+                    ? 'text-[#9E5714] dark:text-[#E59A4D] drop-shadow-sm font-bold'
+                    : 'text-[#5A6D62] dark:text-[#A3B899] hover:text-[#11281E] dark:hover:text-[#F9F6F0]'
                 }`}
               >
                 <span className="relative z-20 flex items-center justify-center gap-1 w-full truncate text-center">
                   <span className="truncate">{link.label}</span>
                   {isActive && !hoveredSection && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#B86B1E] dark:bg-amber-400 animate-pulse shrink-0" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#9E5714] dark:bg-amber-400 animate-pulse shrink-0" />
                   )}
                 </span>
 
@@ -212,7 +212,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       damping: 35,
                     }}
                   >
-                    <div className="absolute bottom-0 left-2 right-2 h-0.5 bg-gradient-to-r from-transparent via-[#B86B1E] dark:via-amber-300 to-transparent rounded-full" />
+                    <div className="absolute bottom-0 left-2 right-2 h-0.5 bg-gradient-to-r from-transparent via-[#9E5714] dark:via-amber-300 to-transparent rounded-full" />
                   </motion.div>
                 )}
               </a>
@@ -233,11 +233,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               repeat: Infinity,
               ease: 'easeInOut',
             }}
-            className="relative hidden lg:flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-[#062319] hover:bg-[#F4EFE6] dark:hover:bg-[#093527] border border-[#E5D8C5] dark:border-[#C87A28]/35 hover:border-[#C87A28]/70 text-[#B86B1E] dark:text-amber-200 hover:text-[#783C1D] dark:hover:text-white shadow-sm dark:shadow-lg dark:shadow-black/80 transition-all focus:outline-none cursor-pointer shrink-0 gpu-accelerate"
+            className="relative hidden lg:flex h-10 w-10 items-center justify-center rounded-xl bg-white dark:bg-[#062319] hover:bg-[#F4EFE6] dark:hover:bg-[#093527] border border-[#C87A28]/20 dark:border-[#C87A28]/35 hover:border-[#C87A28]/70 text-[#9E5714] dark:text-amber-200 hover:text-[#783C1D] dark:hover:text-white shadow-sm dark:shadow-lg dark:shadow-black/80 transition-all focus:outline-none cursor-pointer shrink-0 gpu-accelerate"
             aria-label={`Open export cart with ${totalUniqueItems} items`}
             title={`Open export cart with ${totalUniqueItems} items`}
           >
-            <ShoppingCart className="w-4.5 h-4.5 text-[#B86B1E] dark:text-amber-300" />
+            <ShoppingCart className="w-4.5 h-4.5 text-[#9E5714] dark:text-amber-300" />
 
             {totalUniqueItems > 0 && (
               <motion.span
@@ -256,7 +256,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               type="button"
               onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-              className="h-10 w-[112px] xl:w-[128px] flex items-center justify-between px-2.5 rounded-xl bg-white dark:bg-[#062319] hover:bg-[#F4EFE6] dark:hover:bg-[#093527] border border-[#E5D8C5] dark:border-[#C87A28]/35 hover:border-[#C87A28]/70 text-xs font-semibold text-[#11281E] dark:text-white transition-all focus:outline-none shadow-sm dark:shadow-lg dark:shadow-black/80 cursor-pointer whitespace-nowrap shrink-0"
+              className="h-10 w-[112px] xl:w-[128px] flex items-center justify-between px-2.5 rounded-xl bg-white dark:bg-[#062319] hover:bg-[#F4EFE6] dark:hover:bg-[#093527] border border-[#C87A28]/20 dark:border-[#C87A28]/35 hover:border-[#C87A28]/70 text-xs font-semibold text-[#11281E] dark:text-[#F9F6F0] transition-all focus:outline-none shadow-sm dark:shadow-lg dark:shadow-black/80 cursor-pointer whitespace-nowrap shrink-0"
               aria-expanded={langDropdownOpen}
               aria-label="Change language"
             >
@@ -288,9 +288,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                     transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
                     className={`absolute ${
                       isRtl ? 'left-0' : 'right-0'
-                    } mt-2 w-56 rounded-2xl bg-white dark:bg-[#062319] border border-[#E5D8C5] dark:border-[#C87A28]/35 shadow-2xl dark:shadow-black/95 p-2 z-50 gpu-accelerate`}
+                    } mt-2 w-56 rounded-2xl bg-white dark:bg-[#062319] border border-[#C87A28]/20 dark:border-[#C87A28]/35 shadow-2xl dark:shadow-black/95 p-2 z-50 gpu-accelerate`}
                   >
-                    <div className="px-3 py-1.5 text-[11px] font-bold text-[#B86B1E] dark:text-amber-200/90 uppercase tracking-wider border-b border-[#C87A28]/20 flex items-center justify-between mb-1">
+                    <div className="px-3 py-1.5 text-[11px] font-bold text-[#9E5714] dark:text-[#E59A4D] uppercase tracking-wider border-b border-[#C87A28]/20 flex items-center justify-between mb-1">
                       <span>Select Language</span>
                       <span className="text-[10px] text-ceylon-600 dark:text-ceylon-400 font-mono">i18n</span>
                     </div>
@@ -309,8 +309,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                             }}
                             className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs text-left transition-all duration-150 cursor-pointer ${
                               isSelected
-                                ? 'bg-[#f6ecd6] dark:bg-[#C87A28]/20 text-[#783C1D] dark:text-amber-200 font-bold border border-[#C87A28]/35 shadow-sm'
-                                : 'text-[#11281E] dark:text-gray-100 hover:bg-[#F4EFE6] dark:hover:bg-[#C87A28]/10 border border-transparent font-medium'
+                                ? 'bg-[#f6ecd6] dark:bg-[#C87A28]/20 text-[#9E5714] dark:text-[#E59A4D] font-bold border border-[#C87A28]/35 shadow-sm'
+                                : 'text-[#11281E] dark:text-[#F9F6F0] hover:bg-[#F4EFE6] dark:hover:bg-[#C87A28]/10 border border-transparent font-medium'
                             }`}
                           >
                             <div className="flex items-center gap-2.5">
@@ -326,7 +326,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                             </div>
                             <span
                               className={`text-[11px] ${
-                                isSelected ? 'text-[#B86B1E] dark:text-amber-300 font-semibold' : 'text-gray-400 font-normal'
+                                isSelected ? 'text-[#9E5714] dark:text-[#E59A4D] font-semibold' : 'text-[#5A6D62] dark:text-[#A3B899] font-normal'
                               }`}
                             >
                               {lang.label}
@@ -350,7 +350,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden h-11 w-11 flex items-center justify-center rounded-xl bg-white dark:bg-[#062319] border border-[#E5D8C5] dark:border-[#C87A28]/35 text-[#11281E] dark:text-gray-100 hover:text-[#783C1D] dark:hover:text-white hover:bg-[#F4EFE6] dark:hover:bg-[#093527] focus:outline-none cursor-pointer shadow-sm dark:shadow-md transition-colors shrink-0"
+            className="lg:hidden h-11 w-11 flex items-center justify-center rounded-xl bg-white dark:bg-[#062319] border border-[#C87A28]/20 dark:border-[#C87A28]/35 text-[#11281E] dark:text-[#F9F6F0] hover:text-[#9E5714] dark:hover:text-white hover:bg-[#F4EFE6] dark:hover:bg-[#093527] focus:outline-none cursor-pointer shadow-sm dark:shadow-md transition-colors shrink-0"
             aria-expanded={mobileMenuOpen}
             aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
           >
@@ -364,7 +364,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   transition={{ duration: 0.15 }}
                   className="flex items-center justify-center"
                 >
-                  <X className="w-6 h-6 text-[#B86B1E] dark:text-amber-300" />
+                  <X className="w-6 h-6 text-[#9E5714] dark:text-amber-300" />
                 </motion.div>
               ) : (
                 <motion.div
@@ -375,7 +375,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   transition={{ duration: 0.15 }}
                   className="flex items-center justify-center"
                 >
-                  <Menu className="w-6 h-6 text-[#11281E] dark:text-white" />
+                  <Menu className="w-6 h-6 text-[#11281E] dark:text-[#F9F6F0]" />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -404,7 +404,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               exit={{ opacity: 0, y: -16 }}
               transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               data-lenis-prevent
-              className="lg:hidden absolute top-20 left-0 right-0 max-h-[calc(100vh-5rem)] overflow-y-auto bg-[#FBF8F2] dark:bg-[#062319] border-b border-[#E5D8C5] dark:border-[#C87A28]/35 px-4 pt-3.5 pb-6 space-y-4 shadow-2xl z-50 gpu-accelerate"
+              className="lg:hidden absolute top-20 left-0 right-0 max-h-[calc(100vh-5rem)] overflow-y-auto bg-[#FBF8F2] dark:bg-[#062319] border-b border-[#C87A28]/20 dark:border-[#C87A28]/35 px-4 pt-3.5 pb-6 space-y-4 shadow-2xl z-50 gpu-accelerate"
             >
               {/* 1. Quick Utilities (Side-by-Side Cart & Theme Switcher - Single Close Button at Top Navbar) */}
               <div className="grid grid-cols-2 gap-2">
@@ -415,11 +415,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setMobileMenuOpen(false);
                     openCart();
                   }}
-                  className="min-h-[44px] px-3.5 py-2 rounded-xl bg-white dark:bg-[#041912] border border-[#E5D8C5] dark:border-[#C87A28]/35 hover:border-[#C87A28]/60 flex items-center justify-between shadow-sm active:scale-[0.98] transition-all cursor-pointer text-left"
+                  className="min-h-[44px] px-3.5 py-2 rounded-xl bg-white dark:bg-[#041912] border border-[#C87A28]/20 dark:border-[#C87A28]/35 hover:border-[#C87A28]/60 flex items-center justify-between shadow-sm active:scale-[0.98] transition-all cursor-pointer text-left"
                 >
                   <div className="flex items-center gap-2.5 truncate">
-                    <ShoppingCart className="w-4.5 h-4.5 text-[#B86B1E] dark:text-amber-300 shrink-0" />
-                    <span className="text-xs font-bold text-[#11281E] dark:text-white truncate">
+                    <ShoppingCart className="w-4.5 h-4.5 text-[#9E5714] dark:text-amber-300 shrink-0" />
+                    <span className="text-xs font-bold text-[#11281E] dark:text-[#F9F6F0] truncate">
                       Cart
                     </span>
                   </div>
@@ -432,20 +432,20 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   type="button"
                   onClick={toggleTheme}
-                  className="min-h-[44px] px-3.5 py-2 rounded-xl bg-white dark:bg-[#041912] border border-[#E5D8C5] dark:border-[#C87A28]/35 hover:border-[#C87A28]/60 flex items-center justify-between shadow-sm active:scale-[0.98] transition-all cursor-pointer text-left"
+                  className="min-h-[44px] px-3.5 py-2 rounded-xl bg-white dark:bg-[#041912] border border-[#C87A28]/20 dark:border-[#C87A28]/35 hover:border-[#C87A28]/60 flex items-center justify-between shadow-sm active:scale-[0.98] transition-all cursor-pointer text-left"
                   aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
                 >
                   <div className="flex items-center gap-2.5 truncate">
                     {theme === 'dark' ? (
                       <Sun className="w-4.5 h-4.5 text-amber-300 shrink-0" />
                     ) : (
-                      <Moon className="w-4.5 h-4.5 text-[#B86B1E] shrink-0" />
+                      <Moon className="w-4.5 h-4.5 text-[#9E5714] shrink-0" />
                     )}
-                    <span className="text-xs font-bold text-[#11281E] dark:text-white truncate">
+                    <span className="text-xs font-bold text-[#11281E] dark:text-[#F9F6F0] truncate">
                       {theme === 'dark' ? 'Light' : 'Dark'}
                     </span>
                   </div>
-                  <span className="text-xs text-gray-400 dark:text-gray-500 shrink-0">
+                  <span className="text-xs text-[#5A6D62] dark:text-[#A3B899] shrink-0">
                     ⇄
                   </span>
                 </button>
@@ -454,7 +454,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* 2. Compact Horizontal Language Chip Rail */}
               <div className="space-y-1.5 pt-1">
                 <div className="flex items-center justify-between px-0.5">
-                  <span className="text-[11px] font-bold text-[#B86B1E] dark:text-amber-200/90 uppercase tracking-wider">
+                  <span className="text-[11px] font-bold text-[#9E5714] dark:text-[#E59A4D] uppercase tracking-wider">
                     SELECT LANGUAGE
                   </span>
                   <span className="text-[10px] text-ceylon-600 dark:text-ceylon-400 font-mono font-semibold">
@@ -474,7 +474,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className={`px-3.5 py-1.5 rounded-full text-xs whitespace-nowrap active:scale-95 transition-all cursor-pointer select-none shrink-0 ${
                           isSelected
                             ? 'font-bold border border-[#C87A28] bg-[#C87A28] text-white shadow-md shadow-[#C87A28]/20'
-                            : 'font-medium border border-[#C87A28]/20 bg-[#F4EFE6] dark:bg-[#0A2F22] text-[#536B5C] dark:text-[#A3B899] hover:border-[#C87A28]/40'
+                            : 'font-medium border border-[#C87A28]/20 bg-[#F4EFE6] dark:bg-[#0A2F22] text-[#5A6D62] dark:text-[#A3B899] hover:border-[#C87A28]/40'
                         }`}
                         aria-pressed={isSelected}
                         title={lang.label}
@@ -491,8 +491,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
 
               {/* 3. Site Navigation Links (Exact 1-to-7 Page Order) */}
-              <div className="space-y-1.5 pt-1 border-t border-[#E5D8C5]/80 dark:border-[#C87A28]/20">
-                <div className="px-0.5 text-[11px] font-bold text-[#B86B1E] dark:text-amber-200/90 uppercase tracking-wider">
+              <div className="space-y-1.5 pt-1 border-t border-[#C87A28]/20 dark:border-[#C87A28]/20">
+                <div className="px-0.5 text-[11px] font-bold text-[#9E5714] dark:text-[#E59A4D] uppercase tracking-wider">
                   Site Navigation
                 </div>
                 {navLinks.map((link, index) => {
@@ -505,20 +505,20 @@ export const Navbar: React.FC<NavbarProps> = ({
                       onClick={(e) => handleNavClick(e, link.href)}
                       className={`flex items-center justify-between min-h-[44px] px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer ${
                         isActive
-                          ? 'bg-[#f6ecd6] dark:bg-[#C87A28]/25 text-[#783C1D] dark:text-amber-200 border border-[#C87A28]/45 shadow-sm font-bold'
-                          : 'bg-white/70 dark:bg-[#041912]/70 text-[#11281E] dark:text-gray-100 hover:text-[#783C1D] dark:hover:text-white hover:bg-white dark:hover:bg-[#041912] border border-[#E5D8C5]/70 dark:border-white/5'
+                          ? 'bg-[#f6ecd6] dark:bg-[#C87A28]/25 text-[#9E5714] dark:text-[#E59A4D] border border-[#C87A28]/45 shadow-sm font-bold'
+                          : 'bg-white/70 dark:bg-[#041912]/70 text-[#11281E] dark:text-[#F9F6F0] hover:text-[#9E5714] dark:hover:text-white hover:bg-white dark:hover:bg-[#041912] border border-[#C87A28]/20 dark:border-white/5'
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <span className="text-xs font-mono text-[#B86B1E]/70 dark:text-amber-400/60 w-5">
+                        <span className="text-xs font-mono text-[#9E5714]/70 dark:text-amber-400/60 w-5">
                           0{index + 1}
                         </span>
                         <span>{link.label}</span>
                       </div>
                       {isActive ? (
-                        <span className="w-2 h-2 rounded-full bg-[#B86B1E] dark:bg-amber-400 animate-pulse" />
+                        <span className="w-2 h-2 rounded-full bg-[#9E5714] dark:bg-amber-400 animate-pulse" />
                       ) : (
-                        <span className="text-xs text-gray-400 dark:text-gray-500">→</span>
+                        <span className="text-xs text-[#5A6D62] dark:text-[#A3B899]">→</span>
                       )}
                     </a>
                   );
