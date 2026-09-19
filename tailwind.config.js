@@ -8,6 +8,14 @@ export default {
   theme: {
     extend: {
       colors: {
+        theme: {
+          primary: 'var(--bg-primary)',
+          surface: 'var(--bg-surface)',
+          subtle: 'var(--bg-surface-subtle)',
+          text: 'var(--text-primary)',
+          muted: 'var(--text-muted)',
+          border: 'var(--border-accent)',
+        },
         jade: {
           50: '#f0fdf7',
           100: '#dbfbe9',
@@ -34,6 +42,9 @@ export default {
           900: '#64331c',
           950: '#391a0c',
         }
+      },
+      boxShadow: {
+        'theme-card': 'var(--card-shadow)',
       },
       fontFamily: {
         serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],

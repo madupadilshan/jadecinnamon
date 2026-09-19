@@ -1,16 +1,23 @@
 import { useState, useEffect } from 'react';
+import Lenis from 'lenis';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { LanguageCode, LANGUAGES, TRANSLATIONS } from './data/translations';
 import { Product, PRODUCTS } from './data/products';
+import { CartProvider } from './context/CartContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { AboutUs } from './components/AboutUs';
 import { ProductCatalog } from './components/ProductCatalog';
+import { WhyChooseUs } from './components/WhyChooseUs';
+import { WhatsAppBuilder } from './components/WhatsAppBuilder';
 import { QualitySpecs } from './components/QualitySpecs';
 import { Logistics } from './components/Logistics';
 import { Gallery } from './components/Gallery';
-import { WhatsAppBuilder } from './components/WhatsAppBuilder';
 import { Footer } from './components/Footer';
 import { WhatsAppIcon } from './components/WhatsAppIcon';
+import { CartPanel } from './components/CartPanel';
+import { FlyingParticlesOverlay } from './components/FlyingParticlesOverlay';
 
 export function App() {
   const [currentLang, setCurrentLang] = useState<LanguageCode>('en');
@@ -20,7 +27,39 @@ export function App() {
   const isRtl = Boolean(activeLangMeta.isRtl);
   const t = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
 
-  // Update HTML document direction and lang attribute for accessibility & SEO
+  // Global Scrollytelling 2.0 Progress Bar
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 400,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
+  // 1. Initialize High-Performance Lenis Smooth Scroll (Optimized 0.8s responsive duration)
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 0.8,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1.1,
+      touchMultiplier: 1.8,
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
+  // 2. Update HTML document direction and lang attribute for accessibility & SEO
   useEffect(() => {
     document.documentElement.lang = currentLang;
     document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
@@ -31,66 +70,88 @@ export function App() {
   };
 
   return (
-    <div
-      dir={isRtl ? 'rtl' : 'ltr'}
-      className="min-h-screen bg-[#03140e] text-[#F9F9F6] font-sans antialiased selection:bg-ceylon-500 selection:text-white"
-    >
-      {/* Sticky Header / Navigation */}
-      <Navbar
-        currentLang={currentLang}
-        onLanguageChange={setCurrentLang}
-        t={t}
-        isRtl={isRtl}
-      />
-
-      {/* Main Content Sections: Home -> About Us -> Products -> Quality -> Logistics -> Gallery -> WhatsApp RFQ */}
-      <main>
-        <Hero t={t} />
-        <AboutUs t={t} />
-        <ProductCatalog
-          t={t}
-          onSelectProductForRfq={handleProductSelect}
-        />
-        <QualitySpecs t={t} />
-        <Logistics t={t} />
-        <Gallery t={t} />
-        <WhatsAppBuilder
-          t={t}
-          selectedProduct={selectedProduct}
-          onSelectProduct={handleProductSelect}
-        />
-      </main>
-
-      {/* Corporate Footer */}
-      <Footer t={t} />
-
-      {/* Floating WhatsApp Quick Action Button with radar pulse */}
-      <aside
-        aria-label="WhatsApp Trade Desk Contact"
-        className={`fixed bottom-6 ${isRtl ? 'left-6' : 'right-6'
-          } z-40 flex items-center group`}
-      >
-        <a
-          href="https://wa.me/94771234567?text=Hello%20Jade%20Cinnamon%20Lanka,%20I%20would%20like%20to%20inquire%20about%20Pure%20Ceylon%20Cinnamon%20export%20grades."
-          target="_blank"
-          rel="noopener noreferrer"
-          className="relative flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white shadow-2xl shadow-[#25D366]/50 hover:scale-110 active:scale-95 transition-all duration-300 border-2 border-white/40"
-          aria-label="Direct WhatsApp Trade Desk"
+    <ThemeProvider>
+      <CartProvider>
+        <div
+          dir={isRtl ? 'rtl' : 'ltr'}
+          className="min-h-screen bg-[#FBF8F2] dark:bg-[#062319] text-[#11281E] dark:text-[#F9F6F0] font-sans antialiased selection:bg-ceylon-500 selection:text-white relative transition-colors duration-300 ease-in-out"
         >
-          {/* Radar Ping Animation */}
-          <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-40" />
-          <WhatsAppIcon className="w-7 h-7 text-white relative z-10 drop-shadow-md" />
+          {/* Anti-Gravity Floating Cart Clones Layer */}
+          <FlyingParticlesOverlay />
 
-          {/* Tooltip on hover */}
-          <span
-            className={`absolute ${isRtl ? 'left-full ml-3' : 'right-full mr-3'
-              } px-3 py-1.5 rounded-xl bg-black/90 backdrop-blur-md border border-white/10 text-xs font-semibold text-white whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 shadow-xl`}
+          {/* Sliding Solid Cart Panel Drawer */}
+          <CartPanel isRtl={isRtl} />
+
+          {/* Top Scrollytelling 2.0 Reading Progress Indicator */}
+          <motion.div
+            className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-amber-400 via-ceylon-400 to-emerald-400 origin-left z-[60] shadow-lg shadow-amber-400/50"
+            style={{ scaleX }}
+          />
+
+          {/* Sticky Header / Navigation with Floating Cart Icon & Theme Switcher */}
+          <Navbar
+            currentLang={currentLang}
+            onLanguageChange={setCurrentLang}
+            t={t}
+            isRtl={isRtl}
+          />
+
+          {/* Main Content Sections:
+              1. Hero -> 2. About Us -> 3. Products -> 4. Why Choose Us (Export Authority) -> 5. WhatsApp RFQ Hub -> 6. Quality -> 7. Logistics -> 8. Gallery
+          */}
+          <main className="relative w-full">
+            <Hero t={t} />
+            <AboutUs t={t} />
+            <ProductCatalog
+              t={t}
+              onSelectProductForRfq={handleProductSelect}
+              isRtl={isRtl}
+            />
+            <WhyChooseUs t={t} currentLang={currentLang} isRtl={isRtl} />
+            <WhatsAppBuilder
+              t={t}
+              selectedProduct={selectedProduct}
+              onSelectProduct={handleProductSelect}
+            />
+            <QualitySpecs t={t} />
+            <Logistics t={t} currentLang={currentLang} isRtl={isRtl} />
+            <Gallery t={t} />
+          </main>
+
+          {/* Corporate Footer */}
+          <Footer t={t} />
+
+          {/* Floating WhatsApp Quick Action Button with radar pulse */}
+          <aside
+            aria-label="WhatsApp Trade Desk Contact"
+            className={`fixed bottom-6 ${
+              isRtl ? 'left-6' : 'right-6'
+            } z-40 flex items-center group`}
           >
-            Direct WhatsApp Trade Desk (+94 77 123 4567)
-          </span>
-        </a>
-      </aside>
-    </div>
+            <a
+              href="https://wa.me/94785218364?text=Hello%20Jade%20Cinnamon%20Lanka,%20I%20would%20like%20to%20inquire%20about%20Pure%20Ceylon%20Cinnamon%20export%20grades."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white shadow-2xl shadow-[#25D366]/50 hover:scale-110 active:scale-95 transition-all duration-300 border-2 border-white/40 cursor-pointer"
+              aria-label="Direct WhatsApp Trade Desk"
+            >
+              {/* Radar Ping Animation */}
+              <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-40" />
+              <WhatsAppIcon className="w-7 h-7 text-white relative z-10 drop-shadow-md" />
+
+              {/* Tooltip on hover */}
+              <span
+                className={`absolute ${
+                  isRtl ? 'left-full ml-3' : 'right-full mr-3'
+                } px-3 py-1.5 rounded-xl bg-black/90 backdrop-blur-md border border-white/10 text-xs font-semibold text-white whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 shadow-xl`}
+              >
+                Direct WhatsApp Trade Desk (+94 78 521 8364)
+              </span>
+            </a>
+          </aside>
+        </div>
+      </CartProvider>
+    </ThemeProvider>
   );
 }
 

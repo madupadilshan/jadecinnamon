@@ -321,7 +321,7 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationSchema> = {
       email: 'Export Inquiries:',
       colomboPort: 'Processing & Export Hub: Galle Road, Colombo 03, Sri Lanka',
       legalNote: '100% Authentic Cinnamomum Verum Guarantee. All shipments certified by Sri Lanka Department of Agriculture.',
-      copyright: '© 2026 Jade Cinnamon Lanka. All Rights Reserved. Built for Global B2B Trade.',
+      copyright: '© 2026 Jade Cinnamon Lanka. All Rights Reserved.',
     }
   },
 

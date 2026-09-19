@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { TranslationSchema } from '../data/translations';
@@ -34,6 +34,17 @@ const HERO_SLIDES = [
 
 export const Hero: React.FC<HeroProps> = ({ t }) => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const heroRef = useRef<HTMLElement>(null);
+
+  // Scrollytelling Parallax Hooks
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '35%']);
+  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '-12%']);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.1]);
 
   // Auto-transition background every 3 seconds (3000ms)
   useEffect(() => {
@@ -49,15 +60,15 @@ export const Hero: React.FC<HeroProps> = ({ t }) => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1,
+        staggerChildren: 0.08,
+        delayChildren: 0.05,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+    hidden: { opacity: 0, y: 24 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
   };
 
   const statItems = [
@@ -69,35 +80,42 @@ export const Hero: React.FC<HeroProps> = ({ t }) => {
 
   return (
     <section
+      ref={heroRef}
       id="home"
-      className="relative min-h-[96vh] flex items-center justify-center pt-32 pb-20 overflow-hidden bg-black"
+      className="relative min-h-[100vh] flex items-center justify-center pt-32 pb-24 overflow-hidden bg-black"
     >
-      {/* 3-Second Cross-Fade Rotating Background Slide Images */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* 3-Second Cross-Fade Rotating Background Slide with Parallax Y Shift & GPU Acceleration */}
+      <motion.div
+        style={{ y: bgY }}
+        className="absolute inset-0 overflow-hidden pointer-events-none gpu-layer"
+      >
         <AnimatePresence initial={false}>
           <motion.div
             key={currentSlide}
-            initial={{ opacity: 0, scale: 1.08 }}
+            initial={{ opacity: 0, scale: 1.05 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat gpu-accelerate"
             style={{ backgroundImage: `url('${HERO_SLIDES[currentSlide].url}')` }}
           />
         </AnimatePresence>
-      </div>
+      </motion.div>
 
-      {/* Deep Vignette & Dark Overlay for Maximum Typography Contrast & Visual Luxury */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/55 to-[#03140e]/90 pointer-events-none z-[1]" />
+      {/* Deep Vignette & Overlay for Maximum Typography Contrast & Visual Luxury */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-[#FBF8F2] dark:to-[#062319] pointer-events-none z-[1] transition-colors duration-300" />
       <div className="absolute inset-0 bg-radial-gradient from-transparent via-black/30 to-black/75 pointer-events-none z-[1]" />
 
       {/* Subtle ambient accent glows */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-[2]">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-ceylon-500/15 rounded-full blur-[140px] mix-blend-screen" />
-        <div className="absolute bottom-10 right-1/4 w-[500px] h-[400px] bg-amber-500/10 rounded-full blur-[130px] mix-blend-screen" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-ceylon-500/15 rounded-full blur-[140px] mix-blend-screen gpu-layer" />
+        <div className="absolute bottom-10 right-1/4 w-[500px] h-[400px] bg-amber-500/10 rounded-full blur-[130px] mix-blend-screen gpu-layer" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full">
+      <motion.div
+        style={{ y: contentY, opacity: heroOpacity }}
+        className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 w-full gpu-accelerate"
+      >
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -139,7 +157,7 @@ export const Hero: React.FC<HeroProps> = ({ t }) => {
           >
             <a
               href="#rfq"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-base shadow-2xl shadow-[#25D366]/40 hover:shadow-[#25D366]/60 transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-base shadow-2xl shadow-[#25D366]/40 hover:shadow-[#25D366]/60 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
             >
               <WhatsAppIcon className="w-5 h-5 text-white" />
               <span>{t.hero.ctaPrimary}</span>
@@ -148,7 +166,7 @@ export const Hero: React.FC<HeroProps> = ({ t }) => {
 
             <a
               href="#products"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-black/60 hover:bg-black/80 border border-ceylon-400/60 text-white font-semibold text-base backdrop-blur-md transition-all duration-300 transform hover:-translate-y-1 shadow-lg shadow-black/50 cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-black/60 hover:bg-black/80 border border-ceylon-400/60 text-white font-semibold text-base backdrop-blur-md transition-all duration-200 transform hover:-translate-y-0.5 shadow-lg shadow-black/50 cursor-pointer"
             >
               <span>{t.hero.ctaSecondary}</span>
             </a>
@@ -163,8 +181,8 @@ export const Hero: React.FC<HeroProps> = ({ t }) => {
               <motion.div
                 key={idx}
                 whileHover={{ y: -4 }}
-                transition={{ duration: 0.2 }}
-                className="glass-card p-4 sm:p-5 rounded-2xl text-center flex flex-col justify-center items-center relative group border border-ceylon-500/40 bg-black/60 backdrop-blur-md shadow-xl"
+                transition={{ duration: 0.15 }}
+                className="glass-card p-4 sm:p-5 rounded-2xl text-center flex flex-col justify-center items-center relative group border border-ceylon-500/40 bg-black/60 backdrop-blur-md shadow-xl gpu-accelerate"
               >
                 <div className="text-2xl sm:text-3xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-ceylon-400 mb-1">
                   {stat.value}
@@ -221,7 +239,7 @@ export const Hero: React.FC<HeroProps> = ({ t }) => {
             </div>
           </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 };
