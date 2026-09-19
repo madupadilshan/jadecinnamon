@@ -97,7 +97,7 @@ export function App() {
           />
 
           {/* Main Content Sections:
-              1. Hero -> 2. About Us -> 3. Products -> 4. Why Choose Us (Export Authority) -> 5. WhatsApp RFQ Hub -> 6. Quality -> 7. Logistics -> 8. Gallery
+              1. Hero (#home) -> 2. About Us (#about) -> 3. Products (#products) -> 4. Quality & Lab (#quality) -> 5. Export & Logistics (#logistics / Why Choose Us) -> 6. Gallery (#gallery) -> 7. RFQ & Cart (#rfq)
           */}
           <main className="relative w-full">
             <Hero t={t} />
@@ -107,15 +107,15 @@ export function App() {
               onSelectProductForRfq={handleProductSelect}
               isRtl={isRtl}
             />
+            <QualitySpecs t={t} />
             <WhyChooseUs t={t} currentLang={currentLang} isRtl={isRtl} />
+            <Logistics t={t} currentLang={currentLang} isRtl={isRtl} />
+            <Gallery t={t} />
             <WhatsAppBuilder
               t={t}
               selectedProduct={selectedProduct}
               onSelectProduct={handleProductSelect}
             />
-            <QualitySpecs t={t} />
-            <Logistics t={t} currentLang={currentLang} isRtl={isRtl} />
-            <Gallery t={t} />
           </main>
 
           {/* Corporate Footer */}
