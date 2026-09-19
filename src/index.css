@@ -1,3 +1,4 @@
+@import 'lenis/dist/lenis.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -27,13 +28,13 @@
 
   html {
     position: relative;
-    scroll-behavior: smooth;
-    scroll-snap-type: y proximity;
+    overflow-x: clip;
   }
   
   body {
     position: relative;
     min-height: 100vh;
+    overflow-x: clip;
     background-color: var(--bg-primary);
     color: var(--text-primary);
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
@@ -52,7 +53,6 @@
 
   section {
     position: relative;
-    scroll-snap-align: start;
     scroll-margin-top: 80px;
   }
 

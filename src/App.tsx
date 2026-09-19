@@ -35,26 +35,26 @@ export function App() {
     restDelta: 0.001,
   });
 
-  // 1. Initialize High-Performance Lenis Smooth Scroll (Optimized 0.8s responsive duration)
+  // 1. Initialize High-Performance Lenis Smooth Scroll
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 0.8,
+      autoRaf: true,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.1,
-      touchMultiplier: 1.8,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.0,
+      anchors: {
+        offset: -80,
+      },
     });
 
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
+    (window as any).lenis = lenis;
 
     return () => {
+      (window as any).lenis = null;
       lenis.destroy();
     };
   }, []);

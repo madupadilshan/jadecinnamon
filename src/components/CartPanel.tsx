@@ -145,7 +145,10 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
             </div>
 
             {/* Scrollable Items & Form Container */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
+            <div
+              data-lenis-prevent
+              className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4"
+            >
               {items.length === 0 ? (
                 <div className="h-full min-h-[280px] flex flex-col items-center justify-center text-center p-6 rounded-2xl bg-white dark:bg-black/30 border border-[#E5D8C5] dark:border-white/10">
                   <div className="w-16 h-16 rounded-full bg-[#f6ecd6] dark:bg-white/5 flex items-center justify-center text-[#B86B1E] dark:text-gray-400 mb-3">
@@ -432,6 +435,7 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                 {/* Expandable Preview */}
                 {showPreviewModal && (
                   <motion.div
+                    data-lenis-prevent
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}

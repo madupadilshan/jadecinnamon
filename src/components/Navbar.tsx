@@ -104,14 +104,18 @@ export const Navbar: React.FC<NavbarProps> = ({
     const targetId = href.replace('#', '');
     const element = document.getElementById(targetId);
     if (element) {
-      const navHeight = 80;
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - navHeight;
+      if ((window as any).lenis) {
+        (window as any).lenis.scrollTo(element, { offset: -80 });
+      } else {
+        const navHeight = 80;
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - navHeight;
 
-      window.scrollTo({
-        top: Math.max(0, offsetPosition),
-        behavior: 'smooth',
-      });
+        window.scrollTo({
+          top: Math.max(0, offsetPosition),
+          behavior: 'smooth',
+        });
+      }
 
       setActiveSection(targetId);
       if (history.pushState) {

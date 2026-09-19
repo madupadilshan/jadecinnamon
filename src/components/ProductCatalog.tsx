@@ -31,7 +31,11 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
     onSelectProductForRfq(product);
     const rfqSection = document.getElementById('rfq');
     if (rfqSection) {
-      rfqSection.scrollIntoView({ behavior: 'smooth' });
+      if ((window as any).lenis) {
+        (window as any).lenis.scrollTo(rfqSection, { offset: -80 });
+      } else {
+        rfqSection.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
@@ -131,7 +135,10 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
               </div>
 
               {/* Modal Content Scrollable Area */}
-              <div className="p-4 sm:p-6 overflow-y-auto space-y-5 sm:space-y-6">
+              <div
+                data-lenis-prevent
+                className="p-4 sm:p-6 overflow-y-auto space-y-5 sm:space-y-6"
+              >
                 <div>
                   <h4 className="text-xs font-bold text-[#536B5C] dark:text-gray-400 uppercase tracking-wider mb-2">
                     Official Product Overview
