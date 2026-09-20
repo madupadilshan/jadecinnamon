@@ -42,7 +42,7 @@ jobs:
       - name: Build with Vite
         run: npm run build
         env:
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          BASE_PATH: './'
 
       - name: Create 404.html fallback
         run: cp ./dist/index.html ./dist/404.html
