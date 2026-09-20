@@ -25,15 +25,15 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10 pb-12 border-b border-[#C87A28]/20 dark:border-white/10">
           {/* Brand Column */}
           <div className="lg:col-span-5 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full overflow-hidden border border-ceylon-400/60 shadow-md bg-white dark:bg-black/60 shrink-0">
+            <div className="flex items-center gap-3.5">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-ceylon-400/60 shadow-lg bg-white dark:bg-black/60 shrink-0">
                 <img
                   src={getAssetUrl('images/logo.jpg')}
                   alt="Jade Cinnamon Lanka Logo"
                   className="w-full h-full object-cover"
                 />
               </div>
-              <span className="font-serif font-bold text-xl text-[#11281E] dark:text-[#F9F6F0] tracking-tight">
+              <span className="font-serif font-bold text-xl sm:text-2xl text-[#11281E] dark:text-[#F9F6F0] tracking-tight">
                 {t.brandTitle}
               </span>
             </div>

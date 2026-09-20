@@ -150,7 +150,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           aria-label="Jade Cinnamon Lanka Home"
         >
           {/* Circular Badge */}
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-[#C87A28]/70 shadow-md dark:shadow-black/80 group-hover:border-amber-400 transition-colors duration-200 bg-white dark:bg-black/80 shrink-0">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full overflow-hidden border-2 border-[#C87A28]/70 shadow-md dark:shadow-black/80 group-hover:border-amber-400 transition-all duration-200 bg-white dark:bg-black/80 shrink-0">
             <img
               src={getAssetUrl('images/logo.jpg')}
               alt="Jade Cinnamon Lanka Logo"
