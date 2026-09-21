@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { TranslationSchema } from '../data/translations';
 import { HeroMetrics } from './sections/HeroMetrics';
@@ -10,25 +10,25 @@ interface HeroProps {
   t: TranslationSchema;
 }
 
-// 4 Curated Traditional Ceylon Cinnamon & Spice Marketing Visuals
+// 4 Curated Traditional Ceylon Cinnamon & Spice Marketing Visuals (WebP Optimized)
 const HERO_SLIDES = [
   {
-    url: getAssetUrl('images/hero-bg-1.jpg'),
+    url: getAssetUrl('images/hero-bg-1.webp'),
     label: 'Traditional Harvest & Quills',
     desc: 'Pure Ceylon Cinnamon Quills from Southern Sri Lanka Heritage Estates',
   },
   {
-    url: getAssetUrl('images/hero-bg-2.jpg'),
+    url: getAssetUrl('images/hero-bg-2.webp'),
     label: 'Artisanal Hand Peeling',
     desc: 'Centuries-Old Traditional Sri Lankan Craftsmanship & Curing',
   },
   {
-    url: getAssetUrl('images/hero-bg-3.jpg'),
+    url: getAssetUrl('images/hero-bg-3.webp'),
     label: 'Sun-Drying & Golden Quills',
     desc: 'Premium Alba, C5-SP & Traditional Natural Sun-Drying Process',
   },
   {
-    url: getAssetUrl('images/hero-bg-4.jpg'),
+    url: getAssetUrl('images/hero-bg-4.webp'),
     label: 'Global Export Packing',
     desc: 'SLS 81 & ISO 6539 Certified Ceylon Bales for Worldwide Shipment',
   },
@@ -48,14 +48,21 @@ export const Hero: React.FC<HeroProps> = ({ t }) => {
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '-12%']);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.1]);
 
-  // Auto-transition background every 3 seconds (3000ms)
+  // Auto-transition background every 6.5 seconds (6500ms)
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 3000);
+    }, 6500);
 
     return () => clearInterval(timer);
   }, []);
+
+  // Intelligent Next-Slide Memory Preloader (Prevents network stutter / cancelled requests)
+  useEffect(() => {
+    const nextIndex = (currentSlide + 1) % HERO_SLIDES.length;
+    const preloadImg = new Image();
+    preloadImg.src = HERO_SLIDES[nextIndex].url;
+  }, [currentSlide]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -79,21 +86,33 @@ export const Hero: React.FC<HeroProps> = ({ t }) => {
       id="home"
       className="relative min-h-[100vh] flex items-center justify-center pt-32 pb-24 overflow-hidden bg-black"
     >
-      {/* 3-Second Cross-Fade Rotating Background Slide with Parallax Y Shift & GPU Acceleration */}
+      {/* 6.5-Second Hardware-Accelerated Cross-Fade Rotating Background Slide */}
       <motion.div
         style={{ y: bgY }}
         className="absolute inset-0 overflow-hidden pointer-events-none gpu-layer"
       >
-        <AnimatePresence initial={false}>
+        <AnimatePresence initial={false} mode="sync">
           <motion.div
             key={currentSlide}
-            initial={{ opacity: 0, scale: 1.05 }}
+            initial={{ opacity: 0, scale: 1.04 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat gpu-accelerate"
-            style={{ backgroundImage: `url('${HERO_SLIDES[currentSlide].url}')` }}
-          />
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0 w-full h-full gpu-accelerate"
+          >
+            <picture className="w-full h-full block">
+              <source srcSet={HERO_SLIDES[currentSlide].url} type="image/webp" />
+              <img
+                src={HERO_SLIDES[currentSlide].url}
+                alt={HERO_SLIDES[currentSlide].label}
+                loading={currentSlide === 0 ? 'eager' : 'lazy'}
+                decoding={currentSlide === 0 ? 'sync' : 'async'}
+                // @ts-ignore fetchPriority is supported in modern browsers
+                fetchPriority={currentSlide === 0 ? 'high' : 'low'}
+                className="w-full h-full object-cover object-center"
+              />
+            </picture>
+          </motion.div>
         </AnimatePresence>
       </motion.div>
 
@@ -117,14 +136,6 @@ export const Hero: React.FC<HeroProps> = ({ t }) => {
           animate="visible"
           className="flex flex-col items-center text-center max-w-4xl mx-auto"
         >
-          {/* Top Eyebrow Tag */}
-          <motion.div variants={itemVariants} className="mb-4">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/70 backdrop-blur-md border border-ceylon-400/50 text-ceylon-300 text-xs sm:text-sm font-bold tracking-widest uppercase shadow-xl shadow-black/80">
-              <Sparkles className="w-3.5 h-3.5 text-ceylon-400" />
-              <span>THE BEST QUALITY • {t.hero.badge}</span>
-            </span>
-          </motion.div>
-
           {/* Prominent Kinetic Headline */}
           <motion.h1
             variants={itemVariants}

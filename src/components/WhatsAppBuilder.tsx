@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import {
-  Sparkles,
   Building2,
   Trash2,
   Plus,
@@ -61,8 +60,11 @@ export const WhatsAppBuilder: React.FC<WhatsAppBuilderProps> = ({
   const [validationErrors, setValidationErrors] = useState<{
     name?: string;
     phone?: string;
+    address?: string;
     destination?: string;
     items?: string;
+    zeroQuantity?: string;
+    zeroItemIds?: string[];
   }>({});
 
   const sectionRef = useRef<HTMLElement>(null);
@@ -77,18 +79,55 @@ export const WhatsAppBuilder: React.FC<WhatsAppBuilderProps> = ({
   const cardGlideY = useTransform(scrollYProgress, [0, 0.35, 0.7, 1], [60, 0, 0, -20]);
   const cardOpacity = useTransform(scrollYProgress, [0, 0.25, 0.85, 1], [0.4, 1, 1, 0.8]);
 
-  // Validate form fields
+  // Handle quantity changes and clear errors dynamically
+  const handleQuantityChange = (itemId: string, newQty: number) => {
+    updateQuantity(itemId, newQty);
+    if (newQty > 0 && validationErrors.zeroItemIds?.includes(itemId)) {
+      setValidationErrors((prev) => {
+        const remainingZeroIds = (prev.zeroItemIds || []).filter((id) => id !== itemId);
+        return {
+          ...prev,
+          zeroItemIds: remainingZeroIds,
+          zeroQuantity: remainingZeroIds.length === 0 ? undefined : prev.zeroQuantity,
+          items: undefined,
+        };
+      });
+    }
+  };
+
+  // Validate form fields & line items before WhatsApp generation
   const validateForm = () => {
-    const errors: { name?: string; phone?: string; destination?: string; items?: string } = {};
+    const errors: {
+      name?: string;
+      phone?: string;
+      address?: string;
+      destination?: string;
+      items?: string;
+      zeroQuantity?: string;
+      zeroItemIds?: string[];
+    } = {};
 
     if (items.length === 0) {
       errors.items = 'Please add at least one product item to your quotation.';
+    } else {
+      const zeroItems = items.filter((item) => item.quantity <= 0);
+      const totalQty = items.reduce((acc, item) => acc + item.quantity, 0);
+
+      if (zeroItems.length > 0 || totalQty <= 0) {
+        errors.zeroQuantity =
+          'Please specify a valid quantity greater than 0 (Kg / L) for your selected items before requesting a quotation.';
+        errors.zeroItemIds = zeroItems.map((i) => i.id);
+      }
     }
+
     if (!ordererName.trim()) {
       errors.name = 'Please enter your full name or company representative name.';
     }
     if (!ordererPhone.trim()) {
       errors.phone = 'Please enter your contact phone/WhatsApp number.';
+    }
+    if (!ordererAddress.trim()) {
+      errors.address = 'Please enter your business or delivery address.';
     }
     if (!destinationPort.trim()) {
       errors.destination = 'Please specify the destination port or country.';
@@ -117,8 +156,8 @@ export const WhatsAppBuilder: React.FC<WhatsAppBuilderProps> = ({
   const handleQuickAdd = () => {
     const productToAdd = PRODUCTS.find((p) => p.id === quickAddProductId);
     if (!productToAdd) return;
-    const defaultQty = productToAdd.category === 'oils' ? 50 : 500;
-    addToCart(productToAdd, defaultQty);
+    // Default quantity must be 0 per specifications
+    addToCart(productToAdd, 0);
     setValidationErrors((prev) => ({ ...prev, items: undefined }));
   };
 
@@ -126,13 +165,13 @@ export const WhatsAppBuilder: React.FC<WhatsAppBuilderProps> = ({
     <section
       ref={sectionRef}
       id="rfq"
-      className="py-24 sm:py-32 relative overflow-hidden border-t border-[#C87A28]/20 dark:border-[#C87A28]/30 bg-[#FBF8F2] dark:bg-[#062319] scroll-mt-20 transition-colors duration-300"
+      className="py-20 sm:py-28 relative overflow-hidden border-t border-[#C87A28]/20 dark:border-[#C87A28]/30 bg-[#FBF8F2] dark:bg-[#062319] scroll-mt-20 transition-colors duration-300"
     >
       {/* Parallax Background Layer */}
       <motion.div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none scale-110 opacity-30 dark:opacity-40 gpu-layer"
         style={{
-          backgroundImage: `url('${getAssetUrl('images/bg-about-plantation.jpg')}')`,
+          backgroundImage: `url('${getAssetUrl('images/gallery-plantation.webp')}')`,
           y: bgY,
         }}
       />
@@ -153,13 +192,9 @@ export const WhatsAppBuilder: React.FC<WhatsAppBuilderProps> = ({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center max-w-3xl mx-auto mb-14 gpu-accelerate"
+          className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 gpu-accelerate"
         >
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-black/70 backdrop-blur-md border border-[#C87A28]/20 dark:border-[#C87A28]/30 text-[#9E5714] dark:text-[#E59A4D] text-xs font-bold tracking-wider uppercase mb-3 shadow-md">
-            <Sparkles className="w-3 h-3 text-[#9E5714] dark:text-[#E59A4D]" />
-            <span>{t.rfq.badge}</span>
-          </span>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#11281E] dark:text-[#F9F6F0] mb-4 tracking-tight drop-shadow-sm">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#11281E] dark:text-[#F9F6F0] mb-3 sm:mb-4 tracking-tight drop-shadow-sm">
             {t.rfq.title}
           </h2>
           <p className="text-[#3B4D43] dark:text-[#D1DDD5] text-sm sm:text-base leading-relaxed">
@@ -198,12 +233,16 @@ export const WhatsAppBuilder: React.FC<WhatsAppBuilderProps> = ({
               </div>
             </div>
 
-            {/* Validation Error Banner */}
-            {validationErrors.items && (
-              <div className="p-3.5 rounded-xl bg-red-50 dark:bg-red-950/80 border border-red-300 dark:border-red-500/50 text-red-700 dark:text-red-200 text-xs flex items-center gap-2">
+            {/* Validation Error Banner (Empty Cart or Zero Quantity) */}
+            {(validationErrors.items || validationErrors.zeroQuantity) && (
+              <motion.div
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-3.5 rounded-xl bg-red-50 dark:bg-red-950/80 border border-red-300 dark:border-red-500/50 text-red-700 dark:text-red-200 text-xs flex items-center gap-2.5 shadow-sm"
+              >
                 <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
-                <span>{validationErrors.items}</span>
-              </div>
+                <span className="font-medium">{validationErrors.items || validationErrors.zeroQuantity}</span>
+              </motion.div>
             )}
 
             {/* 1. Synchronized Cart Line Items Review */}
@@ -229,111 +268,139 @@ export const WhatsAppBuilder: React.FC<WhatsAppBuilderProps> = ({
               ) : (
                 <div className="space-y-3">
                   <AnimatePresence mode="popLayout">
-                    {items.map((item, index) => (
-                      <motion.div
-                        key={item.id}
-                        layout
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                        transition={{ duration: 0.22 }}
-                        className="p-3.5 rounded-2xl bg-[#F4EFE6] dark:bg-[#041912] border border-[#C87A28]/20 dark:border-[#C87A28]/30 shadow-md flex flex-col gap-2.5"
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="flex items-center gap-3 min-w-0">
-                            <div className="relative w-11 h-11 rounded-lg overflow-hidden border border-[#C87A28]/20 dark:border-white/10 shrink-0 bg-black">
-                              <img
-                                src={item.imageUrl}
-                                alt={item.name}
-                                className="w-full h-full object-cover"
-                              />
-                              <span className="absolute bottom-0 inset-x-0 bg-black/80 text-[8px] font-mono text-center text-amber-300 font-bold">
-                                #{index + 1}
-                              </span>
-                            </div>
-                            <div className="min-w-0">
-                              <div className="text-[10px] uppercase font-bold text-[#9E5714] dark:text-[#E59A4D] tracking-wider">
-                                {item.categoryLabel || item.category}
+                    {items.map((item, index) => {
+                      const isZeroError =
+                        Boolean(validationErrors.zeroItemIds?.includes(item.id)) ||
+                        (Boolean(validationErrors.zeroQuantity) && item.quantity <= 0);
+
+                      return (
+                        <motion.div
+                          key={item.id}
+                          layout
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                          transition={{ duration: 0.22 }}
+                          className={`p-3.5 rounded-2xl bg-[#F4EFE6] dark:bg-[#041912] border shadow-md flex flex-col gap-2.5 transition-colors ${
+                            isZeroError
+                              ? 'border-red-400 dark:border-red-500/80 shadow-red-500/10'
+                              : 'border-[#C87A28]/20 dark:border-[#C87A28]/30'
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div className="relative w-11 h-11 rounded-lg overflow-hidden border border-[#C87A28]/20 dark:border-white/10 shrink-0 bg-black">
+                                <img
+                                  src={item.imageUrl}
+                                  alt={item.name}
+                                  className="w-full h-full object-cover"
+                                />
+                                <span className="absolute bottom-0 inset-x-0 bg-black/80 text-[8px] font-mono text-center text-amber-300 font-bold">
+                                  #{index + 1}
+                                </span>
                               </div>
-                              <h4 className="font-serif text-sm font-bold text-[#11281E] dark:text-[#F9F6F0] truncate">
-                                {item.name}
-                              </h4>
+                              <div className="min-w-0">
+                                <div className="text-[10px] uppercase font-bold text-[#9E5714] dark:text-[#E59A4D] tracking-wider">
+                                  {item.categoryLabel || item.category}
+                                </div>
+                                <h4 className="font-serif text-sm font-bold text-[#11281E] dark:text-[#F9F6F0] truncate">
+                                  {item.name}
+                                </h4>
+                              </div>
+                            </div>
+
+                            <button
+                              type="button"
+                              onClick={() => removeFromCart(item.id)}
+                              className="min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
+                              title="Remove item"
+                              aria-label="Remove item"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+
+                          {/* Quantity controls & Unit toggle with 40px+ Touch Targets */}
+                          <div className="pt-2.5 border-t border-[#C87A28]/20 dark:border-white/10 flex flex-wrap items-center justify-between gap-3">
+                            {/* Inline Dynamic Quantity Controller: [-] [Input] [+] */}
+                            <div className="flex items-center gap-1.5 bg-white/80 dark:bg-black/40 p-1 rounded-2xl border border-[#C87A28]/20 dark:border-white/10 shadow-sm">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const step = item.unit === 'L' ? (item.quantity <= 10 ? 1 : 5) : (item.quantity <= 50 ? 5 : 50);
+                                  const nextQty = Math.max(0, Math.round((item.quantity - step) * 100) / 100);
+                                  handleQuantityChange(item.id, nextQty);
+                                }}
+                                className="min-w-[40px] min-h-[40px] px-3 py-1 bg-[#C87A28]/20 hover:bg-[#C87A28] text-[#9E5714] dark:text-[#E59A4D] hover:text-white rounded-xl transition-colors flex items-center justify-center cursor-pointer active:scale-95"
+                                title="Decrease quantity"
+                                aria-label="Decrease quantity"
+                              >
+                                <Minus className="w-4 h-4 font-bold" />
+                              </button>
+
+                              <input
+                                type="number"
+                                min="0"
+                                step={item.unit === 'L' ? '1' : '1'}
+                                value={item.quantity === 0 ? '0' : item.quantity}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  if (val === '') {
+                                    handleQuantityChange(item.id, 0);
+                                  } else {
+                                    const parsed = parseFloat(val);
+                                    if (!isNaN(parsed)) {
+                                      handleQuantityChange(item.id, Math.max(0, parsed));
+                                    }
+                                  }
+                                }}
+                                className={`min-h-[40px] w-20 px-2 py-1.5 text-center bg-white dark:bg-[#062319] text-[#11281E] dark:text-[#F9F6F0] rounded-xl text-sm font-bold font-mono focus:outline-none transition-all ${
+                                  isZeroError
+                                    ? 'ring-2 ring-red-500 border-red-500 bg-red-50/50 dark:bg-red-950/30'
+                                    : 'border border-[#C87A28]/30 focus:ring-2 focus:ring-[#C87A28]'
+                                }`}
+                                aria-label={`Quantity for ${item.name}`}
+                              />
+
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const step = item.unit === 'L' ? (item.quantity < 10 ? 1 : 5) : (item.quantity < 50 ? 5 : 50);
+                                  const nextQty = Math.round((item.quantity + step) * 100) / 100;
+                                  handleQuantityChange(item.id, nextQty);
+                                }}
+                                className="min-w-[40px] min-h-[40px] px-3 py-1 bg-[#C87A28]/20 hover:bg-[#C87A28] text-[#9E5714] dark:text-[#E59A4D] hover:text-white rounded-xl transition-colors flex items-center justify-center cursor-pointer active:scale-95"
+                                title="Increase quantity"
+                                aria-label="Increase quantity"
+                              >
+                                <Plus className="w-4 h-4 font-bold" />
+                              </button>
+                            </div>
+
+                            {/* Unit Selector / Badge strictly restricted to Kg and L */}
+                            <div className="flex items-center gap-1.5">
+                              {(['Kg', 'L'] as const).map((u) => {
+                                const isSelected = item.unit === u;
+                                return (
+                                  <button
+                                    key={u}
+                                    type="button"
+                                    onClick={() => updateUnit(item.id, u)}
+                                    className={`px-3.5 py-1.5 min-h-[40px] rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                                      isSelected
+                                        ? 'bg-[#C87A28] text-white shadow-md shadow-[#C87A28]/30'
+                                        : 'bg-white dark:bg-[#062319] text-[#5A6D62] dark:text-[#A3B899] hover:text-[#11281E] dark:hover:text-white border border-[#C87A28]/20 dark:border-white/10 hover:border-[#C87A28]/50'
+                                    }`}
+                                  >
+                                    {u}
+                                  </button>
+                                );
+                              })}
                             </div>
                           </div>
-
-                          <button
-                            type="button"
-                            onClick={() => removeFromCart(item.id)}
-                            className="min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
-                            title="Remove item"
-                            aria-label="Remove item"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-
-                        {/* Quantity controls & Unit toggle */}
-                        <div className="pt-2 border-t border-[#C87A28]/20 dark:border-white/5 flex items-center justify-between gap-2">
-                          <div className="flex items-center gap-1.5 bg-white dark:bg-black/60 p-1 rounded-xl border border-[#C87A28]/20 dark:border-white/10">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const step = item.unit === 'MT' ? 0.5 : 50;
-                                updateQuantity(item.id, Math.max(1, item.quantity - step));
-                              }}
-                              className="w-7 h-7 rounded-md bg-[#F4EFE6] dark:bg-white/5 hover:bg-[#ebd7ad] dark:hover:bg-white/15 flex items-center justify-center text-[#11281E] dark:text-gray-200 transition-colors cursor-pointer"
-                              aria-label="Decrease quantity"
-                            >
-                              <Minus className="w-3.5 h-3.5" />
-                            </button>
-
-                            <input
-                              type="number"
-                              min="1"
-                              step={item.unit === 'MT' ? '0.1' : '10'}
-                              value={item.quantity}
-                              onChange={(e) =>
-                                updateQuantity(item.id, parseFloat(e.target.value) || 0)
-                              }
-                              className="w-14 sm:w-16 text-center bg-transparent text-xs font-bold text-[#11281E] dark:text-[#F9F6F0] font-mono focus:outline-none"
-                            />
-
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const step = item.unit === 'MT' ? 0.5 : 50;
-                                updateQuantity(item.id, item.quantity + step);
-                              }}
-                              className="w-7 h-7 rounded-md bg-[#F4EFE6] dark:bg-white/5 hover:bg-[#ebd7ad] dark:hover:bg-white/15 flex items-center justify-center text-[#11281E] dark:text-gray-200 transition-colors cursor-pointer"
-                              aria-label="Increase quantity"
-                            >
-                              <Plus className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-
-                          {/* Unit Selector */}
-                          <div className="flex items-center gap-1">
-                            {(['Kg', 'MT', 'L', 'Bales'] as const).map((u) => {
-                              const isSelected = item.unit === u;
-                              return (
-                                <button
-                                  key={u}
-                                  type="button"
-                                  onClick={() => updateUnit(item.id, u)}
-                                  className={`px-2 py-1 min-h-[32px] rounded-md text-[10px] font-bold transition-all cursor-pointer ${
-                                    isSelected
-                                      ? 'bg-[#C87A28] text-white shadow-sm'
-                                      : 'bg-white dark:bg-black/40 text-[#5A6D62] dark:text-[#A3B899] hover:text-black dark:hover:text-white border border-[#C87A28]/20 dark:border-white/5'
-                                  }`}
-                                >
-                                  {u}
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
+                        </motion.div>
+                      );
+                    })}
                   </AnimatePresence>
                 </div>
               )}
@@ -533,25 +600,39 @@ export const WhatsAppBuilder: React.FC<WhatsAppBuilderProps> = ({
                   )}
                 </div>
 
-                {/* Address */}
+                {/* Address (Mandatory *) */}
                 <div className="sm:col-span-2">
                   <label className="block text-[11px] font-semibold text-[#5A6D62] dark:text-[#A3B899] mb-1 flex items-center gap-1">
                     <MapPin className="w-3 h-3 text-[#9E5714] dark:text-[#E59A4D]" />
-                    <span>ADDRESS (Business / Country)</span>
+                    <span>ADDRESS (Business / Country) *</span>
                   </label>
                   <input
                     type="text"
                     value={ordererAddress}
-                    onChange={(e) => setOrdererAddress(e.target.value)}
+                    onChange={(e) => {
+                      setOrdererAddress(e.target.value);
+                      if (validationErrors.address) {
+                        setValidationErrors((prev) => ({ ...prev, address: undefined }));
+                      }
+                    }}
                     placeholder="Company address, City, Postal Code, Country"
-                    className="w-full min-h-[44px] px-3 py-2.5 rounded-xl bg-[#F4EFE6] dark:bg-[#03140e] border border-[#C87A28]/25 dark:border-[#C87A28]/35 text-[#11281E] placeholder:text-[#829288] dark:text-[#F9F6F0] dark:placeholder:text-[#64796E] text-xs font-medium focus:outline-none focus:border-[#C87A28]"
+                    className={`w-full min-h-[44px] px-3 py-2.5 rounded-xl bg-[#F4EFE6] dark:bg-[#03140e] border text-[#11281E] placeholder:text-[#829288] dark:text-[#F9F6F0] dark:placeholder:text-[#64796E] text-xs font-medium focus:outline-none ${
+                      validationErrors.address
+                        ? 'border-red-500 focus:border-red-400'
+                        : 'border-[#C87A28]/25 dark:border-[#C87A28]/35 focus:border-[#C87A28]'
+                    }`}
                   />
+                  {validationErrors.address && (
+                    <span className="text-[10px] text-red-500 dark:text-red-400 mt-0.5 block font-medium">
+                      {validationErrors.address}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Commercial Summary & Direct WhatsApp Submission (No Raw Text Box) */}
+          {/* Right Column: Commercial Summary & Direct WhatsApp Submission */}
           <div className="lg:col-span-5 flex flex-col gap-4">
             <div className="glass-card p-6 sm:p-8 rounded-3xl border border-[#C87A28]/20 dark:border-[#C87A28]/30 bg-white/95 dark:bg-[#0A2F22]/95 backdrop-blur-xl shadow-xl dark:shadow-2xl dark:shadow-black/90 flex flex-col justify-between gpu-accelerate space-y-6">
               {/* Header */}
@@ -635,19 +716,30 @@ export const WhatsAppBuilder: React.FC<WhatsAppBuilderProps> = ({
                 </div>
               </div>
 
-              {/* Primary CTA Button */}
+              {/* Primary CTA Button & Pre-Submission Warning Banner */}
               <div className="space-y-3 pt-2">
+                {validationErrors.zeroQuantity && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-3 rounded-xl bg-red-50 dark:bg-red-950/90 border border-red-300 dark:border-red-500/60 text-red-700 dark:text-red-200 text-xs flex items-center gap-2 shadow-sm"
+                  >
+                    <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+                    <span className="font-medium leading-snug">{validationErrors.zeroQuantity}</span>
+                  </motion.div>
+                )}
+
                 <button
                   type="button"
                   onClick={handleSend}
                   className="w-full min-h-[52px] inline-flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-base shadow-xl shadow-[#25D366]/40 hover:shadow-[#25D366]/60 transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                 >
                   <WhatsAppIcon className="w-5 h-5 text-white" />
-                  <span>Request WhatsApp B2B Quotation</span>
+                  <span>{t?.rfq?.btnSendWhatsApp || 'Send Quotation via WhatsApp'}</span>
                 </button>
 
                 <p className="text-[11px] text-[#5A6D62] dark:text-[#A3B899] text-center leading-relaxed">
-                  Direct connection to Jade Cinnamon Lanka Trade Desk (+94 78 521 8364). Instant formal reply with FOB/CIF proforma rates.
+                  Direct connection to Jade Cinnamon Lanka Trade Desk (+94 76 533 5308). Instant formal reply with FOB/CIF proforma rates.
                 </p>
               </div>
             </div>

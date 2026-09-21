@@ -1,6 +1,6 @@
 import { CartItem } from '../../context/CartContext';
 
-export const TRADE_PHONE = '94785218364';
+export const TRADE_PHONE = '94765335308';
 
 export interface B2BQuotationParams {
   items: CartItem[];
@@ -14,6 +14,7 @@ export interface B2BQuotationParams {
 
 /**
  * Builds an official multi-item B2B RFQ message structured for WhatsApp Trade Desk.
+ * Only items with quantity > 0 are included.
  */
 export function buildMultiItemWhatsAppMessage({
   items,
@@ -26,21 +27,21 @@ export function buildMultiItemWhatsAppMessage({
 }: B2BQuotationParams): string {
   const timestamp = new Date().toISOString().split('T')[0];
 
-  const itemList = items
-    .map((item, index) => {
+  // Only include items with valid quantity > 0
+  const validItems = (items || []).filter((item) => item.quantity > 0);
+
+  const itemList = validItems
+    .map((item) => {
       const unitDisplay = item.unit || 'Kg';
-      const gradeStr = item.gradeCode ? ` [Grade: ${item.gradeCode}]` : '';
-      return `  ${index + 1}. *${item.name}* (${item.quantity.toLocaleString()} ${unitDisplay})${gradeStr}`;
+      return `• *${item.name}* (${item.gradeCode}) — ${item.quantity.toLocaleString()} ${unitDisplay}`;
     })
     .join('\n');
 
-  // Compute Total volume summary
+  // Compute Total volume summary strictly in Kg and L
   let totalKg = 0;
   let totalLiters = 0;
-  items.forEach((item) => {
-    if (item.unit === 'MT') {
-      totalKg += item.quantity * 1000;
-    } else if (item.unit === 'L') {
+  validItems.forEach((item) => {
+    if (item.unit === 'L') {
       totalLiters += item.quantity;
     } else {
       totalKg += item.quantity;
@@ -48,15 +49,13 @@ export function buildMultiItemWhatsAppMessage({
   });
 
   const volParts: string[] = [];
-  if (totalKg >= 1000) {
-    volParts.push(`${(totalKg / 1000).toFixed(2)} MT (~${totalKg.toLocaleString()} Kg)`);
-  } else if (totalKg > 0) {
+  if (totalKg > 0) {
     volParts.push(`${totalKg.toLocaleString()} Kg`);
   }
   if (totalLiters > 0) {
-    volParts.push(`${totalLiters.toLocaleString()} Liters`);
+    volParts.push(`${totalLiters.toLocaleString()} L`);
   }
-  const totalVolumeStr = volParts.join(' + ') || '500 Kg';
+  const totalVolumeStr = volParts.join(' + ') || '0 Kg';
 
   let clientInfoBlock = '';
   if (ordererName || ordererAddress || ordererPhone) {
@@ -71,8 +70,8 @@ ${ordererName ? `- *Name:* ${ordererName}\n` : ''}${
 *Company Target:* Jade Cinnamon Lanka Export Desk
 *Date:* ${timestamp}
 
-${clientInfoBlock}*Requested Products (${items.length} ${items.length === 1 ? 'Item' : 'Items'}):*
-${itemList || '  1. *Ceylon Cinnamon Alba* (500 Kg) [Grade: ALBA]'}
+${clientInfoBlock}*Requested Products (${validItems.length} ${validItems.length === 1 ? 'Item' : 'Items'}):*
+${itemList || '• None specified'}
 
 *Commercial & Shipping Parameters:*
 - *Estimated Total Volume:* ${totalVolumeStr}
@@ -100,3 +99,4 @@ export function openWhatsAppQuotation(params: B2BQuotationParams): void {
   const url = generateWhatsAppUrl(params);
   window.open(url, '_blank', 'noopener,noreferrer');
 }
+

@@ -151,11 +151,20 @@ export const Navbar: React.FC<NavbarProps> = ({
         >
           {/* Circular Badge */}
           <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full overflow-hidden border-2 border-[#C87A28]/70 shadow-md dark:shadow-black/80 group-hover:border-amber-400 transition-all duration-200 bg-white dark:bg-black/80 shrink-0">
-            <img
-              src={getAssetUrl('images/logo.jpg')}
-              alt="Jade Cinnamon Lanka Logo"
-              className="w-full h-full object-cover"
-            />
+            <picture className="w-full h-full block">
+              <source srcSet={getAssetUrl('images/logo.webp')} type="image/webp" />
+              <img
+                src={getAssetUrl('images/logo.webp')}
+                alt="Jade Cinnamon Lanka Logo"
+                loading="eager"
+                decoding="sync"
+                // @ts-ignore
+                fetchPriority="high"
+                width={64}
+                height={64}
+                className="w-full h-full object-cover"
+              />
+            </picture>
           </div>
 
           {/* 3-Line Brand Typography */}

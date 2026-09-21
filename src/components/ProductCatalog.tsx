@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { Sparkles, X, ShieldCheck, FileCheck, Package } from 'lucide-react';
+import { X, ShieldCheck, FileCheck, Package } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { Product } from '../data/products';
 import { TranslationSchema } from '../data/translations';
@@ -44,13 +44,13 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
     <section
       ref={sectionRef}
       id="products"
-      className="py-24 sm:py-32 relative overflow-hidden border-t border-[#C87A28]/20 dark:border-[#C87A28]/30 bg-[#FBF8F2] dark:bg-[#062319] scroll-mt-20 transition-colors duration-300"
+      className="py-20 sm:py-28 relative overflow-hidden border-t border-[#C87A28]/20 dark:border-[#C87A28]/30 bg-[#FBF8F2] dark:bg-[#062319] scroll-mt-20 transition-colors duration-300"
     >
       {/* Parallax Background Layer */}
       <motion.div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none scale-110 opacity-30 dark:opacity-40 gpu-layer"
         style={{
-          backgroundImage: `url('${getAssetUrl('images/bg-products.jpg')}')`,
+          backgroundImage: `url('${getAssetUrl('images/gallery-drying.webp')}')`,
           y: bgY,
         }}
       />
@@ -67,11 +67,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 gpu-accelerate"
         >
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-black/70 backdrop-blur-md border border-[#C87A28]/20 dark:border-[#C87A28]/30 text-[#9E5714] dark:text-[#E59A4D] text-xs font-bold tracking-wider uppercase mb-3 shadow-md">
-            <Sparkles className="w-3 h-3 text-[#9E5714] dark:text-[#E59A4D]" />
-            <span>{t.catalog.badge}</span>
-          </span>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#11281E] dark:text-[#F9F6F0] mb-4 tracking-tight drop-shadow-sm">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#11281E] dark:text-[#F9F6F0] mb-3 sm:mb-4 tracking-tight drop-shadow-sm">
             {t.catalog.title}
           </h2>
           <p className="text-[#3B4D43] dark:text-[#D1DDD5] text-sm sm:text-base leading-relaxed">

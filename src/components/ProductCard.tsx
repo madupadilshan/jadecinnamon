@@ -27,8 +27,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     setImageScale(1.1);
     setTimeout(() => setImageScale(1), 350);
 
-    const defaultQty = product.category === 'oils' ? 50 : 500;
-    addToCart(product, defaultQty, undefined, e);
+    // Initial starting value must be 0 per specifications
+    addToCart(product, 0, undefined, e);
 
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 1800);
@@ -46,14 +46,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     >
       {/* Top Image Container */}
       <div className="relative aspect-[16/10] sm:aspect-[4/3] w-full overflow-hidden bg-jade-950">
-        <motion.img
-          src={product.imageUrl}
-          alt={product.name}
-          animate={{ scale: imageScale }}
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
-          loading="lazy"
-        />
+        <picture className="w-full h-full block">
+          <source
+            srcSet={product.imageUrl.replace(/\.(jpg|jpeg)$/i, '.webp')}
+            type="image/webp"
+          />
+          <motion.img
+            src={product.imageUrl}
+            alt={product.name}
+            animate={{ scale: imageScale }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
+            loading="lazy"
+            decoding="async"
+            width={400}
+            height={300}
+          />
+        </picture>
         <div className="absolute inset-0 bg-gradient-to-t from-white/80 dark:from-[#062319] via-transparent to-black/30 pointer-events-none" />
 
         {/* Floating Badges */}

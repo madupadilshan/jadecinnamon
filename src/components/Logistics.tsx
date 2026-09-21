@@ -5,7 +5,6 @@ import {
   Plane,
   Box,
   FileCheck2,
-  Sparkles,
   Anchor,
   Clock,
   Award,
@@ -120,19 +119,15 @@ export const LogisticsWhyChooseUs: React.FC<LogisticsWhyChooseUsProps> = ({
   const content = whyChooseUsText[langKey] || whyChooseUsText.en;
 
   return (
-    <div className="relative w-full mb-16 sm:mb-20">
+    <div className="relative w-full mb-14 sm:mb-18">
       {/* Sub-Header */}
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-        className="text-center max-w-3xl mx-auto mb-12 sm:mb-14 gpu-accelerate"
+        className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 gpu-accelerate"
       >
-        <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-black/70 backdrop-blur-md border border-[#C87A28]/20 dark:border-[#C87A28]/30 text-[#9E5714] dark:text-[#E59A4D] text-xs font-bold tracking-wider uppercase mb-3 shadow-md">
-          <Sparkles className="w-3 h-3 text-[#9E5714] dark:text-[#E59A4D]" />
-          <span>{content.badge}</span>
-        </span>
         <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#11281E] dark:text-[#F9F6F0] mb-4 tracking-tight drop-shadow-sm">
           {content.title}
         </h2>
@@ -418,13 +413,13 @@ export const Logistics: React.FC<LogisticsProps> = ({ t, currentLang = 'en', isR
     <section
       ref={sectionRef}
       id="logistics"
-      className="relative w-full py-24 sm:py-28 overflow-hidden border-t border-[#C87A28]/20 dark:border-[#C87A28]/30 bg-[#FBF8F2] dark:bg-[#062319] scroll-mt-20 transition-colors duration-300"
+      className="relative w-full py-20 sm:py-28 overflow-hidden border-t border-[#C87A28]/20 dark:border-[#C87A28]/30 bg-[#FBF8F2] dark:bg-[#062319] scroll-mt-20 transition-colors duration-300"
     >
       {/* Parallax Background Layer */}
       <motion.div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none scale-110 opacity-30 dark:opacity-40 gpu-layer"
         style={{
-          backgroundImage: `url('${getAssetUrl('images/bg-logistics-port.jpg')}')`,
+          backgroundImage: `url('${getAssetUrl('images/gallery-shipping.webp')}')`,
           y: bgY,
         }}
       />
@@ -448,12 +443,8 @@ export const Logistics: React.FC<LogisticsProps> = ({ t, currentLang = 'en', isR
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center max-w-3xl mx-auto mb-14 pt-10 border-t border-[#C87A28]/20 dark:border-white/10 gpu-accelerate"
+          className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 pt-8 sm:pt-10 border-t border-[#C87A28]/20 dark:border-white/10 gpu-accelerate"
         >
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-black/70 backdrop-blur-md border border-[#C87A28]/20 dark:border-[#C87A28]/30 text-[#9E5714] dark:text-[#E59A4D] text-xs font-bold tracking-wider uppercase mb-3 shadow-md">
-            <Ship className="w-3 h-3 text-[#9E5714] dark:text-[#E59A4D]" />
-            <span>{t.logistics.badge}</span>
-          </span>
           <h3 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#11281E] dark:text-[#F9F6F0] mb-4 tracking-tight drop-shadow-sm">
             {t.logistics.title}
           </h3>

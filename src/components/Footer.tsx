@@ -27,11 +27,18 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
           <div className="lg:col-span-5 space-y-4">
             <div className="flex items-center gap-3.5">
               <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-ceylon-400/60 shadow-lg bg-white dark:bg-black/60 shrink-0">
-                <img
-                  src={getAssetUrl('images/logo.jpg')}
-                  alt="Jade Cinnamon Lanka Logo"
-                  className="w-full h-full object-cover"
-                />
+                <picture className="w-full h-full block">
+                  <source srcSet={getAssetUrl('images/logo.webp')} type="image/webp" />
+                  <img
+                    src={getAssetUrl('images/logo.webp')}
+                    alt="Jade Cinnamon Lanka Logo"
+                    loading="lazy"
+                    decoding="async"
+                    width={64}
+                    height={64}
+                    className="w-full h-full object-cover"
+                  />
+                </picture>
               </div>
               <span className="font-serif font-bold text-xl sm:text-2xl text-[#11281E] dark:text-[#F9F6F0] tracking-tight">
                 {t.brandTitle}
@@ -108,12 +115,12 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
                 <div>
                   <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.footer.directLine}</div>
                   <a
-                    href="https://wa.me/94785218364"
+                    href="https://wa.me/94765335308"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#11281E] dark:text-[#F9F6F0] hover:text-[#9E5714] dark:hover:text-[#E59A4D] font-semibold"
                   >
-                    +94 78 521 8364 (WhatsApp / Voice)
+                    +94 76 533 5308 (WhatsApp / Voice)
                   </a>
                 </div>
               </div>

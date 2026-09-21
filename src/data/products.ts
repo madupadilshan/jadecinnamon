@@ -47,7 +47,7 @@ const RAW_PRODUCTS: Product[] = [
       volatileOil: '> 1.8% v/w',
       gradeStandard: 'SLS 81:2000 Grade Alba / ISO 6539'
     },
-    imageUrl: '/images/product-alba.jpg',
+    imageUrl: '/images/product-alba.webp',
     packaging: '25kg / 50kg export bales, vacuum-sealed bags in master cartons, or custom cut lengths (10cm - 20cm)',
     featured: true
   },
@@ -68,7 +68,7 @@ const RAW_PRODUCTS: Product[] = [
       volatileOil: '> 1.5% v/w',
       gradeStandard: 'SLS 81:2000 Continental C5-SP'
     },
-    imageUrl: '/images/product-c5.jpg',
+    imageUrl: '/images/product-c5.webp',
     packaging: '25kg / 50kg export bales, 10kg master cartons with inner food-grade poly lining',
     featured: true
   },
@@ -89,7 +89,7 @@ const RAW_PRODUCTS: Product[] = [
       volatileOil: '> 1.4% v/w',
       gradeStandard: 'SLS 81:2000 Continental C5'
     },
-    imageUrl: '/images/product-c5.jpg',
+    imageUrl: '/images/product-c5.webp',
     packaging: '25kg / 50kg bales or retail cut quills in custom branded packaging'
   },
   {
@@ -109,7 +109,7 @@ const RAW_PRODUCTS: Product[] = [
       volatileOil: '> 1.2% v/w',
       gradeStandard: 'SLS 81:2000 Continental C4'
     },
-    imageUrl: '/images/product-commercial-quills.jpg',
+    imageUrl: '/images/product-commercial-quills.webp',
     packaging: '25kg / 50kg jute or polypropylene bags, palletized for container loading'
   },
   {
@@ -129,7 +129,7 @@ const RAW_PRODUCTS: Product[] = [
       volatileOil: '> 1.1% v/w',
       gradeStandard: 'SLS 81:2000 Mexican M5'
     },
-    imageUrl: '/images/product-commercial-quills.jpg',
+    imageUrl: '/images/product-commercial-quills.webp',
     packaging: '50kg pressed bales with secure strapped wrapping'
   },
   {
@@ -149,7 +149,7 @@ const RAW_PRODUCTS: Product[] = [
       volatileOil: '> 1.0% v/w',
       gradeStandard: 'SLS 81:2000 Mexican M4'
     },
-    imageUrl: '/images/product-commercial-quills.jpg',
+    imageUrl: '/images/product-commercial-quills.webp',
     packaging: '50kg export standard bales'
   },
   {
@@ -169,7 +169,7 @@ const RAW_PRODUCTS: Product[] = [
       volatileOil: '> 0.9% v/w',
       gradeStandard: 'SLS 81:2000 Hamburg H1'
     },
-    imageUrl: '/images/cinnamon-quills.jpg',
+    imageUrl: '/images/cinnamon-quills.webp',
     packaging: '50kg export bales'
   },
   {
@@ -189,7 +189,7 @@ const RAW_PRODUCTS: Product[] = [
       volatileOil: '> 0.8% v/w',
       gradeStandard: 'SLS 81:2000 Hamburg H2'
     },
-    imageUrl: '/images/cinnamon-quills.jpg',
+    imageUrl: '/images/cinnamon-quills.webp',
     packaging: '50kg compressed bales'
   },
 
@@ -210,7 +210,7 @@ const RAW_PRODUCTS: Product[] = [
       volatileOil: '> 1.4% v/w',
       gradeStandard: 'SLS 81:2000 Quillings Grade 1'
     },
-    imageUrl: '/images/product-quillings-chips.jpg',
+    imageUrl: '/images/product-quillings-chips.webp',
     packaging: '25kg woven PP bags with inner polyethylene barrier',
     featured: true
   },
@@ -230,7 +230,7 @@ const RAW_PRODUCTS: Product[] = [
       volatileOil: '> 1.2% v/w',
       gradeStandard: 'SLS 81:2000 Clean Chips'
     },
-    imageUrl: '/images/product-quillings-chips.jpg',
+    imageUrl: '/images/product-quillings-chips.webp',
     packaging: '25kg / 50kg export bags'
   },
   {
@@ -250,7 +250,7 @@ const RAW_PRODUCTS: Product[] = [
       volatileOil: '> 1.2% v/w',
       gradeStandard: 'ISO 6539 / SLS 81 Fine Ground'
     },
-    imageUrl: '/images/product-cinnamon-powder.jpg',
+    imageUrl: '/images/product-cinnamon-powder.webp',
     packaging: '10kg / 20kg nitrogen-flushed multi-wall kraft bags or custom private-label pouches',
     featured: true
   },
@@ -273,7 +273,7 @@ const RAW_PRODUCTS: Product[] = [
       coumarin: 'Trace < 0.001%',
       gradeStandard: 'SLS 187 / ISO 3524 Grade 1'
     },
-    imageUrl: '/images/product-cinnamon-oil.jpg',
+    imageUrl: '/images/product-cinnamon-oil.webp',
     packaging: '1kg, 5kg, 25kg aluminium bottles, 200kg epoxy-lined steel drums with UN certification',
     featured: true
   },
@@ -294,7 +294,7 @@ const RAW_PRODUCTS: Product[] = [
       coumarin: 'Not Detected',
       gradeStandard: 'SLS 187 / ISO 3524 Industrial Leaf'
     },
-    imageUrl: '/images/product-leaf-oil.jpg',
+    imageUrl: '/images/product-leaf-oil.webp',
     packaging: '25kg HDPE carboys, 200kg UN-certified steel export drums'
   },
 
@@ -316,7 +316,7 @@ const RAW_PRODUCTS: Product[] = [
       volatileOil: '> 2.5% v/w',
       gradeStandard: 'ASTA / ISO 959-1 Export Grade'
     },
-    imageUrl: '/images/product-black-pepper.jpg',
+    imageUrl: '/images/product-black-pepper.webp',
     packaging: '25kg / 50kg multi-layer kraft paper bags or PP bags',
     featured: true
   },
@@ -336,7 +336,7 @@ const RAW_PRODUCTS: Product[] = [
       coumarin: 'N/A',
       volatileOil: '> 17.0% v/w (Extreme Potency)'
     },
-    imageUrl: '/images/product-ceylon-cloves.jpg',
+    imageUrl: '/images/product-ceylon-cloves.webp',
     packaging: '25kg / 50kg vacuum cartons or jute bags'
   },
   {
@@ -356,7 +356,7 @@ const RAW_PRODUCTS: Product[] = [
       volatileOil: '> 6.0% v/w',
       gradeStandard: 'Green Extra Bold Jumbo'
     },
-    imageUrl: '/images/product-cardamom.jpg',
+    imageUrl: '/images/product-cardamom.webp',
     packaging: '5kg airtight foil pouches in 20kg master export cartons'
   },
   {
@@ -375,7 +375,7 @@ const RAW_PRODUCTS: Product[] = [
       coumarin: 'N/A',
       volatileOil: '> 6.5% v/w'
     },
-    imageUrl: '/images/product-nutmeg.jpg',
+    imageUrl: '/images/product-nutmeg.webp',
     packaging: '25kg / 50kg poly-lined jute bags'
   }
 ];

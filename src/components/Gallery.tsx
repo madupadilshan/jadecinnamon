@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { Sparkles, Eye, X } from 'lucide-react';
+import { Eye, X } from 'lucide-react';
 import { TranslationSchema } from '../data/translations';
 import { getAssetUrl } from '../utils/assets';
 
@@ -25,50 +25,50 @@ export const Gallery: React.FC<GalleryProps> = ({ t }) => {
     offset: ['start end', 'end start'],
   });
 
-  const bgY = useTransform(scrollYProgress, [0, 1], ['-12%', '12%']);
+  const bgY = useTransform(scrollYProgress, [0, 1], ['-15%', '15%']);
 
   const galleryItems: GalleryItem[] = [
     {
       id: 1,
       title: t.gallery.item1Title,
       desc: t.gallery.item1Desc,
-      imgUrl: getAssetUrl('images/gallery-plantation.jpg'),
-      tag: 'Ceylon Highlands Plantation',
+      imgUrl: getAssetUrl('images/gallery-plantation.webp'),
+      tag: 'Estate Origin',
     },
     {
       id: 2,
       title: t.gallery.item2Title,
       desc: t.gallery.item2Desc,
-      imgUrl: getAssetUrl('images/gallery-peeling.jpg'),
-      tag: 'Artisan Peeling & Layering',
+      imgUrl: getAssetUrl('images/gallery-peeling.webp'),
+      tag: 'Hand Craftsmanship',
     },
     {
       id: 3,
       title: t.gallery.item3Title,
       desc: t.gallery.item3Desc,
-      imgUrl: getAssetUrl('images/gallery-drying.jpg'),
-      tag: 'Controlled Solar Drying',
+      imgUrl: getAssetUrl('images/gallery-drying.webp'),
+      tag: 'Hygienic Curing',
     },
     {
       id: 4,
       title: t.gallery.item4Title,
       desc: t.gallery.item4Desc,
-      imgUrl: getAssetUrl('images/gallery-grading.jpg'),
-      tag: 'Export Grade Calibration',
+      imgUrl: getAssetUrl('images/gallery-grading.webp'),
+      tag: 'Precision Grading',
     },
     {
       id: 5,
       title: t.gallery.item5Title,
       desc: t.gallery.item5Desc,
-      imgUrl: getAssetUrl('images/gallery-distillation.jpg'),
-      tag: 'Steam Distillation Facility',
+      imgUrl: getAssetUrl('images/gallery-distillation.webp'),
+      tag: 'GC-MS Distillation',
     },
     {
       id: 6,
       title: t.gallery.item6Title,
       desc: t.gallery.item6Desc,
-      imgUrl: getAssetUrl('images/gallery-shipping.jpg'),
-      tag: 'Container Freight Loading',
+      imgUrl: getAssetUrl('images/gallery-shipping.webp'),
+      tag: 'Export Logistics',
     },
   ];
 
@@ -97,13 +97,13 @@ export const Gallery: React.FC<GalleryProps> = ({ t }) => {
     <section
       ref={sectionRef}
       id="gallery"
-      className="py-24 sm:py-32 relative bg-[#FBF8F2] dark:bg-[#062319] overflow-hidden border-t border-[#C87A28]/20 dark:border-[#C87A28]/30 scroll-mt-20 transition-colors duration-300"
+      className="py-20 sm:py-28 relative bg-[#FBF8F2] dark:bg-[#062319] overflow-hidden border-t border-[#C87A28]/20 dark:border-[#C87A28]/30 scroll-mt-20 transition-colors duration-300"
     >
       {/* Clean Parallax Atmosphere Background */}
       <motion.div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat pointer-events-none scale-110 opacity-25 dark:opacity-40 gpu-layer"
         style={{
-          backgroundImage: `url('${getAssetUrl('images/bg-about-plantation.jpg')}')`,
+          backgroundImage: `url('${getAssetUrl('images/gallery-plantation.webp')}')`,
           y: bgY,
         }}
       />
@@ -124,13 +124,9 @@ export const Gallery: React.FC<GalleryProps> = ({ t }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center max-w-3xl mx-auto mb-14 sm:mb-16 gpu-accelerate"
+          className="text-center max-w-3xl mx-auto mb-12 sm:mb-14 gpu-accelerate"
         >
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 dark:bg-black/70 backdrop-blur-md border border-[#C87A28]/20 dark:border-[#C87A28]/30 text-[#9E5714] dark:text-[#E59A4D] text-xs font-bold tracking-wider uppercase mb-3 shadow-md">
-            <Sparkles className="w-3 h-3 text-[#9E5714] dark:text-[#E59A4D]" />
-            <span>{t.gallery.badge}</span>
-          </span>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#11281E] dark:text-[#F9F6F0] mb-4 tracking-tight drop-shadow-sm">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#11281E] dark:text-[#F9F6F0] mb-3 sm:mb-4 tracking-tight drop-shadow-sm">
             {t.gallery.title}
           </h2>
           <p className="text-[#3B4D43] dark:text-[#D1DDD5] text-sm sm:text-base leading-relaxed">
@@ -156,12 +152,18 @@ export const Gallery: React.FC<GalleryProps> = ({ t }) => {
               className="glass-card rounded-2xl overflow-hidden border border-[#C87A28]/20 dark:border-ceylon-500/30 hover:border-[#C87A28]/70 dark:hover:border-ceylon-400/70 shadow-md dark:shadow-2xl group cursor-pointer relative bg-white/95 dark:bg-[#0A2F22]/85 backdrop-blur-md gpu-accelerate"
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden bg-black/50">
-                <img
-                  src={item.imgUrl}
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
-                  loading="lazy"
-                />
+                <picture className="w-full h-full block">
+                  <source srcSet={item.imgUrl} type="image/webp" />
+                  <img
+                    src={item.imgUrl}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
+                    loading="lazy"
+                    decoding="async"
+                    width={600}
+                    height={450}
+                  />
+                </picture>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 dark:from-[#062319] via-transparent to-black/30 opacity-80 group-hover:opacity-60 transition-opacity" />
 
                 {/* Floating Tag */}
@@ -222,11 +224,15 @@ export const Gallery: React.FC<GalleryProps> = ({ t }) => {
               </button>
 
               <div className="relative aspect-[16/10] w-full bg-black">
-                <img
-                  src={activeImage.imgUrl}
-                  alt={activeImage.title}
-                  className="w-full h-full object-cover"
-                />
+                <picture className="w-full h-full block">
+                  <source srcSet={activeImage.imgUrl} type="image/webp" />
+                  <img
+                    src={activeImage.imgUrl}
+                    alt={activeImage.title}
+                    className="w-full h-full object-cover"
+                    decoding="async"
+                  />
+                </picture>
               </div>
 
               <div className="p-6 bg-[#FBF8F2] dark:bg-jade-950/95 border-t border-[#C87A28]/20 dark:border-white/10">

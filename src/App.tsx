@@ -129,7 +129,7 @@ export function App() {
             } z-40 flex items-center group`}
           >
             <a
-              href="https://wa.me/94785218364?text=Hello%20Jade%20Cinnamon%20Lanka,%20I%20would%20like%20to%20inquire%20about%20Pure%20Ceylon%20Cinnamon%20export%20grades."
+              href="https://wa.me/94765335308?text=Hello%20Jade%20Cinnamon%20Lanka,%20I%20would%20like%20to%20inquire%20about%20Pure%20Ceylon%20Cinnamon%20export%20grades."
               target="_blank"
               rel="noopener noreferrer"
               className="relative flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white shadow-2xl shadow-[#25D366]/50 hover:scale-110 active:scale-95 transition-all duration-300 border-2 border-white/40 cursor-pointer"
@@ -145,7 +145,7 @@ export function App() {
                   isRtl ? 'left-full ml-3' : 'right-full mr-3'
                 } px-3 py-1.5 rounded-xl bg-black/90 backdrop-blur-md border border-white/10 text-xs font-semibold text-white whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 shadow-xl`}
               >
-                Direct WhatsApp Trade Desk (+94 78 521 8364)
+                Direct WhatsApp Trade Desk (+94 76 533 5308)
               </span>
             </a>
           </aside>

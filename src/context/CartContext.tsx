@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Product } from '../data/products';
 
+export type QuotationUnit = 'Kg' | 'L';
+
 export interface CartItem {
   id: string; // product.id
   productId: string;
@@ -11,7 +13,7 @@ export interface CartItem {
   categoryLabel: string;
   imageUrl: string;
   quantity: number;
-  unit: 'Kg' | 'MT' | 'L' | 'Bales';
+  unit: QuotationUnit;
   pricePerKg?: number;
   specs?: {
     moisture?: string;
@@ -39,12 +41,12 @@ interface CartContextType {
   addToCart: (
     product: Product,
     quantity?: number,
-    unit?: 'Kg' | 'MT' | 'L' | 'Bales',
+    unit?: QuotationUnit,
     event?: React.MouseEvent
   ) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
-  updateUnit: (productId: string, unit: 'Kg' | 'MT' | 'L' | 'Bales') => void;
+  updateUnit: (productId: string, unit: QuotationUnit) => void;
   clearCart: () => void;
   totalUniqueItems: number;
   totalItemQuantity: number;
@@ -191,11 +193,11 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const addToCart = (
     product: Product,
-    quantity: number = 500,
-    unit?: 'Kg' | 'MT' | 'L' | 'Bales',
+    quantity: number = 0,
+    unit?: QuotationUnit,
     event?: React.MouseEvent
   ) => {
-    const defaultUnit: 'Kg' | 'MT' | 'L' | 'Bales' =
+    const defaultUnit: QuotationUnit =
       unit || (product.category === 'oils' ? 'L' : 'Kg');
 
     // Trigger Anti-Gravity floating clone animation towards Cart Icon
@@ -229,7 +231,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (existing) {
         return prev.map((item) =>
           item.id === product.id
-            ? { ...item, quantity: item.quantity + (quantity > 0 ? quantity : 100) }
+            ? { ...item, quantity: item.quantity + (quantity > 0 ? quantity : 0) }
             : item
         );
       }
@@ -243,7 +245,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         category: product.category,
         categoryLabel: product.categoryLabel,
         imageUrl: product.imageUrl,
-        quantity: quantity > 0 ? quantity : 500,
+        quantity: Math.max(0, quantity),
         unit: defaultUnit,
         specs: {
           moisture: product.specs.moisture,
@@ -261,13 +263,13 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
-    const validQty = Math.max(1, isNaN(quantity) ? 1 : quantity);
+    const validQty = isNaN(quantity) ? 0 : Math.max(0, quantity);
     setItems((prev) =>
       prev.map((item) => (item.id === productId ? { ...item, quantity: validQty } : item))
     );
   };
 
-  const updateUnit = (productId: string, unit: 'Kg' | 'MT' | 'L' | 'Bales') => {
+  const updateUnit = (productId: string, unit: QuotationUnit) => {
     setItems((prev) =>
       prev.map((item) => (item.id === productId ? { ...item, unit } : item))
     );
@@ -280,16 +282,14 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const totalUniqueItems = items.length;
   const totalItemQuantity = items.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Compute clean B2B volume / weight estimate
+  // Compute clean B2B volume / weight estimate strictly in Kg and L
   const totalEstimatedWeightDisplay = (() => {
     if (items.length === 0) return '0 Kg';
     let totalKg = 0;
     let totalLiters = 0;
 
     items.forEach((item) => {
-      if (item.unit === 'MT') {
-        totalKg += item.quantity * 1000;
-      } else if (item.unit === 'L') {
+      if (item.unit === 'L') {
         totalLiters += item.quantity;
       } else {
         totalKg += item.quantity;
@@ -297,13 +297,11 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
 
     const parts: string[] = [];
-    if (totalKg >= 1000) {
-      parts.push(`${(totalKg / 1000).toFixed(2)} MT (~${totalKg.toLocaleString()} Kg)`);
-    } else if (totalKg > 0) {
+    if (totalKg > 0) {
       parts.push(`${totalKg.toLocaleString()} Kg`);
     }
     if (totalLiters > 0) {
-      parts.push(`${totalLiters.toLocaleString()} Liters`);
+      parts.push(`${totalLiters.toLocaleString()} L`);
     }
 
     return parts.join(' + ') || '0 Kg';
