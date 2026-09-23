@@ -1,24 +1,27 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Product } from '../data/products';
+import { Product, ProductVariant } from '../data/products';
 
-export type QuotationUnit = 'Kg' | 'L';
+export type QuotationUnit = 'Kg' | 'L' | 'Packs' | 'Bottles';
 
 export interface CartItem {
-  id: string; // product.id
+  id: string; // Composite key, e.g. "leaf-oil-bottle-100ml" or "cinnamon-powder-1kg" or "cinnamon-quills"
   productId: string;
   name: string;
-  grade?: string;
+  variantId?: string;
+  variantLabel?: string; // e.g., "100ml Standard Bottle", "1Kg Sealed Pouch", "4-Bottle Master Pack", "Bulk Custom Weight"
   gradeCode: string;
   category: string;
   categoryLabel: string;
   imageUrl: string;
   quantity: number;
   unit: QuotationUnit;
-  pricePerKg?: number;
   specs?: {
     moisture?: string;
     coumarin?: string;
     cinnamaldehyde?: string;
+    eugenol?: string;
+    diameter?: string;
+    meshSize?: string;
   };
   notes?: string;
 }
@@ -32,6 +35,13 @@ export interface FlyingParticle {
   imageUrl: string;
 }
 
+export interface AddToCartPayload {
+  product: Product;
+  quantity: number;
+  unit?: QuotationUnit;
+  variant?: ProductVariant;
+}
+
 interface CartContextType {
   items: CartItem[];
   isCartOpen: boolean;
@@ -42,11 +52,16 @@ interface CartContextType {
     product: Product,
     quantity?: number,
     unit?: QuotationUnit,
+    event?: React.MouseEvent,
+    variant?: ProductVariant
+  ) => void;
+  addMultipleToCart: (
+    payloads: AddToCartPayload[],
     event?: React.MouseEvent
   ) => void;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
-  updateUnit: (productId: string, unit: QuotationUnit) => void;
+  removeFromCart: (itemId: string) => void;
+  updateQuantity: (itemId: string, quantity: number) => void;
+  updateUnit: (itemId: string, unit: QuotationUnit) => void;
   clearCart: () => void;
   totalUniqueItems: number;
   totalItemQuantity: number;
@@ -72,7 +87,7 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-const CART_STORAGE_KEY = 'jade_cinnamon_b2b_cart_v2';
+const CART_STORAGE_KEY = 'jade_cinnamon_b2b_cart_v3';
 const NAME_STORAGE_KEY = 'jade_cinnamon_b2b_name';
 const ADDR_STORAGE_KEY = 'jade_cinnamon_b2b_addr';
 const PHONE_STORAGE_KEY = 'jade_cinnamon_b2b_phone';
@@ -118,23 +133,21 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const [destinationPort, setDestinationPort] = useState<string>(() => {
     try {
-      return localStorage.getItem(DEST_STORAGE_KEY) || 'Port of Hamburg, Germany';
+      return localStorage.getItem(DEST_STORAGE_KEY) || '';
     } catch {
-      return 'Port of Hamburg, Germany';
+      return '';
     }
   });
 
   const [incoterm, setIncoterm] = useState<string>(() => {
     try {
-      return localStorage.getItem(INCOTERM_STORAGE_KEY) || 'FOB Colombo & CIF Destination';
+      return localStorage.getItem(INCOTERM_STORAGE_KEY) || '';
     } catch {
-      return 'FOB Colombo & CIF Destination';
+      return '';
     }
   });
 
-  const [orderNotes, setOrderNotes] = useState<string>(
-    'Require 25kg vacuum packs, private labeling, specific moisture level < 12%'
-  );
+  const [orderNotes, setOrderNotes] = useState<string>('');
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [flyingParticles, setFlyingParticles] = useState<FlyingParticle[]>([]);
@@ -191,66 +204,80 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const openCart = () => setIsCartOpen(true);
   const closeCart = () => setIsCartOpen(false);
 
+  const triggerFlyParticle = (event: React.MouseEvent, imageUrl: string) => {
+    const sourceRect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    const targetRect = cartIconRef.current?.getBoundingClientRect();
+
+    const startX = sourceRect.left + sourceRect.width / 2;
+    const startY = sourceRect.top + sourceRect.height / 2;
+    const targetX = targetRect ? targetRect.left + targetRect.width / 2 : window.innerWidth - 60;
+    const targetY = targetRect ? targetRect.top + targetRect.height / 2 : 40;
+
+    const newParticle: FlyingParticle = {
+      id: Date.now() + Math.random(),
+      startX,
+      startY,
+      targetX,
+      targetY,
+      imageUrl,
+    };
+
+    setFlyingParticles((prev) => [...prev, newParticle]);
+
+    setTimeout(() => {
+      setFlyingParticles((prev) => prev.filter((p) => p.id !== newParticle.id));
+    }, 950);
+  };
+
   const addToCart = (
     product: Product,
     quantity: number = 0,
     unit?: QuotationUnit,
-    event?: React.MouseEvent
+    event?: React.MouseEvent,
+    variant?: ProductVariant
   ) => {
-    const defaultUnit: QuotationUnit =
-      unit || (product.category === 'oils' ? 'L' : 'Kg');
-
-    // Trigger Anti-Gravity floating clone animation towards Cart Icon
     if (event) {
-      const sourceRect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-      const targetRect = cartIconRef.current?.getBoundingClientRect();
-
-      const startX = sourceRect.left + sourceRect.width / 2;
-      const startY = sourceRect.top + sourceRect.height / 2;
-      const targetX = targetRect ? targetRect.left + targetRect.width / 2 : window.innerWidth - 60;
-      const targetY = targetRect ? targetRect.top + targetRect.height / 2 : 40;
-
-      const newParticle: FlyingParticle = {
-        id: Date.now() + Math.random(),
-        startX,
-        startY,
-        targetX,
-        targetY,
-        imageUrl: product.imageUrl,
-      };
-
-      setFlyingParticles((prev) => [...prev, newParticle]);
-
-      setTimeout(() => {
-        setFlyingParticles((prev) => prev.filter((p) => p.id !== newParticle.id));
-      }, 950);
+      triggerFlyParticle(event, product.imageUrl);
     }
 
+    const resolvedUnit: QuotationUnit = unit || product.baseUnit || 'Kg';
+    const itemId = variant ? `${product.id}-${variant.id}` : product.id;
+    const itemName = variant ? `${product.name} (${variant.label || variant.volume})` : product.name;
+    const itemGradeCode = variant ? variant.gradeCode : product.gradeCode;
+    const itemVariantLabel = variant ? (variant.label || variant.volume) : (
+      (product.buyingModel === 'fixed_1kg_pack' || product.buyingModel === 'fixed_pack') && product.id !== 'leaf-oil-box-set' ? '1Kg Sealed Pouch' :
+      (product.buyingModel === 'gift_pack' || product.id === 'leaf-oil-box-set') ? '4-Bottle Master Set' : 'Bulk Weight'
+    );
+
     setItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
+      const existing = prev.find((item) => item.id === itemId);
       if (existing) {
         return prev.map((item) =>
-          item.id === product.id
+          item.id === itemId
             ? { ...item, quantity: item.quantity + (quantity > 0 ? quantity : 0) }
             : item
         );
       }
 
       const newItem: CartItem = {
-        id: product.id,
+        id: itemId,
         productId: product.id,
-        name: product.name,
-        grade: product.gradeCode,
-        gradeCode: product.gradeCode,
+        variantId: variant?.id,
+        variantLabel: itemVariantLabel,
+        name: itemName,
+        gradeCode: itemGradeCode,
         category: product.category,
         categoryLabel: product.categoryLabel,
         imageUrl: product.imageUrl,
         quantity: Math.max(0, quantity),
-        unit: defaultUnit,
+        unit: resolvedUnit,
         specs: {
           moisture: product.specs.moisture,
           coumarin: product.specs.coumarin,
           cinnamaldehyde: product.specs.cinnamaldehyde,
+          eugenol: product.specs.eugenol,
+          diameter: product.specs.diameter,
+          meshSize: product.specs.meshSize,
         },
       };
 
@@ -258,20 +285,78 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
   };
 
-  const removeFromCart = (productId: string) => {
-    setItems((prev) => prev.filter((item) => item.id !== productId));
+  const addMultipleToCart = (
+    payloads: AddToCartPayload[],
+    event?: React.MouseEvent
+  ) => {
+    if (payloads.length === 0) return;
+
+    if (event) {
+      triggerFlyParticle(event, payloads[0].product.imageUrl);
+    }
+
+    setItems((prev) => {
+      let updated = [...prev];
+
+      payloads.forEach(({ product, quantity, unit, variant }) => {
+        const resolvedUnit: QuotationUnit = unit || product.baseUnit || 'Kg';
+        const itemId = variant ? `${product.id}-${variant.id}` : product.id;
+        const itemName = variant ? `${product.name} (${variant.label || variant.volume})` : product.name;
+        const itemGradeCode = variant ? variant.gradeCode : product.gradeCode;
+        const itemVariantLabel = variant ? (variant.label || variant.volume) : (
+          (product.buyingModel === 'fixed_1kg_pack' || product.buyingModel === 'fixed_pack') && product.id !== 'leaf-oil-box-set' ? '1Kg Sealed Pouch' :
+          (product.buyingModel === 'gift_pack' || product.id === 'leaf-oil-box-set') ? '4-Bottle Master Set' : 'Bulk Weight'
+        );
+
+        const existingIndex = updated.findIndex((item) => item.id === itemId);
+        if (existingIndex > -1) {
+          updated[existingIndex] = {
+            ...updated[existingIndex],
+            quantity: updated[existingIndex].quantity + (quantity > 0 ? quantity : 0),
+          };
+        } else {
+          updated.push({
+            id: itemId,
+            productId: product.id,
+            variantId: variant?.id,
+            variantLabel: itemVariantLabel,
+            name: itemName,
+            gradeCode: itemGradeCode,
+            category: product.category,
+            categoryLabel: product.categoryLabel,
+            imageUrl: product.imageUrl,
+            quantity: Math.max(0, quantity),
+            unit: resolvedUnit,
+            specs: {
+              moisture: product.specs.moisture,
+              coumarin: product.specs.coumarin,
+              cinnamaldehyde: product.specs.cinnamaldehyde,
+              eugenol: product.specs.eugenol,
+              diameter: product.specs.diameter,
+              meshSize: product.specs.meshSize,
+            },
+          });
+        }
+      });
+
+      return updated;
+    });
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const removeFromCart = (itemId: string) => {
+    setItems((prev) => prev.filter((item) => item.id !== itemId));
+  };
+
+  const updateQuantity = (itemId: string, quantity: number) => {
     const validQty = isNaN(quantity) ? 0 : Math.max(0, quantity);
     setItems((prev) =>
-      prev.map((item) => (item.id === productId ? { ...item, quantity: validQty } : item))
+      prev.map((item) => (item.id === itemId ? { ...item, quantity: validQty } : item))
     );
   };
 
-  const updateUnit = (productId: string, unit: QuotationUnit) => {
+  const updateUnit = (itemId: string, unit: QuotationUnit) => {
     setItems((prev) =>
-      prev.map((item) => (item.id === productId ? { ...item, unit } : item))
+      prev.map((item) => (item.id === itemId ? { ...item, unit } : item))
     );
   };
 
@@ -282,17 +367,30 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const totalUniqueItems = items.length;
   const totalItemQuantity = items.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Compute clean B2B volume / weight estimate strictly in Kg and L
+  // Compute clear B2B volume / weight / pack estimates
   const totalEstimatedWeightDisplay = (() => {
-    if (items.length === 0) return '0 Kg';
+    if (items.length === 0) return '0 Items';
+
     let totalKg = 0;
+    let totalBottles = 0;
+    let totalPacks = 0;
     let totalLiters = 0;
 
     items.forEach((item) => {
-      if (item.unit === 'L') {
-        totalLiters += item.quantity;
-      } else {
+      if (item.unit === 'Kg') {
         totalKg += item.quantity;
+      } else if (item.unit === 'Bottles') {
+        totalBottles += item.quantity;
+      } else if (item.unit === 'Packs') {
+        // If it's a 1Kg pack (Powder, Cut pieces), it also represents 1 Kg per pack
+        if (item.productId === 'cinnamon-powder-1kg' || item.productId === 'cinnamon-cut-pieces-1kg') {
+          totalKg += item.quantity;
+          totalPacks += item.quantity;
+        } else {
+          totalPacks += item.quantity;
+        }
+      } else if (item.unit === 'L') {
+        totalLiters += item.quantity;
       }
     });
 
@@ -300,11 +398,24 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (totalKg > 0) {
       parts.push(`${totalKg.toLocaleString()} Kg`);
     }
+    if (totalBottles > 0) {
+      parts.push(`${totalBottles.toLocaleString()} Bottles`);
+    }
+    if (totalPacks > 0 && totalKg === 0) {
+      parts.push(`${totalPacks.toLocaleString()} Packs`);
+    } else if (totalPacks > 0 && totalKg > 0) {
+      // already counted in totalKg, or add gift packs
+      const non1KgPacks = items.filter(i => i.unit === 'Packs' && i.productId !== 'cinnamon-powder-1kg' && i.productId !== 'cinnamon-cut-pieces-1kg')
+        .reduce((a, b) => a + b.quantity, 0);
+      if (non1KgPacks > 0) {
+        parts.push(`${non1KgPacks.toLocaleString()} Gift Packs`);
+      }
+    }
     if (totalLiters > 0) {
       parts.push(`${totalLiters.toLocaleString()} L`);
     }
 
-    return parts.join(' + ') || '0 Kg';
+    return parts.join(' + ') || '0 Items';
   })();
 
   return (
@@ -316,6 +427,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         openCart,
         closeCart,
         addToCart,
+        addMultipleToCart,
         removeFromCart,
         updateQuantity,
         updateUnit,

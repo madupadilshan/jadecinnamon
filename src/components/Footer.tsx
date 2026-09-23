@@ -52,11 +52,11 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
             <div className="flex flex-wrap items-center gap-2 pt-2">
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white/80 dark:bg-jade-950/80 border border-emerald-600/30 dark:border-jade-500/30 text-emerald-800 dark:text-emerald-300 text-[11px] font-semibold">
                 <ShieldCheck className="w-3 h-3 text-emerald-700 dark:text-emerald-400" />
-                <span>SLS 81 Certified</span>
+                <span>SLS 187 Certified</span>
               </span>
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white/80 dark:bg-jade-950/80 border border-emerald-600/30 dark:border-jade-500/30 text-emerald-800 dark:text-emerald-300 text-[11px] font-semibold">
                 <ShieldCheck className="w-3 h-3 text-emerald-700 dark:text-emerald-400" />
-                <span>ISO 6539:2014</span>
+                <span>ISO 3524:2003</span>
               </span>
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white/80 dark:bg-ceylon-950/80 border border-[#C87A28]/30 dark:border-ceylon-500/30 text-[#9E5714] dark:text-[#E59A4D] text-[11px] font-semibold">
                 <ShieldCheck className="w-3 h-3 text-[#9E5714] dark:text-[#E59A4D]" />

@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ShieldCheck, Sparkles, FileText, Plus, Check } from 'lucide-react';
+import { ShieldCheck, Sparkles, FileText, Plus, Minus, Check, Package, Scale } from 'lucide-react';
 import { WhatsAppIcon } from '../WhatsAppIcon';
-import { Product } from '../../data/products';
+import { Product, ProductVariant } from '../../data/products';
 import { TranslationSchema } from '../../data/translations';
-import { useCart } from '../../context/CartContext';
+import { useCart, QuotationUnit } from '../../context/CartContext';
 
 interface ProductRowCardProps {
   product: Product;
   t: TranslationSchema;
   onOpenSpecs: (product: Product) => void;
-  onQuickOrder: (product: Product) => void;
+  onQuickOrder: (product: Product, variant?: ProductVariant, quantity?: number, unit?: QuotationUnit) => void;
   className?: string;
 }
 
@@ -21,20 +21,91 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
   onQuickOrder,
   className = '',
 }) => {
-  const { addToCart } = useCart();
+  const { addToCart, addMultipleToCart } = useCart();
   const [isAdded, setIsAdded] = useState(false);
   const [imageScale, setImageScale] = useState(1);
 
+  // 1. Bulk Weight Model State (Kg)
+  const [bulkWeight, setBulkWeight] = useState<number>(0);
+
+  // 2. Multi-Volume Bottles Model State (e.g. 100ml, 50ml, 30ml, 15ml)
+  const [variantQtys, setVariantQtys] = useState<Record<string, number>>(() => {
+    const initial: Record<string, number> = {};
+    if (product.variants) {
+      product.variants.forEach((v) => {
+        initial[v.id] = 0;
+      });
+    }
+    return initial;
+  });
+
+  // 3. Fixed Pack Model State (Packs)
+  const [packQty, setPackQty] = useState<number>(0);
+
+  const handleUpdateVariantQty = (variantId: string, delta: number) => {
+    setVariantQtys((prev) => {
+      const current = prev[variantId] || 0;
+      const next = Math.max(0, current + delta);
+      return { ...prev, [variantId]: next };
+    });
+  };
+
+  const handleSetVariantQty = (variantId: string, val: string) => {
+    const parsed = val === '' ? 0 : Math.max(0, parseInt(val, 10) || 0);
+    setVariantQtys((prev) => ({ ...prev, [variantId]: parsed }));
+  };
+
+  const totalConfiguredBottles = Object.values(variantQtys).reduce((a, b) => a + b, 0);
+
   const handleAddToCart = (e: React.MouseEvent) => {
-    setImageScale(1.1);
+    setImageScale(1.08);
     setTimeout(() => setImageScale(1), 350);
 
-    // Initial starting value must be 0 per specifications
-    addToCart(product, 0, undefined, e);
+    if ((product.buyingModel === 'multi_variant_volume' || product.buyingModel === 'volume_variants' || product.buyingModel === 'multi_volume') && product.variants) {
+      const itemsToAdd = product.variants
+        .filter((v) => (variantQtys[v.id] || 0) > 0)
+        .map((v) => ({
+          product,
+          variant: v,
+          quantity: variantQtys[v.id] || 0,
+          unit: 'Bottles' as QuotationUnit,
+        }));
+
+      if (itemsToAdd.length > 0) {
+        addMultipleToCart(itemsToAdd, e);
+      } else {
+        addToCart(product, 0, 'Bottles', e, product.variants[0]);
+      }
+    } else if (product.buyingModel === 'flexible_bulk' || product.buyingModel === 'bulk_weight') {
+      addToCart(product, bulkWeight, 'Kg', e);
+    } else if ((product.buyingModel === 'fixed_pack' && product.id === 'leaf-oil-box-set') || product.buyingModel === 'gift_pack') {
+      addToCart(product, packQty, 'Packs', e);
+    } else if (product.buyingModel === 'fixed_unit_pack' || product.buyingModel === 'fixed_pack' || product.buyingModel === 'fixed_1kg_pack') {
+      addToCart(product, packQty, 'Packs', e);
+    }
 
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 1800);
   };
+
+  const handleOrderNow = () => {
+    if ((product.buyingModel === 'multi_variant_volume' || product.buyingModel === 'volume_variants' || product.buyingModel === 'multi_volume') && product.variants) {
+      const firstActive = product.variants.find((v) => (variantQtys[v.id] || 0) > 0) || product.variants[0];
+      const activeQty = variantQtys[firstActive.id] || 0;
+      onQuickOrder(product, firstActive, activeQty, 'Bottles');
+    } else if (product.buyingModel === 'flexible_bulk' || product.buyingModel === 'bulk_weight') {
+      onQuickOrder(product, undefined, bulkWeight, 'Kg');
+    } else if ((product.buyingModel === 'fixed_pack' && product.id === 'leaf-oil-box-set') || product.buyingModel === 'gift_pack') {
+      onQuickOrder(product, undefined, packQty, 'Packs');
+    } else {
+      onQuickOrder(product, undefined, packQty, 'Packs');
+    }
+  };
+
+  const isVolumeModel = product.buyingModel === 'multi_variant_volume' || product.buyingModel === 'volume_variants' || product.buyingModel === 'multi_volume';
+  const isBulkModel = product.buyingModel === 'flexible_bulk' || product.buyingModel === 'bulk_weight';
+  const isFixedUnitPackModel = (product.buyingModel === 'fixed_unit_pack' || product.buyingModel === 'fixed_pack' || product.buyingModel === 'fixed_1kg_pack') && product.id !== 'leaf-oil-box-set';
+  const isGiftPackModel = (product.buyingModel === 'fixed_pack' && product.id === 'leaf-oil-box-set') || product.buyingModel === 'gift_pack';
 
   return (
     <motion.div
@@ -77,10 +148,13 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
           </span>
         </div>
 
-        {/* Grade Code Badge */}
-        <div className="absolute bottom-2.5 left-2.5">
+        {/* Grade Code & Net Volume Badge */}
+        <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1.5">
           <span className="px-2 py-0.5 rounded bg-ceylon-600 text-white font-mono font-bold text-[11px] shadow-md tracking-wider border border-white/20">
             {product.gradeCode}
+          </span>
+          <span className="px-1.5 py-0.5 rounded bg-black/80 backdrop-blur-md text-amber-300 font-bold text-[9px] tracking-wide border border-amber-400/30">
+            {product.volume}
           </span>
         </div>
       </div>
@@ -88,37 +162,217 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
       {/* Card Content */}
       <div className="p-4 flex-1 flex flex-col justify-between">
         <div>
-          <div className="text-[10px] font-semibold uppercase tracking-wider text-[#9E5714] dark:text-[#E5A855] mb-0.5">
+          <div className="text-[10px] font-semibold uppercase tracking-wider text-[#9E5714] dark:text-[#E59A4D] mb-0.5">
             {product.categoryLabel}
           </div>
-          <h3 className="font-serif text-base sm:text-lg font-bold text-[#11281E] dark:text-[#F9F6F0] mb-1.5 group-hover:text-[#9E5714] dark:group-hover:text-[#E5A855] transition-colors truncate">
+          <h3 className="font-serif text-base sm:text-lg font-bold text-[#11281E] dark:text-[#F9F6F0] mb-1 group-hover:text-[#9E5714] dark:group-hover:text-[#E59A4D] transition-colors truncate">
             {product.name}
           </h3>
           <p className="text-xs text-[#2D3E33] dark:text-[#E2EBE5] line-clamp-2 leading-relaxed mb-3">
             {product.description}
           </p>
 
-          {/* Compact Technical Specs */}
-          <div className="py-2 border-y border-[#E2D8C8] dark:border-white/10 space-y-1 text-xs text-[#5A6D62] dark:text-[#A3B899] mb-3">
-            {product.specs.moisture && (
-              <div className="flex justify-between items-center">
-                <span className="text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.moisture}:</span>
-                <span className="font-semibold text-[#156B3A] dark:text-[#38D377]">{product.specs.moisture}</span>
+          {/* 1. Multi-Volume Controller (Leaf Oil - Independent bottle sizes: 15ml, 30ml, 50ml, 100ml) */}
+          {isVolumeModel && product.variants && (
+            <div className="py-2 border-t border-[#E2D8C8] dark:border-white/10 mb-3 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#5A6D62] dark:text-[#A3B899]">
+                  Bottle Sizes (15ml–100ml):
+                </span>
+                <span className="text-[10px] font-mono font-bold text-[#9E5714] dark:text-[#E5A855]">
+                  {totalConfiguredBottles} {totalConfiguredBottles === 1 ? 'Bottle' : 'Bottles'} Total
+                </span>
               </div>
-            )}
-            {product.specs.coumarin && (
-              <div className="flex justify-between items-center">
-                <span className="text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.coumarin}:</span>
-                <span className="font-semibold text-[#9E5714] dark:text-[#E5A855]">{product.specs.coumarin}</span>
+              <div className="grid grid-cols-2 gap-1.5">
+                {product.variants.map((v) => {
+                  const qty = variantQtys[v.id] || 0;
+                  return (
+                    <div
+                      key={v.id}
+                      className="p-1.5 rounded-lg bg-[#F4EFE6] dark:bg-black/30 border border-[#E2D8C8] dark:border-white/10 flex items-center justify-between gap-1"
+                    >
+                      <div className="text-[11px] font-bold text-[#11281E] dark:text-white truncate">
+                        {v.volume}
+                      </div>
+
+                      <div className="flex items-center gap-0.5">
+                        <button
+                          type="button"
+                          onClick={() => handleUpdateVariantQty(v.id, -1)}
+                          className="w-6 h-6 rounded bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-[10px] font-bold transition-colors cursor-pointer"
+                          aria-label={`Decrease ${v.volume}`}
+                        >
+                          <Minus className="w-2.5 h-2.5" />
+                        </button>
+                        <input
+                          type="number"
+                          min="0"
+                          value={qty === 0 ? '0' : qty}
+                          onChange={(e) => handleSetVariantQty(v.id, e.target.value)}
+                          className="w-8 h-6 text-center text-[11px] font-bold font-mono bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded text-[#11281E] dark:text-[#F9F6F0] focus:outline-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleUpdateVariantQty(v.id, 1)}
+                          className="w-6 h-6 rounded bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-[10px] font-bold transition-colors cursor-pointer"
+                          aria-label={`Increase ${v.volume}`}
+                        >
+                          <Plus className="w-2.5 h-2.5" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            )}
-            {product.specs.volatileOil && (
-              <div className="flex justify-between items-center">
-                <span className="text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.volatileOil}:</span>
-                <span className="font-semibold text-[#11281E] dark:text-[#F9F6F0]">{product.specs.volatileOil}</span>
+            </div>
+          )}
+
+          {/* 2. Flexible Bulk Weight Controller (Quills, Quill Cuts - custom continuous weight in Kg) */}
+          {isBulkModel && (
+            <div className="py-2 border-t border-[#E2D8C8] dark:border-white/10 mb-3 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#5A6D62] dark:text-[#A3B899] flex items-center gap-1">
+                  <Scale className="w-3 h-3 text-[#9E5714] dark:text-[#E5A855]" />
+                  <span>Custom Weight Order (Kg):</span>
+                </span>
+                <span className="text-[9px] text-[#9E5714] dark:text-[#E5A855] font-semibold">
+                  Flexible Bulk
+                </span>
               </div>
-            )}
-          </div>
+              <div className="flex items-center gap-1.5">
+                <div className="flex-1 flex items-center gap-1 bg-[#F4EFE6] dark:bg-black/30 p-1 rounded-xl border border-[#E2D8C8] dark:border-white/10">
+                  <button
+                    type="button"
+                    onClick={() => setBulkWeight((prev) => Math.max(0, prev - (prev > 25 ? 5 : 1)))}
+                    className="w-7 h-7 rounded-lg bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
+                    aria-label="Decrease weight"
+                  >
+                    <Minus className="w-3 h-3" />
+                  </button>
+                  <input
+                    type="number"
+                    min="0"
+                    step="any"
+                    value={bulkWeight === 0 ? '0' : bulkWeight}
+                    onChange={(e) => setBulkWeight(Math.max(0, parseFloat(e.target.value) || 0))}
+                    className="flex-1 h-7 text-center text-xs font-bold font-mono bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded text-[#11281E] dark:text-[#F9F6F0] focus:outline-none"
+                    placeholder="0"
+                  />
+                  <span className="text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] px-1">
+                    Kg
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setBulkWeight((prev) => prev + (prev >= 25 ? 5 : 1))}
+                    className="w-7 h-7 rounded-lg bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
+                    aria-label="Increase weight"
+                  >
+                    <Plus className="w-3 h-3" />
+                  </button>
+                </div>
+
+                {/* Quick Preset Buttons */}
+                <div className="flex items-center gap-1">
+                  {[10, 25, 100].map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => setBulkWeight((prev) => prev + preset)}
+                      className="px-1.5 py-1 h-7 rounded-lg bg-[#F4EFE6] dark:bg-white/5 hover:bg-[#C87A28] hover:text-white border border-[#E2D8C8] dark:border-white/10 text-[9px] font-bold text-[#11281E] dark:text-white transition-colors cursor-pointer"
+                    >
+                      +{preset}kg
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 3. Fixed 1 Kg Unit Pack Controller (Powder, Cut Pieces - strictly 1 Kg sealed pouches) */}
+          {isFixedUnitPackModel && (
+            <div className="py-2 border-t border-[#E2D8C8] dark:border-white/10 mb-3 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#5A6D62] dark:text-[#A3B899] flex items-center gap-1">
+                  <Package className="w-3 h-3 text-[#9E5714] dark:text-[#E5A855]" />
+                  <span>1 Kg Export Packs:</span>
+                </span>
+                <span className="text-[9px] text-[#9E5714] dark:text-[#E5A855] font-semibold">
+                  1 Pack = 1 Kg
+                </span>
+              </div>
+              <div className="flex items-center gap-1 bg-[#F4EFE6] dark:bg-black/30 p-1 rounded-xl border border-[#E2D8C8] dark:border-white/10">
+                <button
+                  type="button"
+                  onClick={() => setPackQty((prev) => Math.max(0, prev - 1))}
+                  className="w-7 h-7 rounded-lg bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
+                  aria-label="Decrease packs"
+                >
+                  <Minus className="w-3 h-3" />
+                </button>
+                <input
+                  type="number"
+                  min="0"
+                  value={packQty === 0 ? '0' : packQty}
+                  onChange={(e) => setPackQty(Math.max(0, parseInt(e.target.value, 10) || 0))}
+                  className="flex-1 h-7 text-center text-xs font-bold font-mono bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded text-[#11281E] dark:text-[#F9F6F0] focus:outline-none"
+                />
+                <span className="text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] px-1">
+                  Packs ({packQty} Kg)
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setPackQty((prev) => prev + 1)}
+                  className="w-7 h-7 rounded-lg bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
+                  aria-label="Increase packs"
+                >
+                  <Plus className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* 4. Fixed Pack Units (Jade Cinnamon Luxury Leaf Oil Gift Set - 4 bottles per pack) */}
+          {isGiftPackModel && (
+            <div className="py-2 border-t border-[#E2D8C8] dark:border-white/10 mb-3 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#5A6D62] dark:text-[#A3B899] flex items-center gap-1">
+                  <Package className="w-3 h-3 text-[#9E5714] dark:text-[#E5A855]" />
+                  <span>Master Gift Sets:</span>
+                </span>
+                <span className="text-[9px] text-[#9E5714] dark:text-[#E5A855] font-semibold">
+                  4 Bottles / Pack
+                </span>
+              </div>
+              <div className="flex items-center gap-1 bg-[#F4EFE6] dark:bg-black/30 p-1 rounded-xl border border-[#E2D8C8] dark:border-white/10">
+                <button
+                  type="button"
+                  onClick={() => setPackQty((prev) => Math.max(0, prev - 1))}
+                  className="w-7 h-7 rounded-lg bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
+                  aria-label="Decrease packs"
+                >
+                  <Minus className="w-3 h-3" />
+                </button>
+                <input
+                  type="number"
+                  min="0"
+                  value={packQty === 0 ? '0' : packQty}
+                  onChange={(e) => setPackQty(Math.max(0, parseInt(e.target.value, 10) || 0))}
+                  className="flex-1 h-7 text-center text-xs font-bold font-mono bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded text-[#11281E] dark:text-[#F9F6F0] focus:outline-none"
+                />
+                <span className="text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] px-1">
+                  Packs
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setPackQty((prev) => prev + 1)}
+                  className="w-7 h-7 rounded-lg bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
+                  aria-label="Increase packs"
+                >
+                  <Plus className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Action Buttons with 44px min tap targets */}
@@ -144,13 +398,13 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
             >
               {isAdded ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-black shrink-0" />
-                  <span className="truncate">Added!</span>
+                  <Check className="w-3.5 h-3.5 text-black" />
+                  <span>Added!</span>
                 </>
               ) : (
                 <>
-                  <Plus className="w-3.5 h-3.5 text-[#9E5714] dark:text-amber-300 shrink-0" />
-                  <span className="truncate">Add to Cart</span>
+                  <Plus className="w-3.5 h-3.5 text-[#9E5714] dark:text-amber-300" />
+                  <span>Add to Cart</span>
                 </>
               )}
             </button>
@@ -158,16 +412,14 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
 
           <button
             type="button"
-            onClick={() => onQuickOrder(product)}
-            className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-xs font-bold text-white shadow-md shadow-[#25D366]/30 hover:shadow-[#25D366]/50 transition-all transform active:scale-98 cursor-pointer"
+            onClick={handleOrderNow}
+            className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-xs shadow-md shadow-[#25D366]/30 transition-all cursor-pointer"
           >
-            <WhatsAppIcon className="w-4 h-4 text-white shrink-0" />
-            <span>{t.catalog.orderNow}</span>
+            <WhatsAppIcon className="w-3.5 h-3.5 text-white" />
+            <span>Direct WhatsApp RFQ</span>
           </button>
         </div>
       </div>
     </motion.div>
   );
 };
-
-export default ProductRowCard;

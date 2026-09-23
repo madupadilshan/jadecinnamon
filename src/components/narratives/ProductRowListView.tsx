@@ -32,17 +32,14 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
   const [itemsPerPage, setItemsPerPage] = useState<number>(4);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Responsive items-per-page calculation
+  // Responsive items-per-page calculation: exactly 4 items on desktop (>=1024px)
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1280) {
+      if (window.innerWidth >= 1024) {
         setItemsPerPage(4);
-      } else if (window.innerWidth >= 1024) {
-        setItemsPerPage(3);
       } else if (window.innerWidth >= 768) {
         setItemsPerPage(2);
       } else {
-        // On mobile, show 4 items per page with swipeable horizontal snap carousel
         setItemsPerPage(4);
       }
     };
@@ -127,16 +124,14 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
 
   const getCategoryLabel = (catId: string) => {
     switch (catId) {
-      case 'quills':
-        return t.catalog.catQuills;
+      case 'retail':
+        return (t.catalog as any).catRetail || 'Amber Dropper Bottles (15ml–100ml)';
       case 'powders':
-        return t.catalog.catPowders;
-      case 'oils':
-        return t.catalog.catOils;
-      case 'spices':
-        return t.catalog.catSpices;
+        return (t.catalog as any).catPowders || 'Pure Spices & Powders';
+      case 'gift-sets':
+        return (t.catalog as any).catGiftSets || 'Luxury Presentation Sets';
       default:
-        return t.catalog.catAll;
+        return t.catalog.catAll || 'All Products';
     }
   };
 
@@ -172,7 +167,7 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
           })}
         </div>
 
-        {/* Real-Time Search Bar with Instant Clear Button (w-full px-4 mb-4) */}
+        {/* Real-Time Search Bar with Instant Clear Button */}
         <div className="max-w-xl mx-auto w-full px-4 mb-2">
           <div className="relative flex items-center">
             <Search className="w-4 h-4 text-[#9E5714] dark:text-[#E5A855] absolute left-4 pointer-events-none" />
@@ -180,8 +175,8 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search grades (e.g. Alba, C5-SP, Leaf Oil, Black Pepper)..."
-              className="w-full pl-11 pr-11 min-h-[48px] py-3 rounded-2xl bg-white dark:bg-[#062319] border border-[#E2D8C8] dark:border-ceylon-500/35 hover:border-[#C87A28] dark:hover:border-ceylon-400 focus:border-[#9E5714] dark:focus:border-amber-400 text-[#11281E] placeholder:text-[#829288] dark:text-[#F9F6F0] dark:placeholder:text-[#64796E] text-xs sm:text-sm font-medium focus:outline-none shadow-sm dark:shadow-xl dark:shadow-black/80 transition-all"
+              placeholder="Search products (e.g. Quills, Cut Pieces, Powder, Leaf Oil, 100ml, Alba, C5)..."
+              className="w-full pl-11 pr-11 min-h-[48px] py-3 rounded-2xl bg-white dark:bg-[#062319] border border-[#E2D8C8] dark:border-ceylon-500/35 hover:border-[#C87A28] dark:hover:border-ceylon-400 focus:border-[#9E5714] dark:focus:border-amber-400 text-[#11281E] placeholder:text-[#829288] dark:text-[#F9F6F0] dark:placeholder:text-[#64796E] text-xs sm:text-sm font-medium focus:outline-none shadow-sm dark:shadow-xl dark:shadow-black/80 transition-all box-border"
             />
             {searchTerm && (
               <button
@@ -203,9 +198,9 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
         </div>
       </div>
 
-      {/* Main Single-Row List Container with Desktop Side Arrows + Mobile Top/Bottom Controls */}
+      {/* Main 4-Item Horizontal Row Container with Desktop Side Nav Controls + Mobile Swipe Slider */}
       <div className="relative group/row my-2">
-        {/* Desktop Side Arrow Left (<) */}
+        {/* Desktop Side Arrow Left (< / ChevronLeft) */}
         <button
           type="button"
           onClick={isRtl ? handleNext : handlePrev}
@@ -213,14 +208,14 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
           className={`hidden md:flex absolute -left-4 lg:-left-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 lg:w-12 lg:h-12 rounded-full bg-white dark:bg-[#062319] border-2 border-[#E2D8C8] dark:border-[#C87A28]/50 hover:border-[#C87A28] dark:hover:border-amber-300 text-[#9E5714] dark:text-[#E5A855] hover:text-[#783C1D] dark:hover:text-white items-center justify-center shadow-md dark:shadow-2xl dark:shadow-black/95 transition-all duration-200 cursor-pointer ${
             (isRtl ? canNext : canPrev)
               ? 'opacity-90 hover:opacity-100 hover:scale-110 active:scale-95'
-              : 'opacity-25 cursor-not-allowed border-gray-300 dark:border-white/10 text-gray-400 dark:text-gray-600'
+              : 'opacity-30 cursor-not-allowed border-gray-300 dark:border-white/10 text-gray-400 dark:text-gray-600 pointer-events-none'
           }`}
           aria-label="Previous products page"
         >
           {isRtl ? <ChevronRight className="w-6 h-6" /> : <ChevronLeft className="w-6 h-6" />}
         </button>
 
-        {/* Desktop Side Arrow Right (>) */}
+        {/* Desktop Side Arrow Right (> / ChevronRight) */}
         <button
           type="button"
           onClick={isRtl ? handlePrev : handleNext}
@@ -228,16 +223,16 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
           className={`hidden md:flex absolute -right-4 lg:-right-6 top-1/2 -translate-y-1/2 z-30 w-11 h-11 lg:w-12 lg:h-12 rounded-full bg-white dark:bg-[#062319] border-2 border-[#E2D8C8] dark:border-[#C87A28]/50 hover:border-[#C87A28] dark:hover:border-amber-300 text-[#9E5714] dark:text-[#E5A855] hover:text-[#783C1D] dark:hover:text-white items-center justify-center shadow-md dark:shadow-2xl dark:shadow-black/95 transition-all duration-200 cursor-pointer ${
             (isRtl ? canPrev : canNext)
               ? 'opacity-90 hover:opacity-100 hover:scale-110 active:scale-95'
-              : 'opacity-25 cursor-not-allowed border-gray-300 dark:border-white/10 text-gray-400 dark:text-gray-600'
+              : 'opacity-30 cursor-not-allowed border-gray-300 dark:border-white/10 text-gray-400 dark:text-gray-600 pointer-events-none'
           }`}
           aria-label="Next products page"
         >
           {isRtl ? <ChevronLeft className="w-6 h-6" /> : <ChevronRight className="w-6 h-6" />}
         </button>
 
-        {/* Mobile-Friendly Viewport:
-            - Mobile (<768px): Swipeable momentum slider with snap-x snap-mandatory, w-[85vw] max-w-[320px] cards, scrollbar-none, px-4 flex gap-4
-            - Tablet/Desktop (>=768px): Fluid responsive grid
+        {/* Viewport:
+            - Mobile (<768px): Touch-optimized swipeable slider with snap-x snap-mandatory scrollbar-none px-4 gap-3
+            - Desktop (>=1024px): Exactly 4 product cards in horizontal row (grid-cols-4 gap-4)
         */}
         <div
           ref={scrollContainerRef}
@@ -260,7 +255,7 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
                   No products found for &ldquo;{searchTerm}&rdquo;
                 </h4>
                 <p className="text-xs text-[#5A6D62] dark:text-[#A3B899] max-w-sm leading-relaxed mb-4">
-                  Try searching with different keywords like &ldquo;Alba&rdquo;, &ldquo;Powder&rdquo;, &ldquo;Oil&rdquo;, or reset your filters.
+                  Try searching with different keywords like &ldquo;Alba&rdquo;, &ldquo;Powder&rdquo;, &ldquo;Oil&rdquo;, &ldquo;Quills&rdquo;, or reset your filters.
                 </p>
                 <button
                   type="button"
@@ -283,12 +278,12 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
                   duration: 0.35,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="flex md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 items-stretch"
+                className="flex overflow-x-auto md:overflow-visible snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 items-stretch"
               >
                 {currentSlice.map((product) => (
                   <div
                     key={product.id}
-                    className="w-[85vw] max-w-[320px] shrink-0 snap-center md:w-auto md:max-w-none md:shrink h-full"
+                    className="w-[82vw] max-w-[300px] shrink-0 snap-center md:w-auto md:max-w-none md:shrink h-full"
                   >
                     <ProductRowCard
                       product={product}
@@ -303,14 +298,14 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
           </AnimatePresence>
         </div>
 
-        {/* Mobile-Only Touch-Friendly Arrow Controls (< 768px) */}
+        {/* Mobile-Only Touch-Friendly Arrow Controls (< 768px) with 44px Tap Targets */}
         {totalPages > 1 && (
           <div className="flex md:hidden items-center justify-between px-4 pt-2">
             <button
               type="button"
               onClick={isRtl ? handleNext : handlePrev}
               disabled={isRtl ? !canNext : !canPrev}
-              className={`min-h-[40px] px-3.5 rounded-xl bg-white dark:bg-[#062319] border border-[#E2D8C8] dark:border-[#C87A28]/35 text-xs font-bold text-[#9E5714] dark:text-[#E5A855] flex items-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer ${
+              className={`min-h-[44px] px-4 rounded-xl bg-white dark:bg-[#062319] border border-[#E2D8C8] dark:border-[#C87A28]/35 text-xs font-bold text-[#9E5714] dark:text-[#E5A855] flex items-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer ${
                 (isRtl ? canNext : canPrev)
                   ? 'opacity-100'
                   : 'opacity-30 cursor-not-allowed'
@@ -328,7 +323,7 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
               type="button"
               onClick={isRtl ? handlePrev : handleNext}
               disabled={isRtl ? !canPrev : !canNext}
-              className={`min-h-[40px] px-3.5 rounded-xl bg-white dark:bg-[#062319] border border-[#E2D8C8] dark:border-[#C87A28]/35 text-xs font-bold text-[#9E5714] dark:text-[#E5A855] flex items-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer ${
+              className={`min-h-[44px] px-4 rounded-xl bg-white dark:bg-[#062319] border border-[#E2D8C8] dark:border-[#C87A28]/35 text-xs font-bold text-[#9E5714] dark:text-[#E5A855] flex items-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer ${
                 (isRtl ? canPrev : canNext)
                   ? 'opacity-100'
                   : 'opacity-30 cursor-not-allowed'

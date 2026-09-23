@@ -20,88 +20,88 @@ import { getAssetUrl } from '../utils/assets';
 // 7-Language Multilingual Dictionary with Safe Fallbacks
 export const whyChooseUsText = {
   en: {
-    badge: 'Export & Logistics Authority',
-    title: 'Why Choose Jade Cinnamon Lanka',
+    badge: 'Export & Quality Authority',
+    title: 'Why Choose Jade Cinnamon Leaf Oil',
     originTitle: '100% Pure Ceylon Origin',
-    originDesc: 'Authentic Cinnamomum verum sourced exclusively from southern Sri Lankan estates.',
-    certTitle: 'Certified Quality (ISO 6539 & SLS)',
-    certDesc: 'Rigorous laboratory testing ensuring international export compliance and purity.',
-    sourcingTitle: 'Direct Plantation Sourcing',
-    sourcingDesc: 'Traceable single-origin supply chain guaranteeing batch consistency and freshness.',
-    coumarinTitle: 'Coumarin-Safe (<0.004%)',
-    coumarinDesc: 'Naturally non-toxic, safe for daily consumer and pharmaceutical applications.',
+    originDesc: 'Authentic Cinnamomum verum leaf oil steam-distilled exclusively from southern Sri Lankan estates.',
+    certTitle: 'Certified Quality (SLS 187 & ISO 3524)',
+    certDesc: 'Rigorous GC-MS testing ensuring 75%–85% active eugenol, full export compliance, and zero additives.',
+    sourcingTitle: 'Sustainable Foliage Sourcing',
+    sourcingDesc: 'Direct estate leaf harvesting guaranteeing single-origin batch consistency, freshness, and high potency.',
+    coumarinTitle: 'High Bioactive Eugenol (75%–85%)',
+    coumarinDesc: 'Naturally rich in antioxidants with safe cinnamaldehyde levels (1.0%–4.5%), ideal for aromatherapy and cosmetic use.',
   },
   si: {
-    badge: 'අපනයන සහ සැපයුම් ප්‍රමිතිය',
-    title: 'අප තෝරාගත යුත්තේ ඇයි?',
-    originTitle: '100% සැබෑ ලංකා කුරුඳු',
-    originDesc: 'ශ්‍රී ලංකාවේ දකුණු පළාතෙන් සෘජුවම ලබාගන්නා උසස්ම කුරුඳු.',
-    certTitle: 'ජාත්‍යන්තර ප්‍රමිති සහතික (ISO 6539)',
-    certDesc: 'ජාත්‍යන්තර අපනයන තත්ත්ව පරීක්ෂාවන්ගෙන් සමත් පිරිසිදු නිෂ්පාදන.',
-    sourcingTitle: 'වතුයායෙන් සෘජුවම',
-    sourcingDesc: 'මැදිහත්කරුවන්ගෙන් තොරව, ගුණාත්මකභාවය සුරකිමින් ලබාදීම.',
-    coumarinTitle: 'ආරක්ෂිත කුමරින් ප්‍රතිශතය (<0.004%)',
-    coumarinDesc: 'දෛනික භාවිතයට වඩාත් සුදුසු සෞඛ්‍යාරක්ෂිත සැබෑ කුරුඳු.',
+    badge: 'අපනයන සහ තත්ත්ව ප්‍රමිතිය',
+    title: 'අපගේ කුරුඳු කොළ තෙල් තෝරාගත යුත්තේ ඇයි?',
+    originTitle: '100% සැබෑ ලංකා කුරුඳු කොළ තෙල්',
+    originDesc: 'ශ්‍රී ලංකාවේ දකුණු පළාතේ නැවුම් කොළවලින් වාෂ්ප ආසවනයෙන් ලබාගන්නා උසස්ම තෙල්.',
+    certTitle: 'ජාත්‍යන්තර ප්‍රමිති සහතික (SLS 187 & ISO 3524)',
+    certDesc: 'GC-MS විද්‍යාගාර පරීක්ෂාවෙන් ඉයුජිනෝල් 75%–85% බව තහවුරු කළ පිරිසිදු නිෂ්පාදන.',
+    sourcingTitle: 'වතුයායෙන් සෘජුවම නැවුම් කොළ',
+    sourcingDesc: 'මැදිහත්කරුවන්ගෙන් තොරව, තිරසාර ලෙස කොළ අස්වැන්න නෙළා පිරිසිදුව ලබාදීම.',
+    coumarinTitle: 'ස්වභාවික ඉයුජිනෝල් (75%–85%)',
+    coumarinDesc: 'ප්‍රතිඔක්සිකාරක ගුණයෙන් අනූන, සමට සහ ආඝ්‍රාණයට වඩාත් සුදුසු සෞඛ්‍යාරක්ෂිත තෙල්.',
   },
   ta: {
-    badge: 'ஏற்றுமதி மற்றும் தளவாடங்கள்',
-    title: 'ஏன் எங்களை தேர்வு செய்ய வேண்டும்?',
-    originTitle: '100% தூய சிலோன் இலவங்கப்பட்டை',
-    originDesc: 'தென் மாகாணத்திலிருந்து நேரடியாக பெறப்பட்ட தூய தரம்.',
-    certTitle: 'சான்றளிக்கப்பட்ட தரம் (ISO 6539)',
-    certDesc: 'சர்வதேச தர பரிசோதனைகளுக்கு உட்பட்ட ஏற்றுமதி தரம்.',
-    sourcingTitle: 'நேரடி பண்ணை விநியோகம்',
-    sourcingDesc: 'நிலையான விநியோகம் மற்றும் தூய்மை உத்தரவாதம்.',
-    coumarinTitle: 'கூமரின்-பாதுகாப்பானது (<0.004%)',
-    coumarinDesc: 'பாதுகாப்பான மற்றும் ஆரோக்கியமான பயன்பாடு.',
+    badge: 'ஏற்றுமதி மற்றும் தர சான்றிதழ்',
+    title: 'ஏன் எங்கள் இலை எண்ணெயை தேர்வு செய்ய வேண்டும்?',
+    originTitle: '100% தூய சிலோன் இலை எண்ணெய்',
+    originDesc: 'தென் மாகாணத் தோட்டங்களிலிருந்து புதிய இலைகளில் இருந்து நீராவி வடித்தல் மூலம் பெறப்பட்டது.',
+    certTitle: 'சான்றளிக்கப்பட்ட தரம் (SLS 187 & ISO 3524)',
+    certDesc: 'GC-MS சோதனைகள் மூலம் 75%–85% யூஜெனோல் உறுதிசெய்யப்பட்ட தூய தரம்.',
+    sourcingTitle: 'நேரடி இலை விநியோகம்',
+    sourcingDesc: 'நிலையான விநியோகம் மற்றும் தூய்மை உத்தரவாதத்துடன் நேரடியாக பெறப்படுகிறது.',
+    coumarinTitle: 'இயற்கை யூஜெனோல் (75%–85%)',
+    coumarinDesc: 'ஆன்டிஆக்ஸிடன்ட்கள் நிறைந்தது, அரோமாதெரபி மற்றும் சரும பயன்பாட்டிற்கு பாதுகாப்பானது.',
   },
   ar: {
-    badge: 'سلطة التصدير والخدمات اللوجستية',
-    title: 'لماذا تختار جيد سينامون لانكا؟',
+    badge: 'سلطة التصدير والجودة المعتمدة',
+    title: 'لماذا تختار زيت ورق القرفة السيلانية؟',
     originTitle: 'أصل سيلاني نقي 100٪',
-    originDesc: 'قرفة سيلانية حقيقية يتم الحصول عليها مباشرة من مزارع سريلانكا الجنوبية.',
-    certTitle: 'جودة معتمدة (ISO 6539 & SLS)',
-    certDesc: 'فحوصات مخبرية صارمة لضمان الامتثال لمعايير التصدير الدولية.',
-    sourcingTitle: 'توريد مباشر من المزارع',
-    sourcingDesc: 'سلسلة توريد موثوقة تضمن ثبات الدفعات ونقاء التوابل.',
-    coumarinTitle: 'آمن وخالٍ من الكومارين (<0.004%)',
-    coumarinDesc: 'قرفة طبيعية نقية آمنة للاستهلاك اليومي والأدوية.',
+    originDesc: 'زيت ورق قرفة سيلانية أصلي مقطر بالبخار من مزارع سريلانكا الجنوبية.',
+    certTitle: 'جودة معتمدة (SLS 187 & ISO 3524)',
+    certDesc: 'فحوصات كروماتوغرافية GC-MS تضمن نسبة يوجينول 75%–85% وخلو تام من الإضافات.',
+    sourcingTitle: 'حصاد مستدام للأوراق الطازجة',
+    sourcingDesc: 'توريد مباشر من المزارع يضمن ثبات الدفعات ونقاء الزيت العطري.',
+    coumarinTitle: 'يوجينول حيوي فعال (75%–85%)',
+    coumarinDesc: 'غني بمضادات الأكسدة ومثالي للاستخدام العطري والتجميلي الآمن.',
   },
   de: {
-    badge: 'Export & Logistik',
-    title: 'Warum Jade Cinnamon Lanka wählen?',
-    originTitle: '100% Reiner Ceylon-Zimt',
-    originDesc: 'Authentischer Cinnamomum verum aus den südlichen Plantagen Sri Lankas.',
-    certTitle: 'Zertifizierte Qualität (ISO 6539)',
-    certDesc: 'Laborgeprüfte Reinheit gemäß internationalen Exportstandards.',
-    sourcingTitle: 'Direktbeschaffung von Plantagen',
-    sourcingDesc: 'Rückverfolgbare Lieferkette für gleichbleibende Frische und Qualität.',
-    coumarinTitle: 'Cumarin-Sicher (<0.004%)',
-    coumarinDesc: 'Natürlich unbedenklich für den täglichen Verzehr und Pharmaanwendungen.',
+    badge: 'Export- & Qualitätsstandard',
+    title: 'Warum Jade Cinnamon Blattöl wählen?',
+    originTitle: '100% Reines Ceylon-Zimtblattöl',
+    originDesc: 'Authentisches Cinnamomum verum Blattöl, wasserdampfdestilliert im Süden Sri Lankas.',
+    certTitle: 'Zertifizierte Qualität (SLS 187 & ISO 3524)',
+    certDesc: 'Laborgeprüfte Reinheit per GC-MS für 75%–85% Eugenol ohne jegliche Zusatzstoffe.',
+    sourcingTitle: 'Direkte nachhaltige Blatternte',
+    sourcingDesc: 'Rückverfolgbare Plantagenlieferkette für gleichbleibende Frische und höchste Potenz.',
+    coumarinTitle: 'Hoher Eugenolgehalt (75%–85%)',
+    coumarinDesc: 'Reich an natürlichen Antioxidantien, ideal für Aromatherapie und Kosmetikanwendungen.',
   },
   fr: {
-    badge: 'Exportation et Logistique',
-    title: 'Pourquoi Choisir Jade Cinnamon Lanka',
-    originTitle: '100% Véritable Cannelle de Ceylan',
-    originDesc: 'Authentique Cinnamomum verum récolté dans le sud du Sri Lanka.',
-    certTitle: 'Qualité Certifiée (ISO 6539 & SLS)',
-    certDesc: 'Tests en laboratoire conformes aux normes internationales d’exportation.',
-    sourcingTitle: 'Approvisionnement Direct des Plantations',
-    sourcingDesc: 'Traçabilité complète garantissant fraîcheur et uniformité.',
-    coumarinTitle: 'Sans Danger en Coumarine (<0.004%)',
-    coumarinDesc: 'Parfaitement sûr pour la consommation quotidienne et l’agroalimentaire.',
+    badge: 'Autorité d\'Exportation et Qualité',
+    title: 'Pourquoi Choisir l\'Huile de Feuille Jade Cinnamon',
+    originTitle: '100% Véritable Huile de Feuille de Ceylan',
+    originDesc: 'Authentique Cinnamomum verum distillé à la vapeur d\'eau au sud du Sri Lanka.',
+    certTitle: 'Qualité Certifiée (SLS 187 & ISO 3524)',
+    certDesc: 'Analyses GC-MS certifiant 75% à 85% d\'eugénol sans aucun solvant synthétique.',
+    sourcingTitle: 'Récolte Durable des Feuilles Fraîches',
+    sourcingDesc: 'Traçabilité complète garantissant fraîcheur, pureté et puissance aromatique.',
+    coumarinTitle: 'Riche en Eugénol Actif (75%–85%)',
+    coumarinDesc: 'Puissant profil antioxydant naturel avec un usage cutané sécurisé.',
   },
   es: {
-    badge: 'Autoridad de Exportación y Logística',
-    title: '¿Por Qué Elegir Jade Cinnamon Lanka?',
+    badge: 'Autoridad de Exportación y Calidad',
+    title: '¿Por Qué Elegir el Aceite de Hoja Jade Cinnamon?',
     originTitle: '100% Origen Puro de Ceilán',
-    originDesc: 'Cinnamomum verum auténtico de las plantaciones del sur de Sri Lanka.',
-    certTitle: 'Calidad Certificada (ISO 6539)',
-    certDesc: 'Rigurosas pruebas de laboratorio para exportación mundial.',
-    sourcingTitle: 'Suministro Directo de Plantación',
-    sourcingDesc: 'Cadena de suministro trazable que garantiza máxima frescura.',
-    coumarinTitle: 'Seguro en Cumarina (<0.004%)',
-    coumarinDesc: 'Seguro y saludable para consumo diario e industrial.',
+    originDesc: 'Aceite de hoja de Cinnamomum verum hidrodestilado al vapor en el sur de Sri Lanka.',
+    certTitle: 'Calidad Certificada (SLS 187 e ISO 3524)',
+    certDesc: 'Pruebas GC-MS que certifican 75%–85% de eugenol sin aditivos químicos.',
+    sourcingTitle: 'Cosecha Sostenible de Hojas Frescas',
+    sourcingDesc: 'Cadena de suministro trazable que garantiza máxima frescura y pureza.',
+    coumarinTitle: 'Alto Eugenol Bioactivo (75%–85%)',
+    coumarinDesc: 'Rico en antioxidantes naturales, ideal para aromaterapia y cosmética.',
   },
 };
 
@@ -168,19 +168,19 @@ export const LogisticsWhyChooseUs: React.FC<LogisticsWhyChooseUsProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-4 border-t border-[#C87A28]/20 dark:border-white/10">
               <div className="flex items-center gap-2 text-xs text-[#11281E] dark:text-[#F9F6F0]">
                 <CheckCircle2 className="w-4 h-4 text-[#9E5714] dark:text-[#E59A4D] shrink-0" />
-                <span>Soft, layered pencil-thin quills</span>
+                <span>100% Pure & Natural Steam Distilled</span>
               </div>
               <div className="flex items-center gap-2 text-xs text-[#11281E] dark:text-[#F9F6F0]">
                 <CheckCircle2 className="w-4 h-4 text-[#9E5714] dark:text-[#E59A4D] shrink-0" />
-                <span>Sweet, delicate aromatic profile</span>
+                <span>No Preservatives or Additives</span>
               </div>
               <div className="flex items-center gap-2 text-xs text-[#11281E] dark:text-[#F9F6F0]">
                 <CheckCircle2 className="w-4 h-4 text-[#9E5714] dark:text-[#E59A4D] shrink-0" />
-                <span>Zero Cassia adulteration guarantee</span>
+                <span>Rich in Antioxidants (75-85% Eugenol)</span>
               </div>
               <div className="flex items-center gap-2 text-xs text-[#11281E] dark:text-[#F9F6F0]">
                 <CheckCircle2 className="w-4 h-4 text-[#9E5714] dark:text-[#E59A4D] shrink-0" />
-                <span>Southern coastal terroir harvest</span>
+                <span>Premium Quality • Product of Sri Lanka</span>
               </div>
             </div>
           </div>
@@ -206,7 +206,7 @@ export const LogisticsWhyChooseUs: React.FC<LogisticsWhyChooseUsProps> = ({
                 <FileCheck2 className="w-6 h-6 sm:w-7 sm:h-7 text-emerald-700 dark:text-emerald-400" />
               </div>
               <span className="px-3 py-1 rounded-full bg-[#f6ecd6] dark:bg-black/60 border border-[#C87A28]/20 dark:border-white/10 text-[#9E5714] dark:text-[#E59A4D] text-xs font-mono font-bold">
-                ISO & SLS Accredited
+                SLS & ISO Accredited
               </span>
             </div>
 
@@ -219,27 +219,27 @@ export const LogisticsWhyChooseUs: React.FC<LogisticsWhyChooseUsProps> = ({
 
             <div className="grid grid-cols-2 gap-2.5">
               <div className="p-3 rounded-xl bg-[#F4EFE6] dark:bg-black/50 border border-[#C87A28]/20 dark:border-white/10">
-                <div className="text-xs font-bold text-[#11281E] dark:text-[#F9F6F0]">ISO 6539:2014</div>
-                <div className="text-[10px] text-[#5A6D62] dark:text-[#A3B899]">Global Spice Standard</div>
-              </div>
-              <div className="p-3 rounded-xl bg-[#F4EFE6] dark:bg-black/50 border border-[#C87A28]/20 dark:border-white/10">
-                <div className="text-xs font-bold text-[#11281E] dark:text-[#F9F6F0]">SLS 81:2000</div>
+                <div className="text-xs font-bold text-[#11281E] dark:text-[#F9F6F0]">SLS 187:1973</div>
                 <div className="text-[10px] text-[#5A6D62] dark:text-[#A3B899]">National Standard</div>
               </div>
               <div className="p-3 rounded-xl bg-[#F4EFE6] dark:bg-black/50 border border-[#C87A28]/20 dark:border-white/10">
-                <div className="text-xs font-bold text-[#11281E] dark:text-[#F9F6F0]">USDA Organic</div>
-                <div className="text-[10px] text-[#5A6D62] dark:text-[#A3B899]">Bio-Certified Batches</div>
+                <div className="text-xs font-bold text-[#11281E] dark:text-[#F9F6F0]">ISO 3524:2003</div>
+                <div className="text-[10px] text-[#5A6D62] dark:text-[#A3B899]">Global Oil Standard</div>
+              </div>
+              <div className="p-3 rounded-xl bg-[#F4EFE6] dark:bg-black/50 border border-[#C87A28]/20 dark:border-white/10">
+                <div className="text-xs font-bold text-[#11281E] dark:text-[#F9F6F0]">GC-MS Verified</div>
+                <div className="text-[10px] text-[#5A6D62] dark:text-[#A3B899]">75%–85% Eugenol</div>
               </div>
               <div className="p-3 rounded-xl bg-[#F4EFE6] dark:bg-black/50 border border-[#C87A28]/20 dark:border-white/10">
                 <div className="text-xs font-bold text-[#11281E] dark:text-[#F9F6F0]">GMP & HACCP</div>
-                <div className="text-[10px] text-[#5A6D62] dark:text-[#A3B899]">Food Safety Compliant</div>
+                <div className="text-[10px] text-[#5A6D62] dark:text-[#A3B899]">Safety Compliant</div>
               </div>
             </div>
           </div>
 
           <div className="mt-6 pt-4 border-t border-[#C87A28]/20 dark:border-white/5 text-[11px] text-[#5A6D62] dark:text-[#A3B899] flex items-center gap-1.5">
             <ShieldCheck className="w-4 h-4 text-emerald-700 dark:text-emerald-400 shrink-0" />
-            <span>Full Certificate of Analysis (COA) per batch</span>
+            <span>Batch-specific GC-MS Certificate of Analysis (COA)</span>
           </div>
         </motion.div>
 
@@ -266,28 +266,28 @@ export const LogisticsWhyChooseUs: React.FC<LogisticsWhyChooseUsProps> = ({
               {content.sourcingTitle}
             </h3>
             <p className="text-[#3B4D43] dark:text-[#D1DDD5] text-xs sm:text-sm leading-relaxed mb-6">
-              {content.sourcingDesc} Direct fair-trade partnerships with master cinnamon-peeling artisans.
+              {content.sourcingDesc} Direct fair-trade partnerships with master distillation artisans.
             </p>
 
             <div className="space-y-2.5">
               <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#F4EFE6] dark:bg-black/40 border border-[#C87A28]/20 dark:border-white/5 text-xs text-[#11281E] dark:text-[#F9F6F0]">
-                <span className="text-[#5A6D62] dark:text-[#A3B899]">Annual Harvest Capacity:</span>
-                <span className="font-bold text-[#9E5714] dark:text-[#E59A4D] font-mono">1,200+ Metric Tons</span>
+                <span className="text-[#5A6D62] dark:text-[#A3B899]">Extraction Method:</span>
+                <span className="font-bold text-[#9E5714] dark:text-[#E59A4D] font-mono">100% Steam Hydro-Distillation</span>
               </div>
               <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#F4EFE6] dark:bg-black/40 border border-[#C87A28]/20 dark:border-white/5 text-xs text-[#11281E] dark:text-[#F9F6F0]">
-                <span className="text-[#5A6D62] dark:text-[#A3B899]">Handcrafted Layering:</span>
-                <span className="font-bold text-[#11281E] dark:text-[#F9F6F0]">Generational Peelers</span>
+                <span className="text-[#5A6D62] dark:text-[#A3B899]">Packaging Options:</span>
+                <span className="font-bold text-[#11281E] dark:text-[#F9F6F0]">15ml, 30ml, 50ml, 100ml Bottles & Gift Sets</span>
               </div>
             </div>
           </div>
 
           <div className="mt-6 pt-4 border-t border-[#C87A28]/20 dark:border-white/5 text-[11px] text-[#5A6D62] dark:text-[#A3B899] flex items-center gap-1.5">
             <Globe2 className="w-4 h-4 text-[#9E5714] dark:text-[#E59A4D] shrink-0" />
-            <span>Direct estate-to-port export supply line</span>
+            <span>Direct distillery-to-port export supply line</span>
           </div>
         </motion.div>
 
-        {/* Pillar 4: Ultra-Low Coumarin (<0.004%) */}
+        {/* Pillar 4: High Bioactive Eugenol (75%–85%) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -303,7 +303,7 @@ export const LogisticsWhyChooseUs: React.FC<LogisticsWhyChooseUsProps> = ({
               </div>
               <div className="px-3.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/90 border border-emerald-600/40 dark:border-emerald-500/40 text-emerald-900 dark:text-emerald-300 text-xs font-mono font-bold flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
-                <span>Health & Safety Verified</span>
+                <span>High Bioactive Eugenol</span>
               </div>
             </div>
 
@@ -312,31 +312,31 @@ export const LogisticsWhyChooseUs: React.FC<LogisticsWhyChooseUsProps> = ({
             </h3>
 
             <p className="text-[#3B4D43] dark:text-[#D1DDD5] text-xs sm:text-sm md:text-base leading-relaxed mb-6">
-              {content.coumarinDesc} Unlike cheap Cassia cinnamon which contains up to 1.0% toxic coumarin causing hepatic strain, Ceylon Cinnamon is non-toxic and medically safe.
+              {content.coumarinDesc} Certified 100% natural, providing therapeutic aroma potency and antimicrobial efficacy with zero mineral oil dilution.
             </p>
 
             <div className="p-4 rounded-2xl bg-[#F4EFE6] dark:bg-black/60 border border-[#C87A28]/20 dark:border-white/10 space-y-3">
               <div className="flex items-center justify-between text-xs">
-                <span className="font-bold text-emerald-800 dark:text-emerald-300">Jade Pure Ceylon Cinnamon:</span>
-                <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400">&lt; 0.004% Coumarin (Safe)</span>
+                <span className="font-bold text-emerald-800 dark:text-emerald-300">Natural Active Eugenol:</span>
+                <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400">75.0% - 85.0% (High Purity)</span>
               </div>
               <div className="w-full h-2 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
-                <div className="w-[1%] h-full bg-emerald-500 dark:bg-emerald-400 rounded-full" />
+                <div className="w-[85%] h-full bg-emerald-500 dark:bg-emerald-400 rounded-full" />
               </div>
 
               <div className="flex items-center justify-between text-xs pt-1 border-t border-black/5 dark:border-white/5">
-                <span className="text-[#5A6D62] dark:text-[#A3B899]">Cassia Cinnamon (Adulterant):</span>
-                <span className="font-mono text-red-600 dark:text-red-400">Up to 1.000% Coumarin (Toxic)</span>
+                <span className="text-[#5A6D62] dark:text-[#A3B899]">Cinnamaldehyde Level:</span>
+                <span className="font-mono font-semibold text-[#11281E] dark:text-[#F9F6F0]">1.0% - 4.5% (Safe Topical Profile)</span>
               </div>
               <div className="w-full h-2 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
-                <div className="w-[100%] h-full bg-red-500/80 rounded-full" />
+                <div className="w-[15%] h-full bg-[#C87A28] rounded-full" />
               </div>
             </div>
           </div>
 
           <div className="mt-6 pt-4 border-t border-[#C87A28]/20 dark:border-white/5 text-[11px] text-[#5A6D62] dark:text-[#A3B899] flex flex-wrap items-center justify-between gap-2">
-            <span>EU & US FDA Dietary Compliance Approved</span>
-            <span className="text-[#9E5714] dark:text-[#E59A4D] font-mono">1,250x Safer Than Cassia</span>
+            <span>IFRA & EU Cosmetic Safety Compliant</span>
+            <span className="text-[#9E5714] dark:text-[#E59A4D] font-mono">100% Pure Essential Oil</span>
           </div>
         </motion.div>
       </div>

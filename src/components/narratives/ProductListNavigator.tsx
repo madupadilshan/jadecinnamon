@@ -29,8 +29,8 @@ export const ProductListNavigator: React.FC<ProductListNavigatorProps> = ({
 
   return (
     <div className="flex flex-col items-center justify-center gap-3 mt-8 select-none">
-      {/* Pagination Number Buttons with Generous Spacing */}
-      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-white dark:bg-[#062319] border border-[#E2D8C8] dark:border-[#C87A28]/30 shadow-md dark:shadow-xl dark:shadow-black/80">
+      {/* Centered Pagination Menu Container */}
+      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-white dark:bg-[#062319] border border-[#C87A28]/30 shadow-md dark:shadow-xl dark:shadow-black/80">
         {/* Previous Button */}
         <button
           type="button"
@@ -46,33 +46,37 @@ export const ProductListNavigator: React.FC<ProductListNavigatorProps> = ({
           {isRtl ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
         </button>
 
-        {/* Dynamic Numbered Buttons [1], [2], ... [N] */}
+        {/* Dynamic Numbered Buttons [1] [2] ... [N] */}
         <div className="flex items-center gap-2 px-1">
           {pages.map((pageIndex) => {
             const isActive = pageIndex === currentPage;
 
             return (
-              <button
+              <div
                 key={pageIndex}
-                type="button"
-                onClick={() => onPageChange(pageIndex)}
-                className={`relative min-w-[44px] min-h-[44px] px-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer flex items-center justify-center ${
-                  isActive
-                    ? 'bg-[#C87A28] text-white border border-white/40 shadow-lg shadow-[#C87A28]/40 scale-105 z-10 font-mono'
-                    : 'bg-[#F4EFE6] dark:bg-black/50 text-[#5A6D62] dark:text-[#A3B899] hover:text-[#11281E] dark:hover:text-white hover:bg-[#ebd7ad] dark:hover:bg-white/10 border border-[#E2D8C8] dark:border-white/5 font-mono'
-                }`}
-                aria-label={`Go to page ${pageIndex + 1}`}
-                aria-current={isActive ? 'page' : undefined}
+                className="flex items-center justify-center min-w-[44px] min-h-[44px]"
               >
-                {isActive && (
-                  <motion.div
-                    layoutId="activePageIndicator"
-                    className="absolute inset-0 rounded-xl bg-[#C87A28] -z-10"
-                    transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-                  />
-                )}
-                <span>{pageIndex + 1}</span>
-              </button>
+                <button
+                  type="button"
+                  onClick={() => onPageChange(pageIndex)}
+                  className={`relative cursor-pointer transition-all duration-200 ${
+                    isActive
+                      ? 'w-9 h-9 flex items-center justify-center rounded-lg bg-[#C87A28] text-white font-bold shadow-md shadow-[#C87A28]/25 scale-105 z-10'
+                      : 'w-9 h-9 flex items-center justify-center rounded-lg border border-[#C87A28]/30 text-sm font-semibold text-[#11281E] dark:text-[#F9F6F0] hover:border-[#C87A28] bg-transparent hover:bg-[#C87A28]/10'
+                  }`}
+                  aria-label={`Go to page ${pageIndex + 1}`}
+                  aria-current={isActive ? 'page' : undefined}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activePageIndicator"
+                      className="absolute inset-0 rounded-lg bg-[#C87A28] -z-10"
+                      transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                    />
+                  )}
+                  <span>{pageIndex + 1}</span>
+                </button>
+              </div>
             );
           })}
         </div>

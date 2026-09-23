@@ -110,7 +110,7 @@ export function App() {
             <QualitySpecs t={t} />
             <WhyChooseUs t={t} currentLang={currentLang} isRtl={isRtl} />
             <Logistics t={t} currentLang={currentLang} isRtl={isRtl} />
-            <Gallery t={t} />
+            <Gallery t={t} isRtl={isRtl} />
             <WhatsAppBuilder
               t={t}
               selectedProduct={selectedProduct}
@@ -129,7 +129,7 @@ export function App() {
             } z-40 flex items-center group`}
           >
             <a
-              href="https://wa.me/94765335308?text=Hello%20Jade%20Cinnamon%20Lanka,%20I%20would%20like%20to%20inquire%20about%20Pure%20Ceylon%20Cinnamon%20export%20grades."
+              href="https://wa.me/94765335308?text=Hello%20Jade%20Cinnamon%20Lanka,%20I%20would%20like%20to%20inquire%20about%20100%25%20Pure%20Ceylon%20Cinnamon%20Leaf%20Oil%20export%20grades."
               target="_blank"
               rel="noopener noreferrer"
               className="relative flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white shadow-2xl shadow-[#25D366]/50 hover:scale-110 active:scale-95 transition-all duration-300 border-2 border-white/40 cursor-pointer"

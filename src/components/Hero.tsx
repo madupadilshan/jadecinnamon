@@ -10,27 +10,27 @@ interface HeroProps {
   t: TranslationSchema;
 }
 
-// 4 Curated Traditional Ceylon Cinnamon & Spice Marketing Visuals (WebP Optimized)
+// 4 Curated 100% Pure Ceylon Cinnamon Leaf Oil Visuals (WebP Optimized)
 const HERO_SLIDES = [
   {
-    url: getAssetUrl('images/hero-bg-1.webp'),
-    label: 'Traditional Harvest & Quills',
-    desc: 'Pure Ceylon Cinnamon Quills from Southern Sri Lanka Heritage Estates',
+    url: getAssetUrl('images/cinnamon-leaf-oil-collection.webp'),
+    label: 'Pure Ceylon Leaf Oil Collection',
+    desc: '100% Natural Steam-Distilled Cinnamon Leaf Oil in 15ml, 30ml, 50ml, 100ml Bottles & Luxury Box',
   },
   {
-    url: getAssetUrl('images/hero-bg-2.webp'),
-    label: 'Artisanal Hand Peeling',
-    desc: 'Centuries-Old Traditional Sri Lankan Craftsmanship & Curing',
+    url: getAssetUrl('images/product-leaf-oil.webp'),
+    label: 'Precision Droppers & Amber Glass',
+    desc: 'High Active Eugenol (75%–85%), SLS 187 & ISO 3524 Certified Pure Essential Oil',
   },
   {
-    url: getAssetUrl('images/hero-bg-3.webp'),
-    label: 'Sun-Drying & Golden Quills',
-    desc: 'Premium Alba, C5-SP & Traditional Natural Sun-Drying Process',
+    url: getAssetUrl('images/gallery-distillation.webp'),
+    label: 'Steam Hydro-Distillation',
+    desc: 'Pure Artisanal Extraction from Fresh Green Foliage with Batch GC-MS Testing',
   },
   {
-    url: getAssetUrl('images/hero-bg-4.webp'),
-    label: 'Global Export Packing',
-    desc: 'SLS 81 & ISO 6539 Certified Ceylon Bales for Worldwide Shipment',
+    url: getAssetUrl('images/gallery-plantation.webp'),
+    label: 'Southern Sri Lanka Estates',
+    desc: 'Sustainably Harvested Foliage from Pure Cinnamomum Verum Heritage Plantations',
   },
 ];
 

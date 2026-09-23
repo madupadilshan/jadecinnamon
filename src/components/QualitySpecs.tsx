@@ -100,12 +100,12 @@ export const QualitySpecs: React.FC<QualitySpecsProps> = ({ t }) => {
                     {t.quality.trueCeylonTitle}
                   </h3>
                   <span className="text-xs text-emerald-700 dark:text-emerald-400 font-semibold tracking-wider uppercase">
-                    SLS 81 Certified • Zero Toxicity Risk
+                    SLS 187 & ISO 3524 Certified • 75%–85% Eugenol
                   </span>
                 </div>
               </div>
               <span className="px-3 py-1 rounded-full bg-emerald-50 dark:bg-jade-500/25 text-emerald-800 dark:text-emerald-300 border border-emerald-600/30 dark:border-jade-500/50 text-xs font-bold shadow-sm">
-                100% Safe
+                100% Pure
               </span>
             </div>
 
@@ -159,12 +159,12 @@ export const QualitySpecs: React.FC<QualitySpecsProps> = ({ t }) => {
                     {t.quality.cassiaTitle}
                   </h3>
                   <span className="text-xs text-red-700 dark:text-red-300 font-semibold tracking-wider uppercase">
-                    Commercial Substitute • High Coumarin
+                    Synthetic Blend • High Chemical Solvents
                   </span>
                 </div>
               </div>
               <span className="px-3 py-1 rounded-full bg-red-50 dark:bg-red-500/25 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-500/50 text-xs font-bold shadow-sm">
-                Health Risk
+                Adulterated
               </span>
             </div>
 

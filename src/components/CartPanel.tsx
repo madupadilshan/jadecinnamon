@@ -30,7 +30,6 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
     closeCart,
     removeFromCart,
     updateQuantity,
-    updateUnit,
     clearCart,
     totalUniqueItems,
     totalEstimatedWeightDisplay,
@@ -277,9 +276,16 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                                 className="w-14 h-14 rounded-xl object-cover border border-[#C87A28]/20 dark:border-white/10 shrink-0"
                               />
                               <div>
-                                <span className="px-1.5 py-0.5 rounded bg-ceylon-600/90 text-white font-mono text-[9px] font-bold">
-                                  {item.gradeCode}
-                                </span>
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className="px-1.5 py-0.5 rounded bg-ceylon-600/90 text-white font-mono text-[9px] font-bold">
+                                    {item.gradeCode}
+                                  </span>
+                                  {item.variantLabel && (
+                                    <span className="px-1.5 py-0.5 rounded bg-[#f6ecd6] dark:bg-white/10 text-[#9E5714] dark:text-[#E5A855] font-semibold text-[9px]">
+                                      {item.variantLabel}
+                                    </span>
+                                  )}
+                                </div>
                                 <h4 className="font-serif text-sm font-bold text-[#11281E] dark:text-[#F9F6F0] line-clamp-1 mt-0.5">
                                   {item.name}
                                 </h4>
@@ -306,7 +312,7 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                               <button
                                 type="button"
                                 onClick={() => {
-                                  const step = item.unit === 'L' ? (item.quantity <= 10 ? 1 : 5) : (item.quantity <= 50 ? 5 : 50);
+                                  const step = item.unit === 'Kg' ? (item.quantity > 50 ? 25 : item.quantity > 20 ? 5 : 1) : 1;
                                   const nextQty = Math.max(0, Math.round((item.quantity - step) * 100) / 100);
                                   handleQuantityChange(item.id, nextQty);
                                 }}
@@ -320,7 +326,7 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                               <input
                                 type="number"
                                 min="0"
-                                step={item.unit === 'L' ? '1' : '1'}
+                                step="1"
                                 value={item.quantity === 0 ? '0' : item.quantity}
                                 onChange={(e) => {
                                   const val = e.target.value;
@@ -344,7 +350,7 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                               <button
                                 type="button"
                                 onClick={() => {
-                                  const step = item.unit === 'L' ? (item.quantity < 10 ? 1 : 5) : (item.quantity < 50 ? 5 : 50);
+                                  const step = item.unit === 'Kg' ? (item.quantity >= 50 ? 25 : item.quantity >= 20 ? 5 : 1) : 1;
                                   const nextQty = Math.round((item.quantity + step) * 100) / 100;
                                   handleQuantityChange(item.id, nextQty);
                                 }}
@@ -356,22 +362,11 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                               </button>
                             </div>
 
-                            {/* Unit Selector strictly restricted to Kg and L */}
+                            {/* Unit Badge */}
                             <div className="flex items-center gap-1.5">
-                              {(['Kg', 'L'] as const).map((unitOption) => (
-                                <button
-                                  key={unitOption}
-                                  type="button"
-                                  onClick={() => updateUnit(item.id, unitOption)}
-                                  className={`px-3.5 py-1.5 min-h-[40px] rounded-xl text-xs font-bold uppercase transition-all cursor-pointer ${
-                                    item.unit === unitOption
-                                      ? 'bg-[#C87A28] text-white shadow-md shadow-[#C87A28]/30'
-                                      : 'bg-white dark:bg-[#062319] text-[#5A6D62] dark:text-[#A3B899] hover:text-[#11281E] dark:hover:text-white border border-[#C87A28]/20 dark:border-white/10 hover:border-[#C87A28]/50'
-                                  }`}
-                                >
-                                  {unitOption}
-                                </button>
-                              ))}
+                              <span className="px-3.5 py-1.5 min-h-[40px] rounded-xl text-xs font-bold bg-[#C87A28] text-white shadow-md shadow-[#C87A28]/30 flex items-center justify-center">
+                                {item.unit}
+                              </span>
                             </div>
                           </div>
                         </div>

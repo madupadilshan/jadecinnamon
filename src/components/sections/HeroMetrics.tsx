@@ -9,9 +9,9 @@ export interface HeroMetricsProps {
 
 export const HeroMetrics: React.FC<HeroMetricsProps> = ({ t }) => {
   const statItems = [
-    { value: t.hero.statCoumarin, label: t.hero.statCoumarinLabel, highlight: 'Safe Daily Intake' },
-    { value: t.hero.statMoisture, label: t.hero.statMoistureLabel, highlight: 'Dry Stable Quality' },
-    { value: t.hero.statOrigin, label: t.hero.statOriginLabel, highlight: 'No Cassia Blends' },
+    { value: t.hero.statCoumarin, label: t.hero.statCoumarinLabel, highlight: 'Antioxidant Active' },
+    { value: t.hero.statMoisture, label: t.hero.statMoistureLabel, highlight: '0% Preservatives' },
+    { value: t.hero.statOrigin, label: t.hero.statOriginLabel, highlight: 'SLS 187 / ISO 3524' },
     { value: t.hero.statFob, label: t.hero.statFobLabel, highlight: 'Port of Colombo' },
   ];
 
