@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ShieldCheck, Sparkles, FileText, Plus, Minus, Check, Package, Scale, Droplets } from 'lucide-react';
+import { ShieldCheck, Sparkles, FileText, Plus, Minus, Check, Package, Scale } from 'lucide-react';
 import { WhatsAppIcon } from '../WhatsAppIcon';
 import { Product, ProductVariant } from '../../data/products';
 import { TranslationSchema } from '../../data/translations';
@@ -21,64 +21,22 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
   onQuickOrder,
   className = '',
 }) => {
-  const { addToCart, addMultipleToCart } = useCart();
+  const { addToCart } = useCart();
   const [isAdded, setIsAdded] = useState(false);
   const [imageScale, setImageScale] = useState(1);
 
   // 1. Bulk Weight Model State (Kg)
   const [bulkWeight, setBulkWeight] = useState<number>(0);
 
-  // 2. Single Portal Multi-Volume Bottles Model State (e.g. 100ml, 50ml, 30ml, 15ml)
-  const [selectedVariantId, setSelectedVariantId] = useState<string>(() => (product.variants && product.variants[0] ? product.variants[0].id : '100ml'));
-  const [variantQtys, setVariantQtys] = useState<Record<string, number>>(() => {
-    const initial: Record<string, number> = {};
-    if (product.variants) {
-      product.variants.forEach((v) => {
-        initial[v.id] = 0;
-      });
-    }
-    return initial;
-  });
-
-  // 3. Fixed Pack Model State (Packs)
+  // 2. Fixed Pack Model State (Packs)
   const [packQty, setPackQty] = useState<number>(0);
-
-  const activeVariant = (product.variants && product.variants.find((v) => v.id === selectedVariantId)) || (product.variants ? product.variants[0] : null);
-  const currentActiveQty = variantQtys[selectedVariantId] || 0;
-
-  const handleUpdateVariantQty = (variantId: string, delta: number) => {
-    setVariantQtys((prev) => {
-      const current = prev[variantId] || 0;
-      const next = Math.max(0, current + delta);
-      return { ...prev, [variantId]: next };
-    });
-  };
-
-  const handleSetVariantQty = (variantId: string, val: string) => {
-    const parsed = val === '' ? 0 : Math.max(0, parseInt(val, 10) || 0);
-    setVariantQtys((prev) => ({ ...prev, [variantId]: parsed }));
-  };
 
   const handleAddToCart = (e: React.MouseEvent) => {
     setImageScale(1.08);
     setTimeout(() => setImageScale(1), 350);
 
     if ((product.buyingModel === 'multi_variant_volume' || product.buyingModel === 'volume_variants' || product.buyingModel === 'multi_volume') && product.variants) {
-      const itemsToAdd = product.variants
-        .filter((v) => (variantQtys[v.id] || 0) > 0)
-        .map((v) => ({
-          product,
-          variant: v,
-          quantity: variantQtys[v.id] || 0,
-          unit: 'Bottles' as QuotationUnit,
-        }));
-
-      if (itemsToAdd.length > 0) {
-        addMultipleToCart(itemsToAdd, e);
-      } else {
-        const chosen = activeVariant || product.variants[0];
-        addToCart(product, 0, 'Bottles', e, chosen);
-      }
+      addToCart(product, 0, 'Bottles', e, product.variants[0]);
     } else if (product.buyingModel === 'flexible_bulk' || product.buyingModel === 'bulk_weight') {
       addToCart(product, bulkWeight, 'Kg', e);
     } else if ((product.buyingModel === 'fixed_pack' && product.id === 'leaf-oil-box-set') || product.buyingModel === 'gift_pack') {
@@ -93,11 +51,7 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
 
   const handleOrderNow = () => {
     if ((product.buyingModel === 'multi_variant_volume' || product.buyingModel === 'volume_variants' || product.buyingModel === 'multi_volume') && product.variants) {
-      const chosen = (variantQtys[selectedVariantId] || 0) > 0
-        ? activeVariant || product.variants[0]
-        : product.variants.find((v) => (variantQtys[v.id] || 0) > 0) || activeVariant || product.variants[0];
-      const activeQty = variantQtys[chosen.id] || 0;
-      onQuickOrder(product, chosen, activeQty, 'Bottles');
+      onQuickOrder(product, product.variants[0], 0, 'Bottles');
     } else if (product.buyingModel === 'flexible_bulk' || product.buyingModel === 'bulk_weight') {
       onQuickOrder(product, undefined, bulkWeight, 'Kg');
     } else if ((product.buyingModel === 'fixed_pack' && product.id === 'leaf-oil-box-set') || product.buyingModel === 'gift_pack') {
@@ -107,7 +61,6 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
     }
   };
 
-  const isVolumeModel = product.buyingModel === 'multi_variant_volume' || product.buyingModel === 'volume_variants' || product.buyingModel === 'multi_volume';
   const isBulkModel = product.buyingModel === 'flexible_bulk' || product.buyingModel === 'bulk_weight';
   const isFixedUnitPackModel = (product.buyingModel === 'fixed_unit_pack' || product.buyingModel === 'fixed_pack' || product.buyingModel === 'fixed_1kg_pack') && product.id !== 'leaf-oil-box-set';
   const isGiftPackModel = (product.buyingModel === 'fixed_pack' && product.id === 'leaf-oil-box-set') || product.buyingModel === 'gift_pack';
@@ -177,84 +130,7 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
             {product.description}
           </p>
 
-          {/* 1. Single Portal Multi-Volume Controller (Leaf Oil - Select mL & Count) */}
-          {isVolumeModel && product.variants && activeVariant && (
-            <div className="py-2 border-t border-[#E2D8C8] dark:border-white/10 mb-3 space-y-1.5">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#5A6D62] dark:text-[#A3B899] flex items-center gap-1">
-                  <Droplets className="w-3 h-3 text-[#9E5714] dark:text-[#E5A855] shrink-0" />
-                  <span>{t.catalog.bottleSizes || 'Select Size (mL):'}</span>
-                </span>
-                <span className="text-[10px] font-mono font-bold text-[#9E5714] dark:text-[#E5A855]">
-                  {activeVariant.gradeCode}
-                </span>
-              </div>
-
-              {/* 4 mL Size Selector Pills in a 4-column row */}
-              <div className="grid grid-cols-4 gap-1 p-0.5 bg-[#F4EFE6] dark:bg-black/30 rounded-lg border border-[#E2D8C8] dark:border-white/10">
-                {product.variants.map((v) => {
-                  const isSelected = selectedVariantId === v.id;
-                  const count = variantQtys[v.id] || 0;
-                  return (
-                    <button
-                      key={v.id}
-                      type="button"
-                      onClick={() => setSelectedVariantId(v.id)}
-                      className={`py-1 px-0.5 rounded-md text-[11px] font-bold transition-all cursor-pointer flex flex-col items-center justify-center relative ${
-                        isSelected
-                          ? 'bg-[#C87A28] text-white shadow-md shadow-[#C87A28]/30 scale-[1.02]'
-                          : 'text-[#11281E] dark:text-[#E2EBE5] hover:bg-black/5 dark:hover:bg-white/10'
-                      }`}
-                    >
-                      <span className="whitespace-nowrap">{v.volume}</span>
-                      {count > 0 && (
-                        <span className={`text-[8.5px] font-mono px-0.5 rounded-full ${isSelected ? 'bg-white/25 text-white' : 'bg-[#C87A28]/20 text-[#9E5714] dark:text-[#E5A855]'}`}>
-                          {count}
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Single Quantity Portal Stepper for Selected mL Size */}
-              <div className="flex items-center gap-1.5 w-full">
-                <button
-                  type="button"
-                  onClick={() => handleUpdateVariantQty(selectedVariantId, -1)}
-                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-[#F4EFE6] dark:bg-[#0A2F22] hover:bg-[#C87A28] hover:text-white border border-[#C87A28]/30 text-[#11281E] dark:text-white font-bold transition-colors cursor-pointer shrink-0"
-                  aria-label={`Decrease ${activeVariant.volume} bottles`}
-                >
-                  <Minus className="w-3.5 h-3.5" />
-                </button>
-
-                <div className="flex-1 relative flex items-center min-w-0">
-                  <input
-                    type="number"
-                    min="0"
-                    value={currentActiveQty === 0 ? '0' : currentActiveQty}
-                    onChange={(e) => handleSetVariantQty(selectedVariantId, e.target.value)}
-                    className="w-full h-9 sm:h-10 px-2 text-center text-xs sm:text-sm font-bold font-mono bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded-lg text-[#11281E] dark:text-[#F9F6F0] focus:outline-none focus:border-[#C87A28]"
-                    placeholder="0"
-                  />
-                  <span className="absolute right-2.5 text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] pointer-events-none">
-                    {t.catalog.bottlePlural || 'Bottles'} ({activeVariant.volume})
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => handleUpdateVariantQty(selectedVariantId, 1)}
-                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-[#F4EFE6] dark:bg-[#0A2F22] hover:bg-[#C87A28] hover:text-white border border-[#C87A28]/30 text-[#11281E] dark:text-white font-bold transition-colors cursor-pointer shrink-0"
-                  aria-label={`Increase ${activeVariant.volume} bottles`}
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* 2. Flexible Bulk Weight Controller (Quills, Quill Cuts - custom continuous weight in Kg) */}
+          {/* 1. Flexible Bulk Weight Controller (Quills, Quill Cuts - custom continuous weight in Kg) */}
           {isBulkModel && (
             <div className="py-2 border-t border-[#E2D8C8] dark:border-white/10 mb-3 space-y-1.5">
               <div className="flex items-center justify-between">
