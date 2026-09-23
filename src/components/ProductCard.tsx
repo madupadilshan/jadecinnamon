@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ShieldCheck, Sparkles, FileText, Plus, Minus, Check, Package, Scale } from 'lucide-react';
+import { ShieldCheck, Sparkles, FileText, Plus, Minus, Check, Package, Scale, Droplets } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { Product, ProductVariant } from '../data/products';
 import { TranslationSchema } from '../data/translations';
@@ -26,7 +26,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   // 1. Bulk Weight Model State (Kg)
   const [bulkWeight, setBulkWeight] = useState<number>(0);
 
-  // 2. Multi-Volume Bottles Model State (e.g. 100ml, 50ml, 30ml, 15ml)
+  // 2. Single Portal Multi-Volume Bottles Model State (e.g. 100ml, 50ml, 30ml, 15ml)
+  const [selectedVariantId, setSelectedVariantId] = useState<string>(() => (product.variants && product.variants[0] ? product.variants[0].id : '100ml'));
   const [variantQtys, setVariantQtys] = useState<Record<string, number>>(() => {
     const initial: Record<string, number> = {};
     if (product.variants) {
@@ -40,6 +41,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   // 3. Fixed Pack Model State (Packs)
   const [packQty, setPackQty] = useState<number>(0);
 
+  const activeVariant = (product.variants && product.variants.find((v) => v.id === selectedVariantId)) || (product.variants ? product.variants[0] : null);
+  const currentActiveQty = variantQtys[selectedVariantId] || 0;
+
   const handleUpdateVariantQty = (variantId: string, delta: number) => {
     setVariantQtys((prev) => {
       const current = prev[variantId] || 0;
@@ -52,8 +56,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     const parsed = val === '' ? 0 : Math.max(0, parseInt(val, 10) || 0);
     setVariantQtys((prev) => ({ ...prev, [variantId]: parsed }));
   };
-
-  const totalConfiguredBottles = Object.values(variantQtys).reduce((a, b) => a + b, 0);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     setImageScale(1.08);
@@ -72,8 +74,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       if (itemsToAdd.length > 0) {
         addMultipleToCart(itemsToAdd, e);
       } else {
-        // Add default size with 0
-        addToCart(product, 0, 'Bottles', e, product.variants[0]);
+        const chosen = activeVariant || product.variants[0];
+        addToCart(product, 0, 'Bottles', e, chosen);
       }
     } else if (product.buyingModel === 'flexible_bulk' || product.buyingModel === 'bulk_weight') {
       addToCart(product, bulkWeight, 'Kg', e);
@@ -89,9 +91,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   const handleOrderNow = () => {
     if ((product.buyingModel === 'multi_variant_volume' || product.buyingModel === 'volume_variants' || product.buyingModel === 'multi_volume') && product.variants) {
-      const firstActive = product.variants.find((v) => (variantQtys[v.id] || 0) > 0) || product.variants[0];
-      const activeQty = variantQtys[firstActive.id] || 0;
-      onQuickOrder(product, firstActive, activeQty, 'Bottles');
+      const chosen = (variantQtys[selectedVariantId] || 0) > 0
+        ? activeVariant || product.variants[0]
+        : product.variants.find((v) => (variantQtys[v.id] || 0) > 0) || activeVariant || product.variants[0];
+      const activeQty = variantQtys[chosen.id] || 0;
+      onQuickOrder(product, chosen, activeQty, 'Bottles');
     } else if (product.buyingModel === 'flexible_bulk' || product.buyingModel === 'bulk_weight') {
       onQuickOrder(product, undefined, bulkWeight, 'Kg');
     } else if ((product.buyingModel === 'fixed_pack' && product.id === 'leaf-oil-box-set') || product.buyingModel === 'gift_pack') {
@@ -174,62 +178,79 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             {product.description}
           </p>
 
-          {/* 1. Multi-Volume Controller (Leaf Oil - Independent bottle sizes: 15ml, 30ml, 50ml, 100ml) */}
-          {isVolumeModel && product.variants && (
+          {/* 1. Single Portal Multi-Volume Controller (Leaf Oil - Select mL & Count) */}
+          {isVolumeModel && product.variants && activeVariant && (
             <div className="py-2.5 border-t border-[#E2D8C8] dark:border-white/10 mb-4 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#5A6D62] dark:text-[#A3B899]">
-                  {t.catalog.bottleSizes || 'Bottle Sizes (Select Quantities):'}
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#5A6D62] dark:text-[#A3B899] flex items-center gap-1.5">
+                  <Droplets className="w-3.5 h-3.5 text-[#9E5714] dark:text-[#E5A855] shrink-0" />
+                  <span>{t.catalog.bottleSizes || 'Select Bottle Size (mL):'}</span>
                 </span>
                 <span className="text-[11px] font-mono font-bold text-[#9E5714] dark:text-[#E5A855]">
-                  {totalConfiguredBottles} {totalConfiguredBottles === 1 ? (t.catalog.bottleSingular || 'Bottle') : (t.catalog.bottlePlural || 'Bottles')} {t.catalog.totalBottles || 'Total'}
+                  {activeVariant.gradeCode}
                 </span>
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                {product.variants.map((v) => {
-                  const qty = variantQtys[v.id] || 0;
-                  return (
-                    <div
-                      key={v.id}
-                      className="p-2 rounded-xl bg-[#F4EFE6] dark:bg-black/30 border border-[#E2D8C8] dark:border-white/10 flex flex-col justify-between gap-1.5 transition-all hover:border-[#C87A28]/50"
-                    >
-                      <div className="flex items-center justify-between w-full px-0.5">
-                        <span className="text-xs font-bold text-[#11281E] dark:text-white whitespace-nowrap">
-                          {v.volume}
-                        </span>
-                        <span className="text-[10px] font-mono text-[#9E5714] dark:text-[#E59A4D] font-semibold whitespace-nowrap">
-                          {v.gradeCode}
-                        </span>
-                      </div>
 
-                      <div className="flex items-center justify-between w-full bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded-lg p-0.5 shadow-sm">
-                        <button
-                          type="button"
-                          onClick={() => handleUpdateVariantQty(v.id, -1)}
-                          className="w-7 h-7 rounded-md hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-xs font-bold transition-colors cursor-pointer shrink-0"
-                          aria-label={`Decrease ${v.volume}`}
-                        >
-                          <Minus className="w-3 h-3" />
-                        </button>
-                        <input
-                          type="number"
-                          min="0"
-                          value={qty === 0 ? '0' : qty}
-                          onChange={(e) => handleSetVariantQty(v.id, e.target.value)}
-                          className="w-full text-center text-xs font-bold font-mono bg-transparent text-[#11281E] dark:text-[#F9F6F0] focus:outline-none"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleUpdateVariantQty(v.id, 1)}
-                          className="w-7 h-7 rounded-md hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-xs font-bold transition-colors cursor-pointer shrink-0"
-                          aria-label={`Increase ${v.volume}`}
-                        >
-                          <Plus className="w-3 h-3" />
-                        </button>
-                      </div>
-                    </div>
+              {/* 4 mL Size Selector Pills in a 4-column row */}
+              <div className="grid grid-cols-4 gap-1.5 p-1 bg-[#F4EFE6] dark:bg-black/30 rounded-xl border border-[#E2D8C8] dark:border-white/10">
+                {product.variants.map((v) => {
+                  const isSelected = selectedVariantId === v.id;
+                  const count = variantQtys[v.id] || 0;
+                  return (
+                    <button
+                      key={v.id}
+                      type="button"
+                      onClick={() => setSelectedVariantId(v.id)}
+                      className={`py-1.5 px-1 rounded-lg text-xs font-bold transition-all cursor-pointer flex flex-col items-center justify-center relative ${
+                        isSelected
+                          ? 'bg-[#C87A28] text-white shadow-md shadow-[#C87A28]/30 scale-[1.02]'
+                          : 'text-[#11281E] dark:text-[#E2EBE5] hover:bg-black/5 dark:hover:bg-white/10'
+                      }`}
+                    >
+                      <span className="whitespace-nowrap">{v.volume}</span>
+                      {count > 0 && (
+                        <span className={`text-[9px] font-mono px-1 rounded-full ${isSelected ? 'bg-white/25 text-white' : 'bg-[#C87A28]/20 text-[#9E5714] dark:text-[#E5A855]'}`}>
+                          {count}
+                        </span>
+                      )}
+                    </button>
                   );
                 })}
+              </div>
+
+              {/* Single Quantity Portal Stepper for Selected mL Size */}
+              <div className="flex items-center gap-2 w-full">
+                <button
+                  type="button"
+                  onClick={() => handleUpdateVariantQty(selectedVariantId, -1)}
+                  className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#F4EFE6] dark:bg-[#0A2F22] hover:bg-[#C87A28] hover:text-white border border-[#C87A28]/30 text-[#11281E] dark:text-white font-bold transition-colors cursor-pointer shrink-0"
+                  aria-label={`Decrease ${activeVariant.volume} bottles`}
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+
+                <div className="flex-1 relative flex items-center min-w-0">
+                  <input
+                    type="number"
+                    min="0"
+                    value={currentActiveQty === 0 ? '0' : currentActiveQty}
+                    onChange={(e) => handleSetVariantQty(selectedVariantId, e.target.value)}
+                    className="w-full h-10 px-3 text-center font-bold font-mono bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded-lg text-[#11281E] dark:text-[#F9F6F0] focus:outline-none focus:border-[#C87A28] text-sm"
+                    placeholder="0"
+                  />
+                  <span className="absolute right-3 text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] pointer-events-none">
+                    {t.catalog.bottlePlural || 'Bottles'} ({activeVariant.volume})
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleUpdateVariantQty(selectedVariantId, 1)}
+                  className="w-10 h-10 flex items-center justify-center rounded-lg bg-[#F4EFE6] dark:bg-[#0A2F22] hover:bg-[#C87A28] hover:text-white border border-[#C87A28]/30 text-[#11281E] dark:text-white font-bold transition-colors cursor-pointer shrink-0"
+                  aria-label={`Increase ${activeVariant.volume} bottles`}
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
               </div>
             </div>
           )}

@@ -116,7 +116,7 @@ const RAW_PRODUCTS: Product[] = [
     volume: '15ml, 30ml, 50ml, 100ml',
     badge: '100% Natural • SLS 187',
     coumarinBadge: 'High Eugenol (75%–85%)',
-    description: '100% pure steam hydro-distilled Ceylon Cinnamon Leaf Oil from Southern Sri Lanka estates. Rich in natural active Eugenol and antioxidants. Choose quantities for each bottle size independently.',
+    description: '100% pure steam hydro-distilled Ceylon Cinnamon Leaf Oil from Southern Sri Lanka estates. Rich in natural active Eugenol and antioxidants. Select bottle size (15ml, 30ml, 50ml, 100ml) and specify order count.',
     longDescription: 'Jade Cinnamon Lanka Pure Ceylon Cinnamon Leaf Oil is steam-distilled directly from freshly harvested green foliage of organic Ceylon Cinnamon (Cinnamomum verum) grown in our Southern Sri Lanka heritage estates. Certified 100% pure with over 75-85% natural eugenol, this high-potency oil delivers powerful antimicrobial, therapeutic, and soothing aromatherapeutic benefits with zero preservatives and zero mineral additives. Available in 100ml standard, 50ml dropper, 30ml travel, and 15ml pocket UV-protective amber glass formats.',
     specs: {
       botanicalName: 'Cinnamomum verum J.Presl (syn. Cinnamomum zeylanicum)',
