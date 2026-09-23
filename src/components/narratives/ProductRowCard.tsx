@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ShieldCheck, Sparkles, FileText, Plus, Minus, Check, Package, Scale } from 'lucide-react';
+import { ShieldCheck, Sparkles, FileText, Plus, Minus, Check, Package, Scale, Droplets } from 'lucide-react';
 import { WhatsAppIcon } from '../WhatsAppIcon';
 import { Product, ProductVariant } from '../../data/products';
 import { TranslationSchema } from '../../data/translations';
@@ -25,23 +25,49 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
   const [isAdded, setIsAdded] = useState(false);
   const [imageScale, setImageScale] = useState(1);
 
+  // Selected variant for multi-variant volume products (Pure Ceylon Cinnamon Leaf Oil)
+  const [selectedVariantId, setSelectedVariantId] = useState<string>(
+    product.variants?.[0]?.id || '15ml'
+  );
+
   // 1. Bulk Weight Model State (Kg)
   const [bulkWeight, setBulkWeight] = useState<number>(0);
 
-  // 2. Fixed Pack Model State (Packs)
+  // 2. Bottle Order Model State (Bottles)
+  const [bottleQty, setBottleQty] = useState<number>(0);
+
+  // 3. Fixed Pack Model State (Packs)
   const [packQty, setPackQty] = useState<number>(0);
+
+  const selectedVariant =
+    product.variants?.find((v) => v.id === selectedVariantId) ||
+    product.variants?.[0];
 
   const handleAddToCart = (e: React.MouseEvent) => {
     setImageScale(1.08);
     setTimeout(() => setImageScale(1), 350);
 
-    if ((product.buyingModel === 'multi_variant_volume' || product.buyingModel === 'volume_variants' || product.buyingModel === 'multi_volume') && product.variants) {
-      addToCart(product, 0, 'Bottles', e, product.variants[0]);
-    } else if (product.buyingModel === 'flexible_bulk' || product.buyingModel === 'bulk_weight') {
+    if (
+      product.buyingModel === 'multi_variant_volume' ||
+      product.buyingModel === 'volume_variants' ||
+      product.buyingModel === 'multi_volume'
+    ) {
+      addToCart(product, bottleQty, 'Bottles', e, selectedVariant);
+    } else if (
+      product.buyingModel === 'flexible_bulk' ||
+      product.buyingModel === 'bulk_weight'
+    ) {
       addToCart(product, bulkWeight, 'Kg', e);
-    } else if ((product.buyingModel === 'fixed_pack' && product.id === 'leaf-oil-box-set') || product.buyingModel === 'gift_pack') {
+    } else if (
+      (product.buyingModel === 'fixed_pack' && product.id === 'leaf-oil-box-set') ||
+      product.buyingModel === 'gift_pack'
+    ) {
       addToCart(product, packQty, 'Packs', e);
-    } else if (product.buyingModel === 'fixed_unit_pack' || product.buyingModel === 'fixed_pack' || product.buyingModel === 'fixed_1kg_pack') {
+    } else if (
+      product.buyingModel === 'fixed_unit_pack' ||
+      product.buyingModel === 'fixed_pack' ||
+      product.buyingModel === 'fixed_1kg_pack'
+    ) {
       addToCart(product, packQty, 'Packs', e);
     }
 
@@ -50,20 +76,50 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
   };
 
   const handleOrderNow = () => {
-    if ((product.buyingModel === 'multi_variant_volume' || product.buyingModel === 'volume_variants' || product.buyingModel === 'multi_volume') && product.variants) {
-      onQuickOrder(product, product.variants[0], 0, 'Bottles');
-    } else if (product.buyingModel === 'flexible_bulk' || product.buyingModel === 'bulk_weight') {
+    if (
+      product.buyingModel === 'multi_variant_volume' ||
+      product.buyingModel === 'volume_variants' ||
+      product.buyingModel === 'multi_volume'
+    ) {
+      onQuickOrder(product, selectedVariant, bottleQty, 'Bottles');
+    } else if (
+      product.buyingModel === 'flexible_bulk' ||
+      product.buyingModel === 'bulk_weight'
+    ) {
       onQuickOrder(product, undefined, bulkWeight, 'Kg');
-    } else if ((product.buyingModel === 'fixed_pack' && product.id === 'leaf-oil-box-set') || product.buyingModel === 'gift_pack') {
+    } else if (
+      (product.buyingModel === 'fixed_pack' && product.id === 'leaf-oil-box-set') ||
+      product.buyingModel === 'gift_pack'
+    ) {
       onQuickOrder(product, undefined, packQty, 'Packs');
     } else {
       onQuickOrder(product, undefined, packQty, 'Packs');
     }
   };
 
-  const isBulkModel = product.buyingModel === 'flexible_bulk' || product.buyingModel === 'bulk_weight';
-  const isFixedUnitPackModel = (product.buyingModel === 'fixed_unit_pack' || product.buyingModel === 'fixed_pack' || product.buyingModel === 'fixed_1kg_pack') && product.id !== 'leaf-oil-box-set';
-  const isGiftPackModel = (product.buyingModel === 'fixed_pack' && product.id === 'leaf-oil-box-set') || product.buyingModel === 'gift_pack';
+  const isVolumeModel =
+    product.buyingModel === 'multi_variant_volume' ||
+    product.buyingModel === 'volume_variants' ||
+    product.buyingModel === 'multi_volume';
+  const isBulkModel =
+    product.buyingModel === 'flexible_bulk' ||
+    product.buyingModel === 'bulk_weight';
+  const isFixedUnitPackModel =
+    (product.buyingModel === 'fixed_unit_pack' ||
+      product.buyingModel === 'fixed_pack' ||
+      product.buyingModel === 'fixed_1kg_pack') &&
+    product.id !== 'leaf-oil-box-set';
+  const isGiftPackModel =
+    (product.buyingModel === 'fixed_pack' && product.id === 'leaf-oil-box-set') ||
+    product.buyingModel === 'gift_pack';
+
+  // Real-time calculated volume in ml for oil bottles
+  const oilSizeNum = parseInt(selectedVariant?.volume || selectedVariantId, 10) || 15;
+  const totalOilMl = oilSizeNum * bottleQty;
+  const totalOilMlDisplay =
+    totalOilMl >= 1000
+      ? `${(totalOilMl / 1000).toFixed(2).replace(/\.00$/, '')}L (${totalOilMl.toLocaleString()}ml)`
+      : `${totalOilMl.toLocaleString()}ml`;
 
   return (
     <motion.div
@@ -130,7 +186,87 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
             {product.description}
           </p>
 
-          {/* 1. Flexible Bulk Weight Controller (Quills, Quill Cuts - custom continuous weight in Kg) */}
+          {/* 1. Amber Dropper Bottles Controller (15ml, 30ml, 50ml, 100ml) */}
+          {isVolumeModel && (
+            <div className="py-2 border-t border-[#E2D8C8] dark:border-white/10 mb-3 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#5A6D62] dark:text-[#A3B899] flex items-center gap-1">
+                  <Droplets className="w-3 h-3 text-[#9E5714] dark:text-[#E5A855] shrink-0" />
+                  <span>{t.catalog.selectBottleSize || 'Select Bottle Size:'}</span>
+                </span>
+                <span className="text-[9px] text-[#9E5714] dark:text-[#E5A855] font-semibold">
+                  {selectedVariant?.volume || '15ml'}
+                </span>
+              </div>
+
+              {/* Segmented Pill Selector (15ml | 30ml | 50ml | 100ml) */}
+              <div className="grid grid-cols-4 gap-1 p-1 rounded-xl bg-[#F4EFE6] dark:bg-black/50 border border-[#C87A28]/25 dark:border-white/10">
+                {(product.variants || [
+                  { id: '15ml', volume: '15ml' },
+                  { id: '30ml', volume: '30ml' },
+                  { id: '50ml', volume: '50ml' },
+                  { id: '100ml', volume: '100ml' },
+                ]).map((v) => {
+                  const isSelected = selectedVariantId === v.id;
+                  return (
+                    <button
+                      key={v.id}
+                      type="button"
+                      onClick={() => setSelectedVariantId(v.id)}
+                      className={`py-1 px-1 rounded-lg text-[11px] font-bold transition-all text-center cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#9E5714] dark:bg-[#C87A28] text-white shadow-sm shadow-[#9E5714]/30'
+                          : 'text-[#5A6D62] dark:text-[#A3B899] hover:text-[#11281E] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
+                      }`}
+                    >
+                      {v.volume || v.id}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Bottle Quantity Row */}
+              <div className="flex items-center gap-1.5 w-full">
+                <button
+                  type="button"
+                  onClick={() => setBottleQty((prev) => Math.max(0, prev - 1))}
+                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-[#F4EFE6] dark:bg-[#0A2F22] hover:bg-[#C87A28] hover:text-white border border-[#C87A28]/30 text-[#11281E] dark:text-white font-bold transition-colors cursor-pointer shrink-0"
+                  aria-label="Decrease bottles"
+                >
+                  <Minus className="w-3.5 h-3.5" />
+                </button>
+                <div className="flex-1 relative flex items-center min-w-0">
+                  <input
+                    type="number"
+                    min="0"
+                    value={bottleQty === 0 ? '0' : bottleQty}
+                    onChange={(e) => setBottleQty(Math.max(0, parseInt(e.target.value, 10) || 0))}
+                    className="w-full h-9 sm:h-10 px-2 text-center text-xs sm:text-sm font-bold font-mono bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded-lg text-[#11281E] dark:text-[#F9F6F0] focus:outline-none focus:border-[#C87A28]"
+                    placeholder="0"
+                  />
+                  <span className="absolute right-2.5 text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] pointer-events-none">
+                    {t.catalog.bottlePlural || 'Bottles'}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setBottleQty((prev) => prev + 1)}
+                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-[#F4EFE6] dark:bg-[#0A2F22] hover:bg-[#C87A28] hover:text-white border border-[#C87A28]/30 text-[#11281E] dark:text-white font-bold transition-colors cursor-pointer shrink-0"
+                  aria-label="Increase bottles"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              {/* Dynamic Subtotal Volume Display */}
+              <div className="flex items-center justify-between text-[10px] font-semibold text-[#9E5714] dark:text-[#E59A4D] px-0.5 pt-0.5">
+                <span>{selectedVariant?.volume || '15ml'} × {bottleQty} {bottleQty === 1 ? 'bottle' : 'bottles'}</span>
+                <span>= {totalOilMlDisplay}</span>
+              </div>
+            </div>
+          )}
+
+          {/* 2. Flexible Bulk Weight Controller (Quills, Quill Cuts - custom continuous weight in Kg) */}
           {isBulkModel && (
             <div className="py-2 border-t border-[#E2D8C8] dark:border-white/10 mb-3 space-y-1.5">
               <div className="flex items-center justify-between">
@@ -174,6 +310,10 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
                   <Plus className="w-3.5 h-3.5" />
                 </button>
               </div>
+              <div className="flex items-center justify-between text-[10px] font-semibold text-[#9E5714] dark:text-[#E59A4D] px-0.5 pt-0.5">
+                <span>Direct Bulk Weight</span>
+                <span>= {bulkWeight} Kg</span>
+              </div>
             </div>
           )}
 
@@ -186,7 +326,7 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
                   <span>{t.catalog.exportPacks1kg || '1 Kg Export Packs:'}</span>
                 </span>
                 <span className="text-[9px] text-[#9E5714] dark:text-[#E5A855] font-semibold">
-                  {t.catalog.pack1kgDesc || '1 Pack = 1 Kg'}
+                  {t.catalog.pack1kgDesc || 'Pack of 1Kg'}
                 </span>
               </div>
               <div className="flex items-center gap-1.5 w-full">
@@ -207,7 +347,7 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
                     className="w-full h-9 sm:h-10 px-2 text-center text-xs sm:text-sm font-bold font-mono bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded-lg text-[#11281E] dark:text-[#F9F6F0] focus:outline-none focus:border-[#C87A28]"
                   />
                   <span className="absolute right-2.5 text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] pointer-events-none">
-                    {t.catalog.packsUnit || 'Packs'} ({packQty} Kg)
+                    1Kg Packs
                   </span>
                 </div>
                 <button
@@ -218,6 +358,10 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
                 >
                   <Plus className="w-3.5 h-3.5" />
                 </button>
+              </div>
+              <div className="flex items-center justify-between text-[10px] font-semibold text-[#9E5714] dark:text-[#E59A4D] px-0.5 pt-0.5">
+                <span>{packQty} × 1Kg {packQty === 1 ? 'Pack' : 'Packs'}</span>
+                <span>= {packQty} Kg</span>
               </div>
             </div>
           )}
@@ -231,7 +375,7 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
                   <span>{t.catalog.masterGiftSets || 'Master Gift Sets:'}</span>
                 </span>
                 <span className="text-[9px] text-[#9E5714] dark:text-[#E5A855] font-semibold">
-                  {t.catalog.giftSetDesc || '4 Bottles / Pack'}
+                  Contains 4 bottles / pack
                 </span>
               </div>
               <div className="flex items-center gap-1.5 w-full">
@@ -263,6 +407,10 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
                 >
                   <Plus className="w-3.5 h-3.5" />
                 </button>
+              </div>
+              <div className="flex items-center justify-between text-[10px] font-semibold text-[#9E5714] dark:text-[#E59A4D] px-0.5 pt-0.5">
+                <span>Contains 4 bottles / pack</span>
+                <span>{packQty > 0 ? `${packQty * 4} bottles total` : 'Fixed Box Set'}</span>
               </div>
             </div>
           )}

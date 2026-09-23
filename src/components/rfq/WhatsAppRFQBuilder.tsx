@@ -21,6 +21,11 @@ import { Product, PRODUCTS } from '../../data/products';
 import { TranslationSchema } from '../../data/translations';
 import { useCart, CartItem } from '../../context/CartContext';
 import { openWhatsAppQuotation } from '../cart/WhatsAppB2BBuilder';
+import {
+  formatCartItemTitle,
+  getCartItemUnitBadge,
+  getCartItemSubtext,
+} from '../../utils/cartFormatting';
 import { getAssetUrl } from '../../utils/assets';
 
 export interface WhatsAppRFQBuilderProps {
@@ -305,6 +310,10 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                         Boolean(validationErrors.zeroItemIds?.includes(item.id)) ||
                         (Boolean(validationErrors.zeroQuantity) && item.quantity <= 0);
 
+                      const displayTitle = formatCartItemTitle(item);
+                      const unitBadgeLabel = getCartItemUnitBadge(item);
+                      const subtext = getCartItemSubtext(item);
+
                       return (
                         <motion.div
                           key={item.id}
@@ -343,8 +352,11 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                                   )}
                                 </div>
                                 <h4 className="font-serif text-sm font-bold text-[#11281E] dark:text-[#F9F6F0] truncate mt-0.5">
-                                  {item.name}
+                                  {displayTitle}
                                 </h4>
+                                <p className="text-[10px] text-[#5A6D62] dark:text-[#A3B899]">
+                                  {subtext}
+                                </p>
                               </div>
                             </div>
 
@@ -419,7 +431,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                             {/* Unit Badge */}
                             <div className="flex items-center gap-1.5">
                               <span className="px-3.5 py-1.5 min-h-[40px] rounded-xl text-xs font-bold bg-[#C87A28] text-white shadow-md shadow-[#C87A28]/30 flex items-center justify-center">
-                                {item.unit}
+                                {unitBadgeLabel}
                               </span>
                             </div>
                           </div>

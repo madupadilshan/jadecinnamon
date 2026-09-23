@@ -1,4 +1,5 @@
 import { CartItem } from '../../context/CartContext';
+import { formatWhatsAppItemLine, getOilTotalMl } from '../../utils/cartFormatting';
 
 export const TRADE_PHONE = '94765335308';
 
@@ -13,7 +14,7 @@ export interface B2BQuotationParams {
 }
 
 /**
- * Builds an official multi-item B2B RFQ message structured for WhatsApp Trade Desk.
+ * Builds an official multi-item B2B RFQ message structured for WhatsApp Trade Desk (+94 76 533 5308).
  * Only items with quantity > 0 are included.
  */
 export function buildMultiItemWhatsAppMessage({
@@ -30,83 +31,15 @@ export function buildMultiItemWhatsAppMessage({
   // Only include items with valid quantity > 0
   const validItems = (items || []).filter((item) => item.quantity > 0);
 
-  // Build structured Selected Products list
-  const formattedProductLines: string[] = [];
-  let itemIndex = 1;
-
-  // Track processed products
-  const distinctProductIds = Array.from(new Set(validItems.map((i) => i.productId)));
-
-  distinctProductIds.forEach((prodId) => {
-    const prodItems = validItems.filter((i) => i.productId === prodId);
-
-    if (prodId === 'cinnamon-quill-cuts') {
-      const item = prodItems[0];
-      formattedProductLines.push(
-        `${itemIndex}. Ceylon Cinnamon Quill Cuts: ${item.quantity.toLocaleString()} Kg (Custom Bulk)`
-      );
-      itemIndex++;
-    } else if (prodId === 'leaf-oil-bottle') {
-      if (prodItems.length === 1) {
-        const item = prodItems[0];
-        const sizeLabel = item.variantLabel
-          ? item.variantLabel.replace(' Standard Bottle', '').replace(' Dropper Bottle', '').replace(' Travel Bottle', '').replace(' Pocket Bottle', '').replace(' Bottle', '').trim()
-          : item.variantId || '100ml';
-        formattedProductLines.push(
-          `${itemIndex}. Pure Ceylon Cinnamon Leaf Oil:\n   • ${sizeLabel}: ${item.quantity.toLocaleString()} Bottles`
-        );
-      } else {
-        const variantSubLines = prodItems
-          .map((item) => {
-            const sizeLabel = item.variantLabel
-              ? item.variantLabel.replace(' Standard Bottle', '').replace(' Dropper Bottle', '').replace(' Travel Bottle', '').replace(' Pocket Bottle', '').replace(' Bottle', '').trim()
-              : item.variantId || '100ml';
-            return `   • ${sizeLabel}: ${item.quantity.toLocaleString()} Bottles`;
-          })
-          .join('\n');
-        formattedProductLines.push(
-          `${itemIndex}. Pure Ceylon Cinnamon Leaf Oil:\n${variantSubLines}`
-        );
-      }
-      itemIndex++;
-    } else if (prodId === 'leaf-oil-box-set') {
-      const item = prodItems[0];
-      formattedProductLines.push(
-        `${itemIndex}. Jade Cinnamon Luxury Leaf Oil Gift Set (4 bottles/pack): ${item.quantity.toLocaleString()} Packs`
-      );
-      itemIndex++;
-    } else if (prodId === 'cinnamon-quills') {
-      const item = prodItems[0];
-      formattedProductLines.push(
-        `${itemIndex}. Ceylon Cinnamon Quills: ${item.quantity.toLocaleString()} Kg (Custom Bulk)`
-      );
-      itemIndex++;
-    } else if (prodId === 'cinnamon-powder-1kg') {
-      const item = prodItems[0];
-      formattedProductLines.push(
-        `${itemIndex}. Ceylon Cinnamon Powder: ${item.quantity.toLocaleString()} Packs (1 Kg each)`
-      );
-      itemIndex++;
-    } else if (prodId === 'cinnamon-cut-pieces-1kg') {
-      const item = prodItems[0];
-      formattedProductLines.push(
-        `${itemIndex}. Ceylon Cinnamon Cut Pieces: ${item.quantity.toLocaleString()} Packs (1 Kg each)`
-      );
-      itemIndex++;
-    } else {
-      const item = prodItems[0];
-      formattedProductLines.push(
-        `${itemIndex}. ${item.name}: ${item.quantity.toLocaleString()} ${item.unit}`
-      );
-      itemIndex++;
-    }
-  });
-
-  const itemList = formattedProductLines.join('\n');
+  // Build structured Selected Products list using exact classifications
+  const formattedProductLines: string[] = validItems.map((item, idx) =>
+    formatWhatsAppItemLine(item, idx + 1)
+  );
 
   // Compute Total volume summary
   let totalKg = 0;
   let totalBottles = 0;
+  let totalOilMl = 0;
   let totalPacks = 0;
   let totalLiters = 0;
 
@@ -115,6 +48,7 @@ export function buildMultiItemWhatsAppMessage({
       totalKg += item.quantity;
     } else if (item.unit === 'Bottles') {
       totalBottles += item.quantity;
+      totalOilMl += getOilTotalMl(item);
     } else if (item.unit === 'Packs') {
       if (item.productId === 'cinnamon-powder-1kg' || item.productId === 'cinnamon-cut-pieces-1kg') {
         totalKg += item.quantity;
@@ -132,7 +66,11 @@ export function buildMultiItemWhatsAppMessage({
     volParts.push(`${totalKg.toLocaleString()} Kg`);
   }
   if (totalBottles > 0) {
-    volParts.push(`${totalBottles.toLocaleString()} Bottles`);
+    const mlStr =
+      totalOilMl >= 1000
+        ? `${(totalOilMl / 1000).toFixed(2).replace(/\.00$/, '')} L`
+        : `${totalOilMl.toLocaleString()} ml`;
+    volParts.push(`${totalBottles.toLocaleString()} Bottles (${mlStr})`);
   }
   if (totalPacks > 0 && totalKg === 0) {
     volParts.push(`${totalPacks.toLocaleString()} Packs`);
@@ -163,7 +101,7 @@ ${ordererName ? `- *Name:* ${ordererName}\n` : ''}${
 *Date:* ${timestamp}
 
 ${clientInfoBlock}*Selected Products:*
-${itemList || '• None specified'}
+${formattedProductLines.length > 0 ? formattedProductLines.join('\n') : '• None specified'}
 
 *Commercial & Shipping Parameters:*
 - *Total Volume / Quantity Summary:* ${totalSummaryStr}

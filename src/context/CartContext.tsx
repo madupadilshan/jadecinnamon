@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Product, ProductVariant } from '../data/products';
+import { getOilTotalMl } from '../utils/cartFormatting';
 
 export type QuotationUnit = 'Kg' | 'L' | 'Packs' | 'Bottles';
 
@@ -245,7 +246,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const itemName = variant ? `${product.name} (${variant.label || variant.volume})` : product.name;
     const itemGradeCode = variant ? variant.gradeCode : product.gradeCode;
     const itemVariantLabel = variant ? (variant.label || variant.volume) : (
-      (product.buyingModel === 'fixed_1kg_pack' || product.buyingModel === 'fixed_pack') && product.id !== 'leaf-oil-box-set' ? '1Kg Sealed Pouch' :
+      (product.buyingModel === 'fixed_1kg_pack' || product.buyingModel === 'fixed_pack' || product.buyingModel === 'fixed_unit_pack') && product.id !== 'leaf-oil-box-set' ? '1Kg Sealed Pouch' :
       (product.buyingModel === 'gift_pack' || product.id === 'leaf-oil-box-set') ? '4-Bottle Master Set' : 'Bulk Weight'
     );
 
@@ -304,7 +305,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const itemName = variant ? `${product.name} (${variant.label || variant.volume})` : product.name;
         const itemGradeCode = variant ? variant.gradeCode : product.gradeCode;
         const itemVariantLabel = variant ? (variant.label || variant.volume) : (
-          (product.buyingModel === 'fixed_1kg_pack' || product.buyingModel === 'fixed_pack') && product.id !== 'leaf-oil-box-set' ? '1Kg Sealed Pouch' :
+          (product.buyingModel === 'fixed_1kg_pack' || product.buyingModel === 'fixed_pack' || product.buyingModel === 'fixed_unit_pack') && product.id !== 'leaf-oil-box-set' ? '1Kg Sealed Pouch' :
           (product.buyingModel === 'gift_pack' || product.id === 'leaf-oil-box-set') ? '4-Bottle Master Set' : 'Bulk Weight'
         );
 
@@ -373,6 +374,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     let totalKg = 0;
     let totalBottles = 0;
+    let totalOilMl = 0;
     let totalPacks = 0;
     let totalLiters = 0;
 
@@ -381,6 +383,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         totalKg += item.quantity;
       } else if (item.unit === 'Bottles') {
         totalBottles += item.quantity;
+        totalOilMl += getOilTotalMl(item);
       } else if (item.unit === 'Packs') {
         // If it's a 1Kg pack (Powder, Cut pieces), it also represents 1 Kg per pack
         if (item.productId === 'cinnamon-powder-1kg' || item.productId === 'cinnamon-cut-pieces-1kg') {
@@ -399,13 +402,23 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       parts.push(`${totalKg.toLocaleString()} Kg`);
     }
     if (totalBottles > 0) {
-      parts.push(`${totalBottles.toLocaleString()} Bottles`);
+      const mlStr =
+        totalOilMl >= 1000
+          ? `${(totalOilMl / 1000).toFixed(2).replace(/\.00$/, '')} L`
+          : `${totalOilMl.toLocaleString()} ml`;
+      parts.push(`${totalBottles.toLocaleString()} Bottles (${mlStr})`);
     }
     if (totalPacks > 0 && totalKg === 0) {
       parts.push(`${totalPacks.toLocaleString()} Packs`);
     } else if (totalPacks > 0 && totalKg > 0) {
       // already counted in totalKg, or add gift packs
-      const non1KgPacks = items.filter(i => i.unit === 'Packs' && i.productId !== 'cinnamon-powder-1kg' && i.productId !== 'cinnamon-cut-pieces-1kg')
+      const non1KgPacks = items
+        .filter(
+          (i) =>
+            i.unit === 'Packs' &&
+            i.productId !== 'cinnamon-powder-1kg' &&
+            i.productId !== 'cinnamon-cut-pieces-1kg'
+        )
         .reduce((a, b) => a + b.quantity, 0);
       if (non1KgPacks > 0) {
         parts.push(`${non1KgPacks.toLocaleString()} Gift Packs`);

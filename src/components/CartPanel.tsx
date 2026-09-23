@@ -6,18 +6,18 @@ import {
   Trash2,
   Plus,
   Minus,
-  Copy,
-  Check,
   Package,
   Globe,
   AlertCircle,
 } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { useCart } from '../context/CartContext';
+import { openWhatsAppQuotation } from './cart/WhatsAppB2BBuilder';
 import {
-  buildMultiItemWhatsAppMessage,
-  openWhatsAppQuotation,
-} from './cart/WhatsAppB2BBuilder';
+  formatCartItemTitle,
+  getCartItemUnitBadge,
+  getCartItemSubtext,
+} from '../utils/cartFormatting';
 
 import { TranslationSchema } from '../data/translations';
 
@@ -50,7 +50,6 @@ export const CartPanel: React.FC<CartPanelProps> = ({ t, isRtl = false }) => {
     setOrderNotes,
   } = useCart();
 
-  const [copied, setCopied] = useState(false);
   const [validationErrors, setValidationErrors] = useState<{
     items?: string;
     zeroQuantity?: string;
@@ -94,7 +93,7 @@ export const CartPanel: React.FC<CartPanelProps> = ({ t, isRtl = false }) => {
       if (zeroItems.length > 0 || totalQty <= 0) {
         errors.zeroQuantity =
           t.rfq?.errorZeroQty ||
-          'Please specify a valid quantity greater than 0 (Kg / L) for your selected items before requesting a quotation.';
+          'Please specify a valid quantity greater than 0 for your selected items before requesting a quotation.';
         errors.zeroItemIds = zeroItems.map((i) => i.id);
       }
     }
@@ -111,24 +110,6 @@ export const CartPanel: React.FC<CartPanelProps> = ({ t, isRtl = false }) => {
 
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
-  };
-
-  const handleCopyMessage = () => {
-    if (!validateCartForm()) {
-      return;
-    }
-    const text = buildMultiItemWhatsAppMessage({
-      items,
-      ordererName,
-      ordererAddress,
-      ordererPhone,
-      destinationPort,
-      incoterm,
-      notes: orderNotes,
-    });
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
   };
 
   const handleRequestQuotation = () => {
@@ -263,6 +244,10 @@ export const CartPanel: React.FC<CartPanelProps> = ({ t, isRtl = false }) => {
                         Boolean(validationErrors.zeroItemIds?.includes(item.id)) ||
                         (Boolean(validationErrors.zeroQuantity) && item.quantity <= 0);
 
+                      const displayTitle = formatCartItemTitle(item);
+                      const unitBadgeLabel = getCartItemUnitBadge(item);
+                      const subtext = getCartItemSubtext(item);
+
                       return (
                         <div
                           key={item.id}
@@ -291,10 +276,10 @@ export const CartPanel: React.FC<CartPanelProps> = ({ t, isRtl = false }) => {
                                   )}
                                 </div>
                                 <h4 className="font-serif text-sm font-bold text-[#11281E] dark:text-[#F9F6F0] mt-0.5">
-                                  {item.name}
+                                  {displayTitle}
                                 </h4>
                                 <p className="text-[10px] text-[#5A6D62] dark:text-[#A3B899]">
-                                  {item.categoryLabel}
+                                  {subtext}
                                 </p>
                               </div>
                             </div>
@@ -369,7 +354,7 @@ export const CartPanel: React.FC<CartPanelProps> = ({ t, isRtl = false }) => {
                             {/* Unit Badge */}
                             <div className="flex items-center gap-1.5">
                               <span className="px-3.5 py-1.5 min-h-[40px] rounded-xl text-xs font-bold bg-[#C87A28] text-white shadow-md shadow-[#C87A28]/30 flex items-center justify-center">
-                                {item.unit}
+                                {unitBadgeLabel}
                               </span>
                             </div>
                           </div>
@@ -546,27 +531,6 @@ export const CartPanel: React.FC<CartPanelProps> = ({ t, isRtl = false }) => {
                   <WhatsAppIcon className="w-5 h-5 text-white shrink-0" />
                   <span>{t.cart?.requestWhatsApp || 'Send Quotation via WhatsApp'}</span>
                 </button>
-
-                {/* Secondary Action: Copy Inquiry Text */}
-                <div className="flex items-center justify-center pt-1">
-                  <button
-                    type="button"
-                    onClick={handleCopyMessage}
-                    className="w-full min-h-[40px] inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-[#F4EFE6] dark:bg-white/5 hover:bg-[#ebd7ad] dark:hover:bg-white/10 border border-[#C87A28]/20 dark:border-white/10 text-xs font-semibold text-[#11281E] dark:text-[#F9F6F0] transition-colors cursor-pointer"
-                  >
-                    {copied ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                        <span className="text-emerald-700 dark:text-emerald-400">{t.rfq?.copied || 'Quotation Copied!'}</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3.5 h-3.5 text-[#9E5714] dark:text-[#E59A4D]" />
-                        <span>{t.cart?.copyRfq || 'Copy Inquiry Text'}</span>
-                      </>
-                    )}
-                  </button>
-                </div>
               </div>
             )}
           </motion.div>
