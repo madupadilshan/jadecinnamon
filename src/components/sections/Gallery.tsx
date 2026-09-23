@@ -1,6 +1,6 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Eye, X, Sparkles, PackageCheck } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Eye, X, PackageCheck } from 'lucide-react';
 import { TranslationSchema } from '../../data/translations';
 import { getAssetUrl } from '../../utils/assets';
 
@@ -225,10 +225,6 @@ export const Gallery: React.FC<GalleryProps> = ({ t, isRtl = false }) => {
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 gpu-accelerate"
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#C87A28]/15 dark:bg-ceylon-500/20 border border-[#C87A28]/30 dark:border-ceylon-400/30 text-[#9E5714] dark:text-[#E5A855] text-xs font-bold uppercase tracking-wider mb-3">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>{t.gallery?.badge || 'Estate, Products & Heritage Gallery'}</span>
-          </div>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#11281E] dark:text-[#F9F6F0] mb-3 sm:mb-4 tracking-tight drop-shadow-sm">
             {t.gallery?.title || 'From Sri Lankan Estates to Global Export Hubs'}
           </h2>
