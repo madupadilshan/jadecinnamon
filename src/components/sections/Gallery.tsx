@@ -40,117 +40,117 @@ export const Gallery: React.FC<GalleryProps> = ({ t, isRtl = false }) => {
       // Page 1: Items 1 to 8 (Harvest Bales, Sealed Packs, and Export Products)
       {
         id: 1,
-        title: 'Master Cinnamon Quill Export Bales',
-        desc: 'High-density export bales of cured Ceylon cinnamon quills secured with natural coir rope at our Galle facility.',
+        title: t.gallery?.item1Title || 'Master Cinnamon Quill Export Bales',
+        desc: t.gallery?.item1Desc || 'High-density export bales of cured Ceylon cinnamon quills secured with natural coir rope at our Galle facility.',
         imgUrl: getAssetUrl('images/gallery-quill-stacks.webp'),
-        tag: 'Export Bales • Galle Facility',
+        tag: t.gallery?.item1Tag || 'Export Bales • Galle Facility',
       },
       {
         id: 2,
-        title: 'Artisanal Estate Quill Cylinders',
-        desc: 'Single-estate whole Ceylon cinnamon quills prepared for grading and international warehouse dispatch.',
+        title: t.gallery?.item2Title || 'Artisanal Estate Quill Cylinders',
+        desc: t.gallery?.item2Desc || 'Single-estate whole Ceylon cinnamon quills prepared for grading and international warehouse dispatch.',
         imgUrl: getAssetUrl('images/gallery-quill-bales.webp'),
-        tag: 'Harvest Bales • Southern Province',
+        tag: t.gallery?.item2Tag || 'Harvest Bales • Southern Province',
       },
       {
         id: 3,
-        title: 'Export-Grade Sealed Cut Quills Packet',
-        desc: 'Vacuum-sealed 1kg presentation pack of precision-cut Ceylon cinnamon quills for premium retail distribution.',
+        title: t.gallery?.item3Title || 'Export-Grade Sealed Cut Quills Packet',
+        desc: t.gallery?.item3Desc || 'Vacuum-sealed 1kg presentation pack of precision-cut Ceylon cinnamon quills for premium retail distribution.',
         imgUrl: getAssetUrl('images/gallery-cinnamon-packet.webp'),
-        tag: 'Retail Export • 1Kg Sealed Pack',
+        tag: t.gallery?.item3Tag || 'Retail Export • 1Kg Sealed Pack',
       },
       {
         id: 4,
-        title: 'Hand-Rolled Alba & C5 Quills',
-        desc: '100% authentic multi-layered concentric golden bark with delicate sweet fragrance and smooth quill texture.',
+        title: t.gallery?.item4Title || 'Hand-Rolled Alba & C5 Quills',
+        desc: t.gallery?.item4Desc || '100% authentic multi-layered concentric golden bark with delicate sweet fragrance and smooth quill texture.',
         imgUrl: getAssetUrl('images/product-cinnamon-quills.webp'),
-        tag: 'Pure Quills • Cinnamomum Verum',
+        tag: t.gallery?.item4Tag || 'Pure Quills • Cinnamomum Verum',
       },
       {
         id: 5,
-        title: 'Precision Cinnamon Quill Cuts',
-        desc: 'Precision-sliced export cuts prepared for culinary extraction, tea blending, and commercial spice packaging.',
+        title: t.gallery?.item5Title || 'Precision Cinnamon Quill Cuts',
+        desc: t.gallery?.item5Desc || 'Precision-sliced export cuts prepared for culinary extraction, tea blending, and commercial spice packaging.',
         imgUrl: getAssetUrl('images/product-cinnamon-quill-cuts.webp'),
-        tag: 'Quill Cuts • Bulk Weight in Kg',
+        tag: t.gallery?.item5Tag || 'Quill Cuts • Bulk Weight in Kg',
       },
       {
         id: 6,
-        title: 'Pure Ceylon Cinnamon Leaf Oil',
-        desc: 'Hydro-distilled pure leaf essential oil containing 75%–85% natural eugenol in UV amber dropper bottles (15ml–100ml).',
+        title: t.gallery?.item6Title || 'Pure Ceylon Cinnamon Leaf Oil',
+        desc: t.gallery?.item6Desc || 'Hydro-distilled pure leaf essential oil containing 75%–85% natural eugenol in UV amber dropper bottles (15ml–100ml).',
         imgUrl: getAssetUrl('images/product-leaf-oil.webp'),
-        tag: 'Leaf Oil • 15ml–100ml Droppers',
+        tag: t.gallery?.item6Tag || 'Leaf Oil • 15ml–100ml Droppers',
       },
       {
         id: 7,
-        title: 'Pure Ceylon Cinnamon Ground Powder',
-        desc: 'Ultra-fine 100% pure Ceylon cinnamon ground powder with zero additives and ultra-low coumarin (<0.005%).',
+        title: t.gallery?.item7Title || 'Pure Ceylon Cinnamon Ground Powder',
+        desc: t.gallery?.item7Desc || 'Ultra-fine 100% pure Ceylon cinnamon ground powder with zero additives and ultra-low coumarin (<0.005%).',
         imgUrl: getAssetUrl('images/product-cinnamon-powder.webp'),
-        tag: '1Kg Pouch • Ultra-Low Coumarin',
+        tag: t.gallery?.item7Tag || '1Kg Pouch • Ultra-Low Coumarin',
       },
       {
         id: 8,
-        title: 'Ceylon Cinnamon Cut Pieces',
-        desc: 'Sealed export-grade cut pieces ideal for pharmaceutical, culinary, tea blending, and spice extraction applications.',
+        title: t.gallery?.item8Title || 'Ceylon Cinnamon Cut Pieces',
+        desc: t.gallery?.item8Desc || 'Sealed export-grade cut pieces ideal for pharmaceutical, culinary, tea blending, and spice extraction applications.',
         imgUrl: getAssetUrl('images/product-cinnamon-cut-pieces.webp'),
-        tag: '1Kg Sealed Pack • Commercial Cut',
+        tag: t.gallery?.item8Tag || '1Kg Sealed Pack • Commercial Cut',
       },
 
       // Page 2: Items 9 to 16 (Estate Heritage, Distillation Lab & Global Shipping)
       {
         id: 9,
-        title: t.gallery?.item1Title || 'Harvesting Galle Estates',
-        desc: t.gallery?.item1Desc || 'Sustainably farmed Ceylon Cinnamon estates nestled in the fertile valleys of Southern Sri Lanka.',
+        title: t.gallery?.item9Title || 'Harvesting Galle Estates',
+        desc: t.gallery?.item9Desc || 'Sustainably farmed Ceylon Cinnamon estates nestled in the fertile valleys of Southern Sri Lanka.',
         imgUrl: getAssetUrl('images/gallery-plantation.webp'),
-        tag: 'Estate Origin • Galle & Matara',
+        tag: t.gallery?.item9Tag || 'Estate Origin • Galle & Matara',
       },
       {
         id: 10,
-        title: t.gallery?.item2Title || 'Artisanal Bark Peeling Tradition',
-        desc: t.gallery?.item2Desc || 'Generations of master peelers handcrafting delicate multi-layered concentric quills with traditional brass tools.',
+        title: t.gallery?.item10Title || 'Artisanal Bark Peeling Tradition',
+        desc: t.gallery?.item10Desc || 'Generations of master peelers handcrafting delicate multi-layered concentric quills with traditional brass tools.',
         imgUrl: getAssetUrl('images/gallery-peeling.webp'),
-        tag: 'Hand Craftsmanship • Master Peelers',
+        tag: t.gallery?.item10Tag || 'Hand Craftsmanship • Master Peelers',
       },
       {
         id: 11,
-        title: t.gallery?.item3Title || 'Hygienic Curing & Drying',
-        desc: t.gallery?.item3Desc || 'Controlled shade curing and gentle drying maintaining natural volatile oils and golden hues.',
+        title: t.gallery?.item11Title || 'Hygienic Curing & Drying',
+        desc: t.gallery?.item11Desc || 'Controlled shade curing and gentle drying maintaining natural volatile oils and golden hues.',
         imgUrl: getAssetUrl('images/gallery-drying.webp'),
-        tag: 'Hygienic Curing • Climate Controlled',
+        tag: t.gallery?.item11Tag || 'Hygienic Curing • Climate Controlled',
       },
       {
         id: 12,
-        title: t.gallery?.item4Title || 'Precision Diameter & Quality Grading',
-        desc: t.gallery?.item4Desc || 'Rigorous ISO classification into Alba, C5 Special, and commercial export grade lots.',
+        title: t.gallery?.item12Title || 'Precision Diameter & Quality Grading',
+        desc: t.gallery?.item12Desc || 'Rigorous ISO classification into Alba, C5 Special, and commercial export grade lots.',
         imgUrl: getAssetUrl('images/gallery-grading.webp'),
-        tag: 'Quality Grading • SLS 81 & ISO',
+        tag: t.gallery?.item12Tag || 'Quality Grading • SLS 81 & ISO',
       },
       {
         id: 13,
-        title: t.gallery?.item5Title || 'Steam Distillation Lab',
-        desc: t.gallery?.item5Desc || 'Slow hydro-distillation of fresh leaves yielding therapeutic-grade eugenol-rich leaf oil.',
+        title: t.gallery?.item13Title || 'Steam Distillation Lab',
+        desc: t.gallery?.item13Desc || 'Slow hydro-distillation of fresh leaves yielding therapeutic-grade eugenol-rich leaf oil.',
         imgUrl: getAssetUrl('images/gallery-distillation.webp'),
-        tag: 'Distillation Lab • 75%–85% Eugenol',
+        tag: t.gallery?.item13Tag || 'Distillation Lab • 75%–85% Eugenol',
       },
       {
         id: 14,
-        title: t.gallery?.item6Title || 'Colombo Port Freight Dispatch',
-        desc: t.gallery?.item6Desc || 'Containerized sea freight (FCL/LCL) and rapid express air cargo dispatch to worldwide destinations.',
+        title: t.gallery?.item14Title || 'Colombo Port Freight Dispatch',
+        desc: t.gallery?.item14Desc || 'Containerized sea freight (FCL/LCL) and rapid express air cargo dispatch to worldwide destinations.',
         imgUrl: getAssetUrl('images/gallery-shipping.webp'),
-        tag: 'Export Logistics • Port of Colombo',
+        tag: t.gallery?.item14Tag || 'Export Logistics • Port of Colombo',
       },
       {
         id: 15,
-        title: 'Amber Dropper Bottle Formats',
-        desc: 'Certified amber glass bottles preserving aromatic bioactives for global cosmetic, aromatherapeutic, and wellness formulations.',
+        title: t.gallery?.item15Title || 'Amber Dropper Bottle Formats',
+        desc: t.gallery?.item15Desc || 'Certified amber glass bottles preserving aromatic bioactives for global cosmetic, aromatherapeutic, and wellness formulations.',
         imgUrl: getAssetUrl('images/cinnamon-leaf-oil-collection.webp'),
-        tag: 'Presentation • Amber UV Glass',
+        tag: t.gallery?.item15Tag || 'Presentation • Amber UV Glass',
       },
       {
         id: 16,
-        title: 'Commercial C5 & Alba Export Lots',
-        desc: 'Official certified export shipments tested for moisture, eugenol content, and international purity compliance.',
+        title: t.gallery?.item16Title || 'Commercial C5 & Alba Export Lots',
+        desc: t.gallery?.item16Desc || 'Official certified export shipments tested for moisture, eugenol content, and international purity compliance.',
         imgUrl: getAssetUrl('images/product-c5.webp'),
-        tag: 'Certified Export • SLS & EDB',
+        tag: t.gallery?.item16Tag || 'Certified Export • SLS & EDB',
       },
     ],
     [t]
@@ -317,7 +317,7 @@ export const Gallery: React.FC<GalleryProps> = ({ t, isRtl = false }) => {
 
                       {/* Location / Batch Badge */}
                       <div className="absolute top-2.5 left-2.5 z-10 max-w-[85%]">
-                        <span className="inline-block px-2.5 py-0.5 rounded-full bg-black/80 backdrop-blur-md text-[#E5A855] border border-[#C87A28]/40 text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider truncate shadow-md">
+                        <span className="inline-block px-2.5 py-0.5 rounded-full bg-black/80 backdrop-blur-md text-[#E5A855] border border-[#C87A28]/40 text-[9.5px] sm:text-[10px] font-bold uppercase tracking-wider whitespace-nowrap shadow-md">
                           {item.tag}
                         </span>
                       </div>
@@ -331,7 +331,7 @@ export const Gallery: React.FC<GalleryProps> = ({ t, isRtl = false }) => {
 
                       {/* Title & Short Description on Image Bottom */}
                       <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-3.5 z-10">
-                        <h3 className="font-serif text-sm sm:text-base font-bold text-white mb-0.5 group-hover:text-amber-200 transition-colors line-clamp-1">
+                        <h3 className="font-serif text-sm sm:text-base font-bold text-white mb-0.5 group-hover:text-amber-200 transition-colors leading-snug">
                           {item.title}
                         </h3>
                         <p className="text-[11px] sm:text-xs text-gray-200 line-clamp-2 leading-snug">
@@ -425,8 +425,8 @@ export const Gallery: React.FC<GalleryProps> = ({ t, isRtl = false }) => {
 
           {/* Page Info */}
           <div className="text-[11px] font-mono text-[#5A6D62] dark:text-[#A3B899]">
-            Showing <span className="text-[#9E5714] dark:text-[#E5A855] font-bold">8</span> of{' '}
-            <span className="text-[#11281E] dark:text-[#F9F6F0] font-semibold">{allGalleryItems.length}</span> images (Page {currentPage + 1} of {totalPages})
+            {t.gallery?.showing || 'Showing'} <span className="text-[#9E5714] dark:text-[#E5A855] font-bold">8</span> {t.gallery?.of || 'of'}{' '}
+            <span className="text-[#11281E] dark:text-[#F9F6F0] font-semibold">{allGalleryItems.length}</span> {t.gallery?.images || 'images'} ({t.gallery?.page || 'Page'} {currentPage + 1} {t.gallery?.of || 'of'} {totalPages})
           </div>
         </div>
       </div>
@@ -503,7 +503,7 @@ export const Gallery: React.FC<GalleryProps> = ({ t, isRtl = false }) => {
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#C87A28] hover:bg-[#b0671c] text-white font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer whitespace-nowrap"
                   >
                     <PackageCheck className="w-4 h-4" />
-                    <span>Request Quotation</span>
+                    <span>{t.gallery?.requestQuotation || 'Request Quotation'}</span>
                   </a>
                 </div>
               </div>

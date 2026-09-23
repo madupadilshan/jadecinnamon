@@ -121,32 +121,33 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
     } = {};
 
     if (items.length === 0) {
-      errors.items = 'Please add at least one product item to your quotation.';
+      errors.items = t.rfq?.errorAddProduct || 'Please add at least one product item to your quotation.';
     } else {
       const zeroItems = items.filter((item: CartItem) => item.quantity <= 0);
       const totalQty = items.reduce((acc: number, item: CartItem) => acc + item.quantity, 0);
 
       if (zeroItems.length > 0 || totalQty <= 0) {
         errors.zeroQuantity =
+          t.rfq?.errorZeroQty ||
           'Please specify a valid quantity greater than 0 for your selected items before requesting a quotation.';
         errors.zeroItemIds = zeroItems.map((i: CartItem) => i.id);
       }
     }
 
     if (!incoterm || !incoterm.trim()) {
-      errors.incoterm = 'Please select a preferred Incoterm.';
+      errors.incoterm = t.rfq?.errorIncoterm || 'Please select a preferred Incoterm.';
     }
     if (!destinationPort.trim()) {
-      errors.destination = 'Please specify the destination port or country.';
+      errors.destination = t.rfq?.errorDestination || 'Please specify the destination port or country.';
     }
     if (!ordererName.trim()) {
-      errors.name = 'Please enter your full name or company representative name.';
+      errors.name = t.rfq?.errorName || 'Please enter your full name or company representative name.';
     }
     if (!ordererPhone.trim()) {
-      errors.phone = 'Please enter your contact phone/WhatsApp number.';
+      errors.phone = t.rfq?.errorPhone || 'Please enter your contact phone/WhatsApp number.';
     }
     if (!ordererAddress.trim()) {
-      errors.address = 'Please enter your business or delivery address.';
+      errors.address = t.rfq?.errorAddress || 'Please enter your business or delivery address.';
     }
 
     setValidationErrors(errors);
@@ -245,12 +246,12 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
               <div className="flex items-center gap-2.5">
                 <Building2 className="w-5 h-5 text-[#9E5714] dark:text-[#E59A4D]" />
                 <span className="text-sm font-bold text-[#11281E] dark:text-[#F9F6F0] uppercase tracking-wider">
-                  B2B Cart & Selected Products
+                  {t.rfq?.cartTitle || 'B2B Cart & Selected Products'}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-xs text-[#9E5714] dark:text-[#E59A4D] font-mono bg-[#f6ecd6] dark:bg-black/50 px-3 py-1 rounded-full border border-[#C87A28]/20 dark:border-[#C87A28]/30 font-semibold">
-                  Total Volume: {totalEstimatedWeightDisplay}
+                  {t.rfq?.totalVolume || 'Total Volume'}: {totalEstimatedWeightDisplay}
                 </span>
                 {items.length > 0 && (
                   <button
@@ -258,7 +259,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                     onClick={clearCart}
                     className="min-h-[36px] text-[11px] text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 px-2.5 py-1 rounded-lg bg-red-50 dark:bg-red-950/40 hover:bg-red-100 transition-colors cursor-pointer font-medium"
                   >
-                    Clear All
+                    {t.rfq?.clearAll || 'Clear All'}
                   </button>
                 )}
               </div>
@@ -280,10 +281,10 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-bold text-[#11281E] dark:text-[#F9F6F0] uppercase tracking-wider">
-                  1. Quotation Line Items ({totalUniqueItems} {totalUniqueItems === 1 ? 'Item' : 'Items'})
+                  {t.rfq?.lineItemsLabel || '1. Quotation Line Items'} ({totalUniqueItems} {totalUniqueItems === 1 ? 'Item' : 'Items'})
                 </label>
                 <span className="text-[11px] text-emerald-700 dark:text-emerald-400 font-medium">
-                  Directly synced with your B2B Cart
+                  {t.rfq?.syncedWithCart || 'Directly synced with your B2B Cart'}
                 </span>
               </div>
 
@@ -293,7 +294,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                     <Package className="w-5 h-5 text-[#9E5714] dark:text-[#E59A4D]" />
                   </div>
                   <p className="text-xs text-[#5A6D62] dark:text-[#A3B899] max-w-sm mx-auto">
-                    Your quotation list is currently empty. Use the quick add dropdown below or browse the catalog above to add items.
+                    {t.rfq?.emptyCartPrompt || 'Your quotation list is currently empty. Use the quick add dropdown below or browse the catalog above to add items.'}
                   </p>
                 </div>
               ) : (
@@ -436,7 +437,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                   onChange={(e) => setQuickAddKey(e.target.value)}
                   className="w-full sm:flex-1 min-h-[44px] px-3 py-2 rounded-xl bg-[#F4EFE6] dark:bg-[#03140e] border border-[#C87A28]/25 dark:border-[#C87A28]/35 text-[#11281E] dark:text-[#F9F6F0] text-xs focus:outline-none focus:border-[#C87A28] cursor-pointer box-border"
                 >
-                  <optgroup label="Pure Ceylon Cinnamon Leaf Oil (Bottles: 15ml - 100ml)">
+                  <optgroup label={t.rfq?.optgroupOil || 'Pure Ceylon Cinnamon Leaf Oil (Bottles: 15ml - 100ml)'}>
                     {PRODUCTS.filter((p: Product) => p.buyingModel === 'volume_variants' || p.buyingModel === 'multi_variant_volume' || p.buyingModel === 'multi_volume').flatMap((p: Product) =>
                       p.variants && p.variants.length > 0
                         ? p.variants.map((v) => (
@@ -451,7 +452,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                         : []
                     )}
                   </optgroup>
-                  <optgroup label="Ceylon Cinnamon Quills & Cuts (Bulk Weight in Kg)">
+                  <optgroup label={t.rfq?.optgroupQuills || 'Ceylon Cinnamon Quills & Cuts (Bulk Weight in Kg)'}>
                     {PRODUCTS.filter((p: Product) => p.buyingModel === 'bulk_weight' || p.buyingModel === 'flexible_bulk').map((p: Product) => (
                       <option
                         key={p.id}
@@ -462,7 +463,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                       </option>
                     ))}
                   </optgroup>
-                  <optgroup label="Ceylon Cinnamon Powders & Pieces (Fixed 1Kg Sealed Pouches)">
+                  <optgroup label={t.rfq?.optgroupPowders || 'Ceylon Cinnamon Powders & Pieces (Fixed 1Kg Sealed Pouches)'}>
                     {PRODUCTS.filter((p: Product) => (p.buyingModel === 'fixed_pack' || p.buyingModel === 'fixed_unit_pack' || p.buyingModel === 'fixed_1kg_pack') && p.id !== 'leaf-oil-box-set').map((p: Product) => (
                       <option
                         key={p.id}
@@ -473,7 +474,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                       </option>
                     ))}
                   </optgroup>
-                  <optgroup label="Luxury Presentation Gift Sets (Packs)">
+                  <optgroup label={t.rfq?.optgroupGift || 'Luxury Presentation Gift Sets (Packs)'}>
                     {PRODUCTS.filter((p: Product) => p.buyingModel === 'gift_pack' || p.id === 'leaf-oil-box-set').map((p: Product) => (
                       <option
                         key={p.id}
@@ -492,7 +493,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                   className="w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#C87A28] hover:bg-[#b0671c] text-white text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer whitespace-nowrap box-border"
                 >
                   <PackagePlus className="w-4 h-4" />
-                  <span>(+) Add Product</span>
+                  <span>{t.rfq?.addProduct || '(+) Add Product'}</span>
                 </button>
               </div>
             </div>
@@ -509,10 +510,10 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
               </div>
               <div>
                 <h3 className="font-serif text-base sm:text-lg font-bold text-[#11281E] dark:text-[#F9F6F0] leading-tight">
-                  Trade Desk Quotation & Parameters
+                  {t.rfq?.tradeDeskTitle || 'Trade Desk Quotation & Parameters'}
                 </h3>
                 <p className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">
-                  Direct Colombo Export Processing Desk
+                  {t.rfq?.tradeDeskSubtitle || 'Direct Colombo Export Processing Desk'}
                 </p>
               </div>
             </div>
@@ -520,14 +521,14 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
             {/* 2. Structured Shipping Parameters Form */}
             <div className="space-y-4">
               <label className="text-xs font-bold text-[#11281E] dark:text-[#F9F6F0] uppercase tracking-wider block">
-                2. Shipping & Trade Parameters
+                {t.rfq?.shippingParameters || '2. Shipping & Trade Parameters'}
               </label>
 
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
                 {/* Incoterm Select */}
                 <div className="sm:col-span-5">
                   <label className="block text-[11px] font-semibold text-[#5A6D62] dark:text-[#A3B899] mb-1">
-                    Preferred Incoterm *
+                    {t.rfq?.preferredIncoterm || 'Preferred Incoterm *'}
                   </label>
                   <select
                     value={incoterm}
@@ -544,7 +545,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                     }`}
                   >
                     <option value="" disabled className="text-gray-400 dark:text-gray-500">
-                      Select Preferred Incoterm *
+                      {t.rfq?.selectIncotermPlaceholder || 'Select Preferred Incoterm *'}
                     </option>
                     <option value="FOB Colombo & CIF Destination" className="bg-white dark:bg-[#062319] text-[#11281E] dark:text-white">
                       FOB Colombo & CIF Destination
@@ -575,7 +576,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                 {/* Destination Port / Country */}
                 <div className="sm:col-span-7">
                   <label className="block text-[11px] font-semibold text-[#5A6D62] dark:text-[#A3B899] mb-1">
-                    Destination Port / Country *
+                    {t.rfq?.destinationPortLabel || 'Destination Port / Country *'}
                   </label>
                   <input
                     type="text"
@@ -586,7 +587,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                         setValidationErrors((prev) => ({ ...prev, destination: undefined }));
                       }
                     }}
-                    placeholder="e.g., Port of Hamburg, Germany or Port of Rotterdam, Netherlands"
+                    placeholder={t.rfq?.destinationPlaceholder || 'e.g., Port of Hamburg, Germany or Port of Rotterdam, Netherlands'}
                     className={`w-full box-border min-h-[44px] px-3 py-2.5 rounded-xl bg-[#F4EFE6] dark:bg-[#03140e] border text-[#11281E] placeholder:text-[#829288] dark:text-[#F9F6F0] dark:placeholder:text-[#64796E] text-xs font-medium focus:outline-none ${
                       validationErrors.destination
                         ? 'border-red-500 focus:border-red-400 ring-1 ring-red-500'
@@ -604,13 +605,13 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
               {/* Custom Packaging or Lab Requirements */}
               <div>
                 <label className="block text-[11px] font-semibold text-[#5A6D62] dark:text-[#A3B899] mb-1">
-                  Custom Packaging or Lab Requirements (Optional)
+                  {t.rfq?.customPackagingNotes || 'Custom Packaging or Lab Requirements (Optional)'}
                 </label>
                 <textarea
                   rows={2}
                   value={orderNotes}
                   onChange={(e) => setOrderNotes(e.target.value)}
-                  placeholder="e.g., 25kg bulk kraft bags, private white-label retail packaging, moisture < 12% COA"
+                  placeholder={t.rfq?.notesPlaceholder || 'e.g., 25kg bulk kraft bags, private white-label retail packaging, moisture < 12% COA'}
                   className="w-full box-border px-3 py-2.5 rounded-xl bg-[#F4EFE6] dark:bg-[#03140e] border border-[#C87A28]/25 dark:border-[#C87A28]/35 text-[#11281E] placeholder:text-[#829288] dark:text-[#F9F6F0] dark:placeholder:text-[#64796E] text-xs font-medium focus:outline-none focus:border-[#C87A28] resize-none"
                 />
               </div>
@@ -619,7 +620,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
             {/* 3. Orderer Contact Information */}
             <div className="space-y-4 pt-3 border-t border-[#C87A28]/20 dark:border-[#C87A28]/30">
               <label className="text-xs font-bold text-[#11281E] dark:text-[#F9F6F0] uppercase tracking-wider block">
-                3. Orderer Contact Information
+                {t.rfq?.ordererContactInfo || '3. Orderer Contact Information'}
               </label>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -627,7 +628,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                 <div>
                   <label className="block text-[11px] font-semibold text-[#5A6D62] dark:text-[#A3B899] mb-1 flex items-center gap-1">
                     <User className="w-3 h-3 text-[#9E5714] dark:text-[#E59A4D]" />
-                    <span>NAME (Representative) *</span>
+                    <span>{t.rfq?.nameLabel || 'NAME (Representative) *'}</span>
                   </label>
                   <input
                     type="text"
@@ -638,7 +639,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                         setValidationErrors((prev) => ({ ...prev, name: undefined }));
                       }
                     }}
-                    placeholder="e.g., Johnathan Miller (Procurement Director)"
+                    placeholder={t.rfq?.namePlaceholder || 'e.g., Johnathan Miller (Procurement Director)'}
                     className={`w-full box-border min-h-[44px] px-3 py-2.5 rounded-xl bg-[#F4EFE6] dark:bg-[#03140e] border text-[#11281E] placeholder:text-[#829288] dark:text-[#F9F6F0] dark:placeholder:text-[#64796E] text-xs font-medium focus:outline-none ${
                       validationErrors.name
                         ? 'border-red-500 focus:border-red-400 ring-1 ring-red-500'
@@ -656,7 +657,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                 <div>
                   <label className="block text-[11px] font-semibold text-[#5A6D62] dark:text-[#A3B899] mb-1 flex items-center gap-1">
                     <Phone className="w-3 h-3 text-[#25D366]" />
-                    <span>PHONE NO (WhatsApp / Tel) *</span>
+                    <span>{t.rfq?.phoneLabel || 'PHONE NO (WhatsApp / Tel) *'}</span>
                   </label>
                   <input
                     type="tel"
@@ -667,7 +668,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                         setValidationErrors((prev) => ({ ...prev, phone: undefined }));
                       }
                     }}
-                    placeholder="e.g., +49 170 1234567 (with international country code)"
+                    placeholder={t.rfq?.phonePlaceholder || 'e.g., +49 170 1234567 (with international country code)'}
                     className={`w-full box-border min-h-[44px] px-3 py-2.5 rounded-xl bg-[#F4EFE6] dark:bg-[#03140e] border text-[#11281E] placeholder:text-[#829288] dark:text-[#F9F6F0] dark:placeholder:text-[#64796E] text-xs font-medium focus:outline-none ${
                       validationErrors.phone
                         ? 'border-red-500 focus:border-red-400 ring-1 ring-red-500'
@@ -685,7 +686,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                 <div className="sm:col-span-2">
                   <label className="block text-[11px] font-semibold text-[#5A6D62] dark:text-[#A3B899] mb-1 flex items-center gap-1">
                     <MapPin className="w-3 h-3 text-[#9E5714] dark:text-[#E59A4D]" />
-                    <span>ADDRESS (Business / Delivery / Country) *</span>
+                    <span>{t.rfq?.addressLabel || 'ADDRESS (Business / Delivery / Country) *'}</span>
                   </label>
                   <input
                     type="text"
@@ -696,7 +697,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                         setValidationErrors((prev) => ({ ...prev, address: undefined }));
                       }
                     }}
-                    placeholder="e.g., Spices GmbH, Warehouse 4B, Hafenstraße 12, 20457 Hamburg, Germany"
+                    placeholder={t.rfq?.addressPlaceholder || 'e.g., Spices GmbH, Warehouse 4B, Hafenstraße 12, 20457 Hamburg, Germany'}
                     className={`w-full box-border min-h-[44px] px-3 py-2.5 rounded-xl bg-[#F4EFE6] dark:bg-[#03140e] border text-[#11281E] placeholder:text-[#829288] dark:text-[#F9F6F0] dark:placeholder:text-[#64796E] text-xs font-medium focus:outline-none ${
                       validationErrors.address
                         ? 'border-red-500 focus:border-red-400 ring-1 ring-red-500'
@@ -716,7 +717,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
             <div className="space-y-3 pt-2">
               <div className="p-4 rounded-2xl bg-[#F4EFE6] dark:bg-[#041912] border border-[#C87A28]/20 dark:border-[#C87A28]/30 space-y-2.5">
                 <div className="text-xs font-bold text-[#11281E] dark:text-[#F9F6F0] uppercase tracking-wider flex items-center justify-between">
-                  <span>Order Specification Summary</span>
+                  <span>{t.rfq?.orderSummaryTitle || 'Order Specification Summary'}</span>
                   <span className="text-[#9E5714] dark:text-[#E59A4D] font-mono text-[11px]">
                     {totalUniqueItems} {totalUniqueItems === 1 ? 'Grade' : 'Grades'}
                   </span>
@@ -724,47 +725,47 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
 
                 <div className="space-y-2 text-xs divide-y divide-[#C87A28]/10 dark:divide-white/5 pt-1">
                   <div className="flex items-center justify-between pt-1">
-                    <span className="text-[#5A6D62] dark:text-[#A3B899]">Estimated Volume:</span>
+                    <span className="text-[#5A6D62] dark:text-[#A3B899]">{t.rfq?.estimatedVolume || 'Estimated Volume:'}</span>
                     <span className="font-bold font-mono text-[#11281E] dark:text-[#F9F6F0]">
                       {totalEstimatedWeightDisplay}
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2">
-                    <span className="text-[#5A6D62] dark:text-[#A3B899]">Incoterm:</span>
+                  <div className="flex items-center justify-between gap-2 pt-2">
+                    <span className="text-[#5A6D62] dark:text-[#A3B899] shrink-0">{t.rfq?.incoterm || 'Incoterm:'}</span>
                     {incoterm ? (
-                      <span className="font-semibold text-[#11281E] dark:text-[#F9F6F0] truncate max-w-[200px] text-right">
-                        {incoterm.split(' ')[0]}
+                      <span className="font-semibold text-[#11281E] dark:text-[#F9F6F0] text-right text-xs">
+                        {incoterm}
                       </span>
                     ) : (
                       <span className="font-semibold text-amber-600 dark:text-amber-400 italic text-right">
-                        Required *
+                        {t.rfq?.required || 'Required *'}
                       </span>
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between pt-2">
-                    <span className="text-[#5A6D62] dark:text-[#A3B899]">Destination:</span>
+                  <div className="flex items-center justify-between gap-2 pt-2">
+                    <span className="text-[#5A6D62] dark:text-[#A3B899] shrink-0">{t.rfq?.destination || 'Destination:'}</span>
                     {destinationPort.trim() ? (
-                      <span className="font-semibold text-[#11281E] dark:text-[#F9F6F0] truncate max-w-[200px] text-right">
+                      <span className="font-semibold text-[#11281E] dark:text-[#F9F6F0] text-right text-xs">
                         {destinationPort}
                       </span>
                     ) : (
                       <span className="font-semibold text-amber-600 dark:text-amber-400 italic text-right">
-                        Required *
+                        {t.rfq?.required || 'Required *'}
                       </span>
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between pt-2">
-                    <span className="text-[#5A6D62] dark:text-[#A3B899]">Representative:</span>
+                  <div className="flex items-center justify-between gap-2 pt-2">
+                    <span className="text-[#5A6D62] dark:text-[#A3B899] shrink-0">{t.rfq?.representative || 'Representative:'}</span>
                     {ordererName.trim() ? (
-                      <span className="font-semibold text-[#11281E] dark:text-[#F9F6F0] truncate max-w-[200px] text-right">
+                      <span className="font-semibold text-[#11281E] dark:text-[#F9F6F0] text-right text-xs">
                         {ordererName}
                       </span>
                     ) : (
                       <span className="font-semibold text-amber-600 dark:text-amber-400 italic text-right">
-                        Required *
+                        {t.rfq?.required || 'Required *'}
                       </span>
                     )}
                   </div>
@@ -775,19 +776,19 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
               <div className="p-3.5 rounded-2xl bg-white/70 dark:bg-[#062319] border border-[#C87A28]/20 dark:border-[#C87A28]/30 space-y-1.5">
                 <div className="flex items-start gap-2 text-[11px] text-[#3B4D43] dark:text-[#D1DDD5]">
                   <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                  <span>15-Minute Guaranteed Commercial Response Time</span>
+                  <span>{t.rfq?.guarantee1 || '15-Minute Guaranteed Commercial Response Time'}</span>
                 </div>
                 <div className="flex items-start gap-2 text-[11px] text-[#3B4D43] dark:text-[#D1DDD5]">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#9E5714] dark:text-[#E59A4D] shrink-0 mt-0.5" />
-                  <span>100% Pure Ceylon Cinnamon • SLS 81 / SLS 187 / ISO Standard</span>
+                  <span>{t.rfq?.guarantee2 || '100% Pure Ceylon Cinnamon • SLS 81 / SLS 187 / ISO Standard'}</span>
                 </div>
                 <div className="flex items-start gap-2 text-[11px] text-[#3B4D43] dark:text-[#D1DDD5]">
                   <FileCheck2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Official Batch GC-MS Analysis, COA & Phytosanitary Certificates</span>
+                  <span>{t.rfq?.guarantee3 || 'Official Batch GC-MS Analysis, COA & Phytosanitary Certificates'}</span>
                 </div>
                 <div className="flex items-start gap-2 text-[11px] text-[#3B4D43] dark:text-[#D1DDD5]">
                   <Anchor className="w-3.5 h-3.5 text-[#9E5714] dark:text-[#E59A4D] shrink-0 mt-0.5" />
-                  <span>Direct Colombo Port Export Logistics & Courier Dispatch</span>
+                  <span>{t.rfq?.guarantee4 || 'Direct Colombo Port Export Logistics & Courier Dispatch'}</span>
                 </div>
               </div>
             </div>
@@ -804,6 +805,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
                   <span className="font-medium leading-snug">
                     {validationErrors.items ||
                       validationErrors.zeroQuantity ||
+                      t.rfq?.errorFormIncomplete ||
                       'Please complete all required fields marked with * before sending your quotation.'}
                   </span>
                 </motion.div>
@@ -819,7 +821,7 @@ export const WhatsAppRFQBuilder: React.FC<WhatsAppRFQBuilderProps> = ({
               </button>
 
               <p className="text-[11px] text-[#5A6D62] dark:text-[#A3B899] text-center leading-relaxed">
-                Direct connection to Jade Cinnamon Lanka Trade Desk (+94 76 533 5308). Instant formal reply with FOB/CIF proforma rates.
+                {t.rfq?.tradeDeskNotice || 'Direct connection to Jade Cinnamon Lanka Trade Desk (+94 76 533 5308). Instant formal reply with FOB/CIF proforma rates.'}
               </p>
             </div>
           </div>

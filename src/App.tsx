@@ -80,7 +80,7 @@ export function App() {
           <FlyingParticlesOverlay />
 
           {/* Sliding Solid Cart Panel Drawer */}
-          <CartPanel isRtl={isRtl} />
+          <CartPanel t={t} isRtl={isRtl} />
 
           {/* Top Scrollytelling 2.0 Reading Progress Indicator */}
           <motion.div

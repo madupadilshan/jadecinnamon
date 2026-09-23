@@ -26,7 +26,7 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
           {/* Brand Column */}
           <div className="lg:col-span-5 space-y-4">
             <div className="flex items-center gap-3.5">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-ceylon-400/60 shadow-lg bg-white dark:bg-black/60 shrink-0">
+              <div className="relative w-14 h-14 sm:w-16 sm:h-16 shrink-0 filter drop-shadow-md dark:drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
                 <picture className="w-full h-full block">
                   <source srcSet={getAssetUrl('images/logo.webp')} type="image/webp" />
                   <img
@@ -36,7 +36,7 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
                     decoding="async"
                     width={64}
                     height={64}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </picture>
               </div>

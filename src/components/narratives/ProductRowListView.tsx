@@ -175,7 +175,7 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search products (e.g. Quills, Cut Pieces, Powder, Leaf Oil, 100ml, Alba, C5)..."
+              placeholder={t.catalog.searchPlaceholder || 'Search products (e.g. Quills, Cut Pieces, Powder, Leaf Oil, 100ml, Alba, C5)...'}
               className="w-full pl-11 pr-11 min-h-[48px] py-3 rounded-2xl bg-white dark:bg-[#062319] border border-[#E2D8C8] dark:border-ceylon-500/35 hover:border-[#C87A28] dark:hover:border-ceylon-400 focus:border-[#9E5714] dark:focus:border-amber-400 text-[#11281E] placeholder:text-[#829288] dark:text-[#F9F6F0] dark:placeholder:text-[#64796E] text-xs sm:text-sm font-medium focus:outline-none shadow-sm dark:shadow-xl dark:shadow-black/80 transition-all box-border"
             />
             {searchTerm && (
@@ -192,7 +192,7 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
 
           {debouncedSearch && (
             <div className="flex items-center justify-end px-2 pt-2 text-[11px] text-[#9E5714] dark:text-[#E5A855]">
-              <span>Filtered by &ldquo;{debouncedSearch}&rdquo;</span>
+              <span>{t.catalog.filteredBy || 'Filtered by'} &ldquo;{debouncedSearch}&rdquo;</span>
             </div>
           )}
         </div>
@@ -210,7 +210,7 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
               ? 'opacity-90 hover:opacity-100 hover:scale-110 active:scale-95'
               : 'opacity-30 cursor-not-allowed border-gray-300 dark:border-white/10 text-gray-400 dark:text-gray-600 pointer-events-none'
           }`}
-          aria-label="Previous products page"
+          aria-label={t.catalog.prev || 'Previous products page'}
         >
           {isRtl ? <ChevronRight className="w-6 h-6" /> : <ChevronLeft className="w-6 h-6" />}
         </button>
@@ -225,7 +225,7 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
               ? 'opacity-90 hover:opacity-100 hover:scale-110 active:scale-95'
               : 'opacity-30 cursor-not-allowed border-gray-300 dark:border-white/10 text-gray-400 dark:text-gray-600 pointer-events-none'
           }`}
-          aria-label="Next products page"
+          aria-label={t.catalog.next || 'Next products page'}
         >
           {isRtl ? <ChevronLeft className="w-6 h-6" /> : <ChevronRight className="w-6 h-6" />}
         </button>
@@ -252,10 +252,10 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
                   <PackageSearch className="w-8 h-8 text-[#9E5714] dark:text-[#E5A855]" />
                 </div>
                 <h4 className="font-serif text-xl font-bold text-[#11281E] dark:text-[#F9F6F0] mb-2">
-                  No products found for &ldquo;{searchTerm}&rdquo;
+                  {t.catalog.noProductsFound || 'No products found for'} &ldquo;{searchTerm}&rdquo;
                 </h4>
                 <p className="text-xs text-[#5A6D62] dark:text-[#A3B899] max-w-sm leading-relaxed mb-4">
-                  Try searching with different keywords like &ldquo;Alba&rdquo;, &ldquo;Powder&rdquo;, &ldquo;Oil&rdquo;, &ldquo;Quills&rdquo;, or reset your filters.
+                  {t.catalog.trySearching || 'Try searching with different keywords like “Alba”, “Powder”, “Oil”, “Quills”, or reset your filters.'}
                 </p>
                 <button
                   type="button"
@@ -265,7 +265,7 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
                   }}
                   className="px-4 py-2.5 min-h-[44px] rounded-xl bg-[#C87A28] hover:bg-[#b0671c] text-white text-xs font-bold transition-all shadow-md cursor-pointer"
                 >
-                  Reset All Filters
+                  {t.catalog.resetFilters || 'Reset All Filters'}
                 </button>
               </motion.div>
             ) : (
@@ -312,11 +312,11 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
               }`}
             >
               {isRtl ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-              <span>Prev</span>
+              <span>{t.catalog.prev || 'Prev'}</span>
             </button>
 
             <span className="text-xs font-mono text-[#5A6D62] dark:text-[#A3B899]">
-              Page {currentPage + 1} / {totalPages}
+              {t.catalog.page || 'Page'} {currentPage + 1} {t.catalog.of || '/'} {totalPages}
             </span>
 
             <button
@@ -329,7 +329,7 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
                   : 'opacity-30 cursor-not-allowed'
               }`}
             >
-              <span>Next</span>
+              <span>{t.catalog.next || 'Next'}</span>
               {isRtl ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
             </button>
           </div>
@@ -351,6 +351,7 @@ export const ProductRowListView: React.FC<ProductRowListViewProps> = ({
         canPrev={canPrev}
         canNext={canNext}
         isRtl={isRtl}
+        t={t}
       />
     </div>
   );

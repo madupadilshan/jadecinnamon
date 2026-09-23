@@ -149,8 +149,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           className="flex items-center gap-2.5 sm:gap-3 group focus:outline-none shrink-0 select-none cursor-pointer text-left [transform:translateZ(0)]"
           aria-label="Jade Cinnamon Lanka Home"
         >
-          {/* Circular Badge */}
-          <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full overflow-hidden border-2 border-[#C87A28]/70 shadow-md dark:shadow-black/80 group-hover:border-amber-400 transition-all duration-200 bg-white dark:bg-black/80 shrink-0">
+          {/* Circular Luxury Emblem Badge */}
+          <div className="relative w-11 h-11 sm:w-13 sm:h-13 lg:w-15 lg:h-15 shrink-0 transition-transform duration-300 group-hover:scale-105 filter drop-shadow-md dark:drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
             <picture className="w-full h-full block">
               <source srcSet={getAssetUrl('images/logo.webp')} type="image/webp" />
               <img
@@ -162,7 +162,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 fetchPriority="high"
                 width={64}
                 height={64}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             </picture>
           </div>
@@ -176,7 +176,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               Lanka
             </span>
             <span className="font-sans font-medium text-[9px] sm:text-[11px] uppercase tracking-wider text-[#169a61] dark:text-emerald-400 whitespace-nowrap leading-tight mt-0.5">
-              Direct Ceylon Origin • ISO 6539
+              {t.nav.brandSubtitle || 'Direct Ceylon Origin • ISO 6539'}
             </span>
           </div>
         </a>
@@ -300,7 +300,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     } mt-2 w-56 rounded-2xl bg-white dark:bg-[#062319] border border-[#C87A28]/20 dark:border-[#C87A28]/35 shadow-2xl dark:shadow-black/95 p-2 z-50 gpu-accelerate`}
                   >
                     <div className="px-3 py-1.5 text-[11px] font-bold text-[#9E5714] dark:text-[#E59A4D] uppercase tracking-wider border-b border-[#C87A28]/20 flex items-center justify-between mb-1">
-                      <span>Select Language</span>
+                      <span>{t.nav.selectLanguage || 'Select Language'}</span>
                       <span className="text-[10px] text-ceylon-600 dark:text-ceylon-400 font-mono">i18n</span>
                     </div>
 
@@ -429,7 +429,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <div className="flex items-center gap-2.5 truncate">
                     <ShoppingCart className="w-4.5 h-4.5 text-[#9E5714] dark:text-amber-300 shrink-0" />
                     <span className="text-xs font-bold text-[#11281E] dark:text-[#F9F6F0] truncate">
-                      Cart
+                      {t.nav.cart || 'Cart'}
                     </span>
                   </div>
                   <span className="px-2 py-0.5 rounded-full bg-[#C87A28] text-white text-[10px] font-extrabold shrink-0 shadow-sm">
@@ -451,7 +451,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <Moon className="w-4.5 h-4.5 text-[#9E5714] shrink-0" />
                     )}
                     <span className="text-xs font-bold text-[#11281E] dark:text-[#F9F6F0] truncate">
-                      {theme === 'dark' ? 'Light' : 'Dark'}
+                      {theme === 'dark' ? (t.nav.light || 'Light') : (t.nav.dark || 'Dark')}
                     </span>
                   </div>
                   <span className="text-xs text-[#5A6D62] dark:text-[#A3B899] shrink-0">
@@ -464,7 +464,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div className="space-y-1.5 pt-1">
                 <div className="flex items-center justify-between px-0.5">
                   <span className="text-[11px] font-bold text-[#9E5714] dark:text-[#E59A4D] uppercase tracking-wider">
-                    SELECT LANGUAGE
+                    {t.nav.selectLanguage || 'Select Language'}
                   </span>
                   <span className="text-[10px] text-ceylon-600 dark:text-ceylon-400 font-mono font-semibold">
                     {activeLangMeta.nativeLabel} ({activeLangMeta.code.toUpperCase()})
@@ -502,7 +502,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* 3. Site Navigation Links (Exact 1-to-7 Page Order) */}
               <div className="space-y-1.5 pt-1 border-t border-[#C87A28]/20 dark:border-[#C87A28]/20">
                 <div className="px-0.5 text-[11px] font-bold text-[#9E5714] dark:text-[#E59A4D] uppercase tracking-wider">
-                  Site Navigation
+                  {t.nav.siteNavigation || 'Site Navigation'}
                 </div>
                 {navLinks.map((link, index) => {
                   const isActive = activeSection === link.id;

@@ -165,10 +165,10 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
           <div className="text-[10px] font-semibold uppercase tracking-wider text-[#9E5714] dark:text-[#E59A4D] mb-0.5">
             {product.categoryLabel}
           </div>
-          <h3 className="font-serif text-base sm:text-lg font-bold text-[#11281E] dark:text-[#F9F6F0] mb-1 group-hover:text-[#9E5714] dark:group-hover:text-[#E59A4D] transition-colors truncate">
+          <h3 className="font-serif text-base sm:text-lg font-bold text-[#11281E] dark:text-[#F9F6F0] mb-1 group-hover:text-[#9E5714] dark:group-hover:text-[#E59A4D] transition-colors">
             {product.name}
           </h3>
-          <p className="text-xs text-[#2D3E33] dark:text-[#E2EBE5] line-clamp-2 leading-relaxed mb-3">
+          <p className="text-xs text-[#2D3E33] dark:text-[#E2EBE5] leading-relaxed mb-3">
             {product.description}
           </p>
 
@@ -177,10 +177,10 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
             <div className="py-2 border-t border-[#E2D8C8] dark:border-white/10 mb-3 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#5A6D62] dark:text-[#A3B899]">
-                  Bottle Sizes (15ml–100ml):
+                  {t.catalog.bottleSizes || 'Bottle Sizes (15ml–100ml):'}
                 </span>
                 <span className="text-[10px] font-mono font-bold text-[#9E5714] dark:text-[#E5A855]">
-                  {totalConfiguredBottles} {totalConfiguredBottles === 1 ? 'Bottle' : 'Bottles'} Total
+                  {totalConfiguredBottles} {totalConfiguredBottles === 1 ? (t.catalog.bottleSingular || 'Bottle') : (t.catalog.bottlePlural || 'Bottles')} {t.catalog.totalBottles || 'Total'}
                 </span>
               </div>
               <div className="grid grid-cols-2 gap-1.5">
@@ -189,17 +189,22 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
                   return (
                     <div
                       key={v.id}
-                      className="p-1.5 rounded-lg bg-[#F4EFE6] dark:bg-black/30 border border-[#E2D8C8] dark:border-white/10 flex items-center justify-between gap-1"
+                      className="p-1.5 rounded-lg bg-[#F4EFE6] dark:bg-black/30 border border-[#E2D8C8] dark:border-white/10 flex flex-col justify-between gap-1 transition-all hover:border-[#C87A28]/50"
                     >
-                      <div className="text-[11px] font-bold text-[#11281E] dark:text-white truncate">
-                        {v.volume}
+                      <div className="flex items-center justify-between w-full px-0.5">
+                        <span className="text-[11px] font-bold text-[#11281E] dark:text-white whitespace-nowrap">
+                          {v.volume}
+                        </span>
+                        <span className="text-[9px] font-mono text-[#9E5714] dark:text-[#E59A4D] font-semibold whitespace-nowrap">
+                          {v.gradeCode}
+                        </span>
                       </div>
 
-                      <div className="flex items-center gap-0.5">
+                      <div className="flex items-center justify-between w-full bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded p-0.5 shadow-sm">
                         <button
                           type="button"
                           onClick={() => handleUpdateVariantQty(v.id, -1)}
-                          className="w-6 h-6 rounded bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-[10px] font-bold transition-colors cursor-pointer"
+                          className="w-6 h-6 rounded hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-[10px] font-bold transition-colors cursor-pointer shrink-0"
                           aria-label={`Decrease ${v.volume}`}
                         >
                           <Minus className="w-2.5 h-2.5" />
@@ -209,12 +214,12 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
                           min="0"
                           value={qty === 0 ? '0' : qty}
                           onChange={(e) => handleSetVariantQty(v.id, e.target.value)}
-                          className="w-8 h-6 text-center text-[11px] font-bold font-mono bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded text-[#11281E] dark:text-[#F9F6F0] focus:outline-none"
+                          className="w-full text-center text-[11px] font-bold font-mono bg-transparent text-[#11281E] dark:text-[#F9F6F0] focus:outline-none"
                         />
                         <button
                           type="button"
                           onClick={() => handleUpdateVariantQty(v.id, 1)}
-                          className="w-6 h-6 rounded bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-[10px] font-bold transition-colors cursor-pointer"
+                          className="w-6 h-6 rounded hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-[10px] font-bold transition-colors cursor-pointer shrink-0"
                           aria-label={`Increase ${v.volume}`}
                         >
                           <Plus className="w-2.5 h-2.5" />
@@ -233,57 +238,43 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#5A6D62] dark:text-[#A3B899] flex items-center gap-1">
                   <Scale className="w-3 h-3 text-[#9E5714] dark:text-[#E5A855]" />
-                  <span>Custom Weight Order (Kg):</span>
+                  <span>{t.catalog.customWeightOrder || 'Custom Weight Order (Kg):'}</span>
                 </span>
                 <span className="text-[9px] text-[#9E5714] dark:text-[#E5A855] font-semibold">
-                  Flexible Bulk
+                  {t.catalog.flexibleBulk || 'Flexible Bulk'}
                 </span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <div className="flex-1 flex items-center gap-1 bg-[#F4EFE6] dark:bg-black/30 p-1 rounded-xl border border-[#E2D8C8] dark:border-white/10">
-                  <button
-                    type="button"
-                    onClick={() => setBulkWeight((prev) => Math.max(0, prev - (prev > 25 ? 5 : 1)))}
-                    className="w-7 h-7 rounded-lg bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
-                    aria-label="Decrease weight"
-                  >
-                    <Minus className="w-3 h-3" />
-                  </button>
+              <div className="flex items-center gap-1.5 w-full">
+                <button
+                  type="button"
+                  onClick={() => setBulkWeight((prev) => Math.max(0, parseFloat((prev - (prev > 25 ? 5 : 1)).toFixed(2))))}
+                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-[#F4EFE6] dark:bg-[#0A2F22] hover:bg-[#C87A28] hover:text-white border border-[#C87A28]/30 text-[#11281E] dark:text-white font-bold transition-colors cursor-pointer shrink-0"
+                  aria-label="Decrease weight"
+                >
+                  <Minus className="w-3.5 h-3.5" />
+                </button>
+                <div className="flex-1 relative flex items-center min-w-0">
                   <input
                     type="number"
                     min="0"
                     step="any"
                     value={bulkWeight === 0 ? '0' : bulkWeight}
                     onChange={(e) => setBulkWeight(Math.max(0, parseFloat(e.target.value) || 0))}
-                    className="flex-1 h-7 text-center text-xs font-bold font-mono bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded text-[#11281E] dark:text-[#F9F6F0] focus:outline-none"
+                    className="w-full h-9 sm:h-10 px-2 text-center text-xs sm:text-sm font-bold font-mono bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded-lg text-[#11281E] dark:text-[#F9F6F0] focus:outline-none focus:border-[#C87A28]"
                     placeholder="0"
                   />
-                  <span className="text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] px-1">
-                    Kg
+                  <span className="absolute right-2.5 text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] pointer-events-none">
+                    {t.catalog.bulkUnitKg || 'Kg'}
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => setBulkWeight((prev) => prev + (prev >= 25 ? 5 : 1))}
-                    className="w-7 h-7 rounded-lg bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
-                    aria-label="Increase weight"
-                  >
-                    <Plus className="w-3 h-3" />
-                  </button>
                 </div>
-
-                {/* Quick Preset Buttons */}
-                <div className="flex items-center gap-1">
-                  {[10, 25, 100].map((preset) => (
-                    <button
-                      key={preset}
-                      type="button"
-                      onClick={() => setBulkWeight((prev) => prev + preset)}
-                      className="px-1.5 py-1 h-7 rounded-lg bg-[#F4EFE6] dark:bg-white/5 hover:bg-[#C87A28] hover:text-white border border-[#E2D8C8] dark:border-white/10 text-[9px] font-bold text-[#11281E] dark:text-white transition-colors cursor-pointer"
-                    >
-                      +{preset}kg
-                    </button>
-                  ))}
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setBulkWeight((prev) => parseFloat((prev + (prev >= 25 ? 5 : 1)).toFixed(2)))}
+                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-[#F4EFE6] dark:bg-[#0A2F22] hover:bg-[#C87A28] hover:text-white border border-[#C87A28]/30 text-[#11281E] dark:text-white font-bold transition-colors cursor-pointer shrink-0"
+                  aria-label="Increase weight"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                </button>
               </div>
             </div>
           )}
@@ -294,38 +285,40 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#5A6D62] dark:text-[#A3B899] flex items-center gap-1">
                   <Package className="w-3 h-3 text-[#9E5714] dark:text-[#E5A855]" />
-                  <span>1 Kg Export Packs:</span>
+                  <span>{t.catalog.exportPacks1kg || '1 Kg Export Packs:'}</span>
                 </span>
                 <span className="text-[9px] text-[#9E5714] dark:text-[#E5A855] font-semibold">
-                  1 Pack = 1 Kg
+                  {t.catalog.pack1kgDesc || '1 Pack = 1 Kg'}
                 </span>
               </div>
-              <div className="flex items-center gap-1 bg-[#F4EFE6] dark:bg-black/30 p-1 rounded-xl border border-[#E2D8C8] dark:border-white/10">
+              <div className="flex items-center gap-1.5 w-full">
                 <button
                   type="button"
                   onClick={() => setPackQty((prev) => Math.max(0, prev - 1))}
-                  className="w-7 h-7 rounded-lg bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
+                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-[#F4EFE6] dark:bg-[#0A2F22] hover:bg-[#C87A28] hover:text-white border border-[#C87A28]/30 text-[#11281E] dark:text-white font-bold transition-colors cursor-pointer shrink-0"
                   aria-label="Decrease packs"
                 >
-                  <Minus className="w-3 h-3" />
+                  <Minus className="w-3.5 h-3.5" />
                 </button>
-                <input
-                  type="number"
-                  min="0"
-                  value={packQty === 0 ? '0' : packQty}
-                  onChange={(e) => setPackQty(Math.max(0, parseInt(e.target.value, 10) || 0))}
-                  className="flex-1 h-7 text-center text-xs font-bold font-mono bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded text-[#11281E] dark:text-[#F9F6F0] focus:outline-none"
-                />
-                <span className="text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] px-1">
-                  Packs ({packQty} Kg)
-                </span>
+                <div className="flex-1 relative flex items-center min-w-0">
+                  <input
+                    type="number"
+                    min="0"
+                    value={packQty === 0 ? '0' : packQty}
+                    onChange={(e) => setPackQty(Math.max(0, parseInt(e.target.value, 10) || 0))}
+                    className="w-full h-9 sm:h-10 px-2 text-center text-xs sm:text-sm font-bold font-mono bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded-lg text-[#11281E] dark:text-[#F9F6F0] focus:outline-none focus:border-[#C87A28]"
+                  />
+                  <span className="absolute right-2.5 text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] pointer-events-none">
+                    {t.catalog.packsUnit || 'Packs'} ({packQty} Kg)
+                  </span>
+                </div>
                 <button
                   type="button"
                   onClick={() => setPackQty((prev) => prev + 1)}
-                  className="w-7 h-7 rounded-lg bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
+                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-[#F4EFE6] dark:bg-[#0A2F22] hover:bg-[#C87A28] hover:text-white border border-[#C87A28]/30 text-[#11281E] dark:text-white font-bold transition-colors cursor-pointer shrink-0"
                   aria-label="Increase packs"
                 >
-                  <Plus className="w-3 h-3" />
+                  <Plus className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
@@ -337,38 +330,40 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#5A6D62] dark:text-[#A3B899] flex items-center gap-1">
                   <Package className="w-3 h-3 text-[#9E5714] dark:text-[#E5A855]" />
-                  <span>Master Gift Sets:</span>
+                  <span>{t.catalog.masterGiftSets || 'Master Gift Sets:'}</span>
                 </span>
                 <span className="text-[9px] text-[#9E5714] dark:text-[#E5A855] font-semibold">
-                  4 Bottles / Pack
+                  {t.catalog.giftSetDesc || '4 Bottles / Pack'}
                 </span>
               </div>
-              <div className="flex items-center gap-1 bg-[#F4EFE6] dark:bg-black/30 p-1 rounded-xl border border-[#E2D8C8] dark:border-white/10">
+              <div className="flex items-center gap-1.5 w-full">
                 <button
                   type="button"
                   onClick={() => setPackQty((prev) => Math.max(0, prev - 1))}
-                  className="w-7 h-7 rounded-lg bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
+                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-[#F4EFE6] dark:bg-[#0A2F22] hover:bg-[#C87A28] hover:text-white border border-[#C87A28]/30 text-[#11281E] dark:text-white font-bold transition-colors cursor-pointer shrink-0"
                   aria-label="Decrease packs"
                 >
-                  <Minus className="w-3 h-3" />
+                  <Minus className="w-3.5 h-3.5" />
                 </button>
-                <input
-                  type="number"
-                  min="0"
-                  value={packQty === 0 ? '0' : packQty}
-                  onChange={(e) => setPackQty(Math.max(0, parseInt(e.target.value, 10) || 0))}
-                  className="flex-1 h-7 text-center text-xs font-bold font-mono bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded text-[#11281E] dark:text-[#F9F6F0] focus:outline-none"
-                />
-                <span className="text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] px-1">
-                  Packs
-                </span>
+                <div className="flex-1 relative flex items-center min-w-0">
+                  <input
+                    type="number"
+                    min="0"
+                    value={packQty === 0 ? '0' : packQty}
+                    onChange={(e) => setPackQty(Math.max(0, parseInt(e.target.value, 10) || 0))}
+                    className="w-full h-9 sm:h-10 px-2 text-center text-xs sm:text-sm font-bold font-mono bg-white dark:bg-[#062319] border border-[#C87A28]/30 rounded-lg text-[#11281E] dark:text-[#F9F6F0] focus:outline-none focus:border-[#C87A28]"
+                  />
+                  <span className="absolute right-2.5 text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] pointer-events-none">
+                    {t.catalog.packsUnit || 'Packs'}
+                  </span>
+                </div>
                 <button
                   type="button"
                   onClick={() => setPackQty((prev) => prev + 1)}
-                  className="w-7 h-7 rounded-lg bg-white dark:bg-white/10 hover:bg-[#C87A28] hover:text-white text-[#11281E] dark:text-white flex items-center justify-center text-xs font-bold transition-colors cursor-pointer"
+                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-[#F4EFE6] dark:bg-[#0A2F22] hover:bg-[#C87A28] hover:text-white border border-[#C87A28]/30 text-[#11281E] dark:text-white font-bold transition-colors cursor-pointer shrink-0"
                   aria-label="Increase packs"
                 >
-                  <Plus className="w-3 h-3" />
+                  <Plus className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
@@ -381,16 +376,16 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
             <button
               type="button"
               onClick={() => onOpenSpecs(product)}
-              className="w-full min-h-[44px] inline-flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl bg-[#F4EFE6] dark:bg-jade-900/80 hover:bg-[#ebd7ad] dark:hover:bg-jade-800 border border-[#E2D8C8] dark:border-white/10 text-xs font-semibold text-[#11281E] dark:text-[#F9F6F0] transition-all shadow-sm cursor-pointer"
+              className="w-full min-h-[44px] inline-flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl bg-[#F4EFE6] dark:bg-jade-900/80 hover:bg-[#ebd7ad] dark:hover:bg-jade-800 border border-[#E2D8C8] dark:border-white/10 text-xs sm:text-sm font-medium text-[#11281E] dark:text-[#F9F6F0] transition-all shadow-sm cursor-pointer whitespace-nowrap"
             >
-              <FileText className="w-3.5 h-3.5 text-[#9E5714] dark:text-[#E5A855] shrink-0" />
-              <span className="truncate">{t.catalog.viewSpecs}</span>
+              <FileText className="w-4 h-4 text-[#9E5714] dark:text-[#E5A855] shrink-0" />
+              <span className="whitespace-nowrap">{t.catalog.viewSpecs || 'Details'}</span>
             </button>
 
             <button
               type="button"
               onClick={handleAddToCart}
-              className={`w-full min-h-[44px] inline-flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer ${
+              className={`w-full min-h-[44px] inline-flex items-center justify-center gap-1.5 px-2.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all shadow-md active:scale-95 cursor-pointer whitespace-nowrap ${
                 isAdded
                   ? 'bg-amber-500 text-black shadow-amber-400/40 border border-amber-300'
                   : 'bg-[#f6ecd6] dark:bg-[#093527] hover:bg-[#ebd7ad] dark:hover:bg-[#0d4734] text-[#9E5714] dark:text-amber-200 border border-[#C87A28]/40 hover:border-[#C87A28]'
@@ -398,13 +393,13 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
             >
               {isAdded ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-black" />
-                  <span>Added!</span>
+                  <Check className="w-4 h-4 text-black shrink-0" />
+                  <span className="whitespace-nowrap">{t.catalog.added || 'Added!'}</span>
                 </>
               ) : (
                 <>
-                  <Plus className="w-3.5 h-3.5 text-[#9E5714] dark:text-amber-300" />
-                  <span>Add to Cart</span>
+                  <Plus className="w-4 h-4 text-[#9E5714] dark:text-amber-300 shrink-0" />
+                  <span className="whitespace-nowrap">{t.catalog.addToCart || 'Add to Cart'}</span>
                 </>
               )}
             </button>
@@ -413,10 +408,10 @@ export const ProductRowCard: React.FC<ProductRowCardProps> = ({
           <button
             type="button"
             onClick={handleOrderNow}
-            className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-xs shadow-md shadow-[#25D366]/30 transition-all cursor-pointer"
+            className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-xs sm:text-sm shadow-md shadow-[#25D366]/30 transition-all cursor-pointer whitespace-nowrap"
           >
-            <WhatsAppIcon className="w-3.5 h-3.5 text-white" />
-            <span>Direct WhatsApp RFQ</span>
+            <WhatsAppIcon className="w-4 h-4 text-white shrink-0" />
+            <span className="whitespace-nowrap">{t.catalog.orderNow || 'Direct WhatsApp RFQ'}</span>
           </button>
         </div>
       </div>

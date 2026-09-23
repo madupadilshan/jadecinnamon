@@ -2,6 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+import { TranslationSchema } from '../../data/translations';
+
 interface ProductListNavigatorProps {
   currentPage: number;
   totalPages: number;
@@ -11,6 +13,7 @@ interface ProductListNavigatorProps {
   canPrev: boolean;
   canNext: boolean;
   isRtl?: boolean;
+  t?: TranslationSchema;
 }
 
 export const ProductListNavigator: React.FC<ProductListNavigatorProps> = ({
@@ -22,6 +25,7 @@ export const ProductListNavigator: React.FC<ProductListNavigatorProps> = ({
   canPrev,
   canNext,
   isRtl = false,
+  t,
 }) => {
   if (totalPages <= 1) return null;
 
@@ -41,7 +45,7 @@ export const ProductListNavigator: React.FC<ProductListNavigatorProps> = ({
               ? 'bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/15 text-[#11281E] dark:text-[#F9F6F0] hover:text-[#9E5714] dark:hover:text-amber-200 border border-[#E2D8C8] dark:border-white/10 active:scale-95'
               : 'opacity-30 cursor-not-allowed text-gray-400 dark:text-gray-500 border border-transparent'
           }`}
-          aria-label="Previous page"
+          aria-label={t?.catalog?.prev || 'Previous page'}
         >
           {isRtl ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
         </button>
@@ -91,7 +95,7 @@ export const ProductListNavigator: React.FC<ProductListNavigatorProps> = ({
               ? 'bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/15 text-[#11281E] dark:text-[#F9F6F0] hover:text-[#9E5714] dark:hover:text-amber-200 border border-[#E2D8C8] dark:border-white/10 active:scale-95'
               : 'opacity-30 cursor-not-allowed text-gray-400 dark:text-gray-500 border border-transparent'
           }`}
-          aria-label="Next page"
+          aria-label={t?.catalog?.next || 'Next page'}
         >
           {isRtl ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
         </button>
@@ -99,7 +103,7 @@ export const ProductListNavigator: React.FC<ProductListNavigatorProps> = ({
 
       {/* Page count indicator text */}
       <div className="text-[11px] font-mono text-[#5A6D62] dark:text-[#A3B899]">
-        Page <span className="text-[#9E5714] dark:text-[#E5A855] font-bold">{currentPage + 1}</span> of{' '}
+        {t?.catalog?.page || 'Page'} <span className="text-[#9E5714] dark:text-[#E5A855] font-bold">{currentPage + 1}</span> {t?.catalog?.of || 'of'}{' '}
         <span className="text-[#11281E] dark:text-[#F9F6F0] font-semibold">{totalPages}</span>
       </div>
     </div>

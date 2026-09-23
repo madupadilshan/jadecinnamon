@@ -506,10 +506,10 @@ export const Logistics: React.FC<LogisticsProps> = ({ t, currentLang = 'en', isR
             </div>
             <div>
               <h4 className="font-serif text-lg sm:text-xl font-bold text-[#11281E] dark:text-[#F9F6F0] mb-1">
-                Port of Colombo Direct Maritime Dispatch
+                {t.logistics?.maritimeTitle || 'Port of Colombo Direct Maritime Dispatch'}
               </h4>
               <p className="text-xs sm:text-sm text-[#3B4D43] dark:text-[#D1DDD5]">
-                Primary transshipment hub for South Asia. Fast connections to Rotterdam, Hamburg, Singapore, New York & Jebel Ali.
+                {t.logistics?.maritimeDesc || 'Primary transshipment hub for South Asia. Fast connections to Rotterdam, Hamburg, Singapore, New York & Jebel Ali.'}
               </p>
             </div>
           </div>
@@ -517,7 +517,7 @@ export const Logistics: React.FC<LogisticsProps> = ({ t, currentLang = 'en', isR
           <div className="flex items-center gap-3 shrink-0">
             <div className="flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl bg-[#F4EFE6] dark:bg-black/60 border border-[#C87A28]/20 dark:border-ceylon-500/40 text-xs font-semibold text-[#9E5714] dark:text-[#E59A4D]">
               <Clock className="w-4 h-4 text-[#9E5714] dark:text-[#E59A4D]" />
-              <span>Transit Time: 14 - 28 Days Global</span>
+              <span>{t.logistics?.transitTime || 'Transit Time: 14 - 28 Days Global'}</span>
             </div>
           </div>
         </motion.div>

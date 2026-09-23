@@ -158,7 +158,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                 {activeModalProduct.variants && activeModalProduct.variants.length > 0 && (
                   <div className="p-3.5 rounded-xl bg-[#F4EFE6] dark:bg-black/40 border border-[#C87A28]/20 dark:border-white/10">
                     <div className="text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] uppercase tracking-wider mb-2 flex items-center justify-between">
-                      <span>Select Bottle Size / Volume Format:</span>
+                      <span>{t.catalog.selectBottleSize || 'Select Bottle Size / Volume Format:'}</span>
                       {modalSelectedVariant && (
                         <span className="font-mono text-[11px] text-[#11281E] dark:text-[#F9F6F0]">
                           {modalSelectedVariant.gradeCode}
@@ -194,7 +194,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
                 <div>
                   <h4 className="text-xs font-bold text-[#5A6D62] dark:text-[#A3B899] uppercase tracking-wider mb-2">
-                    Official Product Overview
+                    {t.catalog.officialProductOverview || 'Official Product Overview'}
                   </h4>
                   <p className="text-xs sm:text-sm text-[#3B4D43] dark:text-[#D1DDD5] leading-relaxed">
                     {activeModalProduct.longDescription}
@@ -210,7 +210,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 bg-[#F4EFE6] dark:bg-black/40 p-4 rounded-xl border border-[#C87A28]/20 dark:border-white/5">
                     {activeModalProduct.specs.botanicalName && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5 sm:col-span-2">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Botanical Name</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.botanicalName || 'Botanical Name'}</div>
                         <div className="text-sm font-semibold italic text-[#11281E] dark:text-[#F9F6F0]">
                           {activeModalProduct.specs.botanicalName}
                         </div>
@@ -218,7 +218,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     )}
                     {activeModalProduct.specs.eugenol && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5 border border-emerald-500/30">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Eugenol Active (GC-MS)</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.eugenolActive || 'Eugenol Active (GC-MS)'}</div>
                         <div className="text-sm font-bold text-emerald-800 dark:text-emerald-400">
                           {activeModalProduct.specs.eugenol}
                         </div>
@@ -226,7 +226,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     )}
                     {activeModalProduct.specs.cinnamaldehyde && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Cinnamaldehyde Content</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.cinnamaldehyde || 'Cinnamaldehyde Content'}</div>
                         <div className="text-sm font-semibold text-[#9E5714] dark:text-[#E59A4D]">
                           {activeModalProduct.specs.cinnamaldehyde}
                         </div>
@@ -234,7 +234,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     )}
                     {activeModalProduct.specs.plantPart && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Plant Part Used</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.plantPart || 'Plant Part Used'}</div>
                         <div className="text-sm font-semibold text-[#11281E] dark:text-[#F9F6F0]">
                           {activeModalProduct.specs.plantPart}
                         </div>
@@ -242,7 +242,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     )}
                     {activeModalProduct.specs.extractionMethod && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Extraction Method</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.extractionMethod || 'Extraction Method'}</div>
                         <div className="text-sm font-semibold text-[#11281E] dark:text-[#F9F6F0]">
                           {activeModalProduct.specs.extractionMethod}
                         </div>
@@ -250,7 +250,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     )}
                     {activeModalProduct.specs.specificGravity && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Specific Gravity (20°C)</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.specificGravity || 'Specific Gravity (20°C)'}</div>
                         <div className="text-sm font-semibold text-[#11281E] dark:text-[#F9F6F0]">
                           {activeModalProduct.specs.specificGravity}
                         </div>
@@ -258,7 +258,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     )}
                     {activeModalProduct.specs.refractiveIndex && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Refractive Index (20°C)</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.refractiveIndex || 'Refractive Index (20°C)'}</div>
                         <div className="text-sm font-semibold text-[#11281E] dark:text-[#F9F6F0]">
                           {activeModalProduct.specs.refractiveIndex}
                         </div>
@@ -266,7 +266,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     )}
                     {activeModalProduct.specs.diameter && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5 border border-amber-500/30">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Quill Diameter / Cut Size</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.diameter || 'Quill Diameter / Cut Size'}</div>
                         <div className="text-sm font-bold text-[#9E5714] dark:text-[#E59A4D]">
                           {activeModalProduct.specs.diameter}
                         </div>
@@ -274,7 +274,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     )}
                     {activeModalProduct.specs.meshSize && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5 border border-amber-500/30">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Granulometry / Mesh Size</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.meshSize || 'Granulometry / Mesh Size'}</div>
                         <div className="text-sm font-bold text-[#9E5714] dark:text-[#E59A4D]">
                           {activeModalProduct.specs.meshSize}
                         </div>
@@ -282,7 +282,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     )}
                     {activeModalProduct.specs.coumarin && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5 border border-emerald-500/30">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Coumarin Level</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.coumarinLevel || 'Coumarin Level'}</div>
                         <div className="text-sm font-bold text-emerald-800 dark:text-emerald-400">
                           {activeModalProduct.specs.coumarin}
                         </div>
@@ -290,7 +290,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     )}
                     {activeModalProduct.specs.moisture && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Moisture Content</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.moistureContent || 'Moisture Content'}</div>
                         <div className="text-sm font-semibold text-[#11281E] dark:text-[#F9F6F0]">
                           {activeModalProduct.specs.moisture}
                         </div>
@@ -298,7 +298,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     )}
                     {activeModalProduct.specs.volatileOil && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Volatile Essential Oil</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.volatileOil || 'Volatile Essential Oil'}</div>
                         <div className="text-sm font-semibold text-[#11281E] dark:text-[#F9F6F0]">
                           {activeModalProduct.specs.volatileOil}
                         </div>
@@ -306,7 +306,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     )}
                     {activeModalProduct.specs.appearance && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5 sm:col-span-2">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Visual Appearance & Texture</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.appearance || 'Visual Appearance & Texture'}</div>
                         <div className="text-sm font-semibold text-[#11281E] dark:text-[#F9F6F0]">
                           {activeModalProduct.specs.appearance}
                         </div>
@@ -314,7 +314,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     )}
                     {activeModalProduct.specs.aroma && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5 sm:col-span-2">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Aroma & Sensory Profile</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.aroma || 'Aroma & Sensory Profile'}</div>
                         <div className="text-sm font-semibold text-[#11281E] dark:text-[#F9F6F0]">
                           {activeModalProduct.specs.aroma}
                         </div>
@@ -322,7 +322,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     )}
                     {activeModalProduct.specs.origin && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Country of Origin</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.countryOfOrigin || 'Country of Origin'}</div>
                         <div className="text-sm font-semibold text-[#11281E] dark:text-[#F9F6F0]">
                           {activeModalProduct.specs.origin}
                         </div>
@@ -330,7 +330,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                     )}
                     {activeModalProduct.specs.gradeStandard && (
                       <div className="p-2.5 rounded-lg bg-white dark:bg-white/5 sm:col-span-2">
-                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">Compliance & Standard</div>
+                        <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.catalog.compliance || 'Compliance & Standard'}</div>
                         <div className="text-sm font-semibold text-[#11281E] dark:text-[#F9F6F0]">
                           {activeModalProduct.specs.gradeStandard}
                         </div>
@@ -343,7 +343,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                 {activeModalProduct.keyBenefits && activeModalProduct.keyBenefits.length > 0 && (
                   <div>
                     <h4 className="text-xs font-bold text-[#5A6D62] dark:text-[#A3B899] uppercase tracking-wider mb-2.5">
-                      Verified Bioactive Highlights
+                      {t.catalog.verifiedBioactives || 'Verified Bioactive Highlights'}
                     </h4>
                     <ul className="space-y-1.5 bg-[#F4EFE6] dark:bg-jade-950/60 p-3.5 rounded-xl border border-[#C87A28]/20 dark:border-white/5 text-xs text-[#3B4D43] dark:text-[#D1DDD5]">
                       {activeModalProduct.keyBenefits.map((benefit, i) => (
@@ -390,7 +390,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                 >
                   <WhatsAppIcon className="w-4 h-4 text-white" />
                   <span>
-                    Configure WhatsApp RFQ for {activeModalProduct.name}
+                    {(t.catalog.configureWhatsAppRfq || 'Configure WhatsApp RFQ for')} {activeModalProduct.name}
                     {modalSelectedVariant ? ` (${modalSelectedVariant.volume})` : ''}
                   </span>
                 </button>

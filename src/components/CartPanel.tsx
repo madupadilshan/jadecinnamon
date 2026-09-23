@@ -19,11 +19,14 @@ import {
   openWhatsAppQuotation,
 } from './cart/WhatsAppB2BBuilder';
 
+import { TranslationSchema } from '../data/translations';
+
 interface CartPanelProps {
+  t: TranslationSchema;
   isRtl?: boolean;
 }
 
-export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
+export const CartPanel: React.FC<CartPanelProps> = ({ t, isRtl = false }) => {
   const {
     items,
     isCartOpen,
@@ -83,26 +86,27 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
     } = {};
 
     if (items.length === 0) {
-      errors.items = 'Your export quotation cart is empty.';
+      errors.items = t.rfq?.errorAddProduct || 'Your export quotation cart is empty.';
     } else {
       const zeroItems = items.filter((item) => item.quantity <= 0);
       const totalQty = items.reduce((acc, item) => acc + item.quantity, 0);
 
       if (zeroItems.length > 0 || totalQty <= 0) {
         errors.zeroQuantity =
+          t.rfq?.errorZeroQty ||
           'Please specify a valid quantity greater than 0 (Kg / L) for your selected items before requesting a quotation.';
         errors.zeroItemIds = zeroItems.map((i) => i.id);
       }
     }
 
     if (!ordererName.trim()) {
-      errors.name = 'Please enter your name or company representative name.';
+      errors.name = t.rfq?.errorName || 'Please enter your name or company representative name.';
     }
     if (!ordererPhone.trim()) {
-      errors.phone = 'Please enter your contact phone / WhatsApp.';
+      errors.phone = t.rfq?.errorPhone || 'Please enter your contact phone / WhatsApp.';
     }
     if (!ordererAddress.trim()) {
-      errors.address = 'Please enter your business delivery address.';
+      errors.address = t.rfq?.errorAddress || 'Please enter your business delivery address.';
     }
 
     setValidationErrors(errors);
@@ -176,14 +180,14 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                 <div>
                   <div className="flex items-center gap-2">
                     <h2 className="font-serif text-base sm:text-lg font-bold text-[#11281E] dark:text-[#F9F6F0] tracking-wide">
-                      B2B Export Inquiry Cart
+                      {t.cart?.cartHeading || 'B2B Export Inquiry Cart'}
                     </h2>
                     <span className="px-2 py-0.5 rounded-full bg-[#C87A28] text-white text-[10px] sm:text-[11px] font-bold">
                       {totalUniqueItems} {totalUniqueItems === 1 ? 'Item' : 'Items'}
                     </span>
                   </div>
                   <p className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">
-                    Direct Ceylon Port Quotation Desk
+                    {t.cart?.cartSubtitle || 'Direct Ceylon Port Quotation Desk'}
                   </p>
                 </div>
               </div>
@@ -195,14 +199,14 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                     onClick={clearCart}
                     className="min-h-[36px] text-[11px] text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 px-2.5 py-1 rounded-lg bg-red-50 dark:bg-red-950/40 hover:bg-red-100 transition-colors cursor-pointer font-medium"
                   >
-                    Clear All
+                    {t.rfq?.clearAll || 'Clear All'}
                   </button>
                 )}
                 <button
                   type="button"
                   onClick={closeCart}
                   className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-[#11281E] dark:text-[#F9F6F0] hover:text-black dark:hover:text-white transition-colors cursor-pointer"
-                  aria-label="Close cart panel"
+                  aria-label={t.cart?.closeCart || 'Close cart panel'}
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -232,17 +236,17 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                     <Package className="w-8 h-8" />
                   </div>
                   <h3 className="font-serif text-lg font-bold text-[#11281E] dark:text-[#F9F6F0] mb-1">
-                    Your Export Cart is Empty
+                    {t.cart?.emptyCartHeading || 'Your Export Cart is Empty'}
                   </h3>
                   <p className="text-xs text-[#5A6D62] dark:text-[#A3B899] max-w-xs mb-4">
-                    Browse our Pure Ceylon Cinnamon export catalog and add your target quills, cut, powder, or spice grades.
+                    {t.cart?.emptyCartDesc || 'Browse our Pure Ceylon Cinnamon export catalog and add your target quills, cut, powder, or spice grades.'}
                   </p>
                   <button
                     type="button"
                     onClick={closeCart}
                     className="min-h-[44px] px-5 py-2.5 rounded-xl bg-[#C87A28] hover:bg-[#b0671c] text-white text-xs font-bold transition-all shadow-md cursor-pointer"
                   >
-                    Browse Product Grades
+                    {t.cart?.browseCatalog || 'Browse Product Grades'}
                   </button>
                 </div>
               ) : (
@@ -250,7 +254,7 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                   {/* Cart Items List */}
                   <div className="space-y-3">
                     <div className="text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] uppercase tracking-wider flex items-center justify-between">
-                      <span>Configured Line Items ({items.length})</span>
+                      <span>{t.rfq?.lineItemsLabel || 'Configured Line Items'} ({items.length})</span>
                       <span className="text-[10px] text-[#5A6D62] dark:text-[#A3B899]">Adjust Qty / Units</span>
                     </div>
 
@@ -286,7 +290,7 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                                     </span>
                                   )}
                                 </div>
-                                <h4 className="font-serif text-sm font-bold text-[#11281E] dark:text-[#F9F6F0] line-clamp-1 mt-0.5">
+                                <h4 className="font-serif text-sm font-bold text-[#11281E] dark:text-[#F9F6F0] mt-0.5">
                                   {item.name}
                                 </h4>
                                 <p className="text-[10px] text-[#5A6D62] dark:text-[#A3B899]">
@@ -378,13 +382,13 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                   <div className="p-4 rounded-2xl bg-white dark:bg-[#082b20] border border-[#C87A28]/20 dark:border-[#C87A28]/30 space-y-3 shadow-md">
                     <div className="text-xs font-bold text-[#9E5714] dark:text-[#E59A4D] uppercase tracking-wider flex items-center gap-1.5">
                       <Globe className="w-3.5 h-3.5 text-[#9E5714] dark:text-[#E59A4D]" />
-                      <span>Export Destination & Contact</span>
+                      <span>{t.rfq?.shippingParameters || 'Export Destination & Contact'}</span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       <div>
                         <label className="block text-[10px] font-semibold text-[#5A6D62] dark:text-[#A3B899] mb-1">
-                          Incoterm Trade Basis
+                          {t.rfq?.preferredIncoterm || 'Incoterm Trade Basis'}
                         </label>
                         <select
                           value={incoterm}
@@ -402,13 +406,13 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
 
                       <div>
                         <label className="block text-[10px] font-semibold text-[#5A6D62] dark:text-[#A3B899] mb-1">
-                          Destination Port / City
+                          {t.rfq?.destinationPortLabel || 'Destination Port / City'}
                         </label>
                         <input
                           type="text"
                           value={destinationPort}
                           onChange={(e) => setDestinationPort(e.target.value)}
-                          placeholder="e.g. Port of Hamburg"
+                          placeholder={t.rfq?.destinationPlaceholder || 'e.g. Port of Hamburg'}
                           className="w-full min-h-[44px] px-2.5 py-2 rounded-xl bg-[#F4EFE6] dark:bg-black/60 border border-[#C87A28]/20 dark:border-white/15 text-xs text-[#11281E] placeholder:text-[#829288] dark:text-[#F9F6F0] dark:placeholder:text-[#64796E] focus:outline-none focus:border-[#C87A28]"
                         />
                       </div>
@@ -417,7 +421,7 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       <div>
                         <label className="block text-[10px] font-semibold text-[#5A6D62] dark:text-[#A3B899] mb-1">
-                          Your Name / Company *
+                          {t.rfq?.nameLabel || 'Your Name / Company *'}
                         </label>
                         <input
                           type="text"
@@ -428,7 +432,7 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                               setValidationErrors((prev) => ({ ...prev, name: undefined }));
                             }
                           }}
-                          placeholder="Trade Buyer / Company Name"
+                          placeholder={t.rfq?.namePlaceholder || 'Trade Buyer / Company Name'}
                           className={`w-full min-h-[44px] px-2.5 py-2 rounded-xl bg-[#F4EFE6] dark:bg-black/60 border text-xs text-[#11281E] placeholder:text-[#829288] dark:text-[#F9F6F0] dark:placeholder:text-[#64796E] focus:outline-none ${
                             validationErrors.name
                               ? 'border-red-500 focus:border-red-400'
@@ -444,7 +448,7 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
 
                       <div>
                         <label className="block text-[10px] font-semibold text-[#5A6D62] dark:text-[#A3B899] mb-1">
-                          WhatsApp / Phone *
+                          {t.rfq?.phoneLabel || 'WhatsApp / Phone *'}
                         </label>
                         <input
                           type="text"
@@ -455,7 +459,7 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                               setValidationErrors((prev) => ({ ...prev, phone: undefined }));
                             }
                           }}
-                          placeholder="e.g. +49 170 1234567"
+                          placeholder={t.rfq?.phonePlaceholder || 'e.g. +49 170 1234567'}
                           className={`w-full min-h-[44px] px-2.5 py-2 rounded-xl bg-[#F4EFE6] dark:bg-black/60 border text-xs text-[#11281E] placeholder:text-[#829288] dark:text-[#F9F6F0] dark:placeholder:text-[#64796E] focus:outline-none ${
                             validationErrors.phone
                               ? 'border-red-500 focus:border-red-400'
@@ -472,7 +476,7 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
 
                     <div>
                       <label className="block text-[10px] font-semibold text-[#5A6D62] dark:text-[#A3B899] mb-1">
-                        Business Address & Country *
+                        {t.rfq?.addressLabel || 'Business Address & Country *'}
                       </label>
                       <input
                         type="text"
@@ -483,7 +487,7 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                             setValidationErrors((prev) => ({ ...prev, address: undefined }));
                           }
                         }}
-                        placeholder="e.g. Speicherstadt 4, 20457 Hamburg, Germany"
+                        placeholder={t.rfq?.addressPlaceholder || 'e.g. Speicherstadt 4, 20457 Hamburg, Germany'}
                         className={`w-full min-h-[44px] px-2.5 py-2 rounded-xl bg-[#F4EFE6] dark:bg-black/60 border text-xs text-[#11281E] placeholder:text-[#829288] dark:text-[#F9F6F0] dark:placeholder:text-[#64796E] focus:outline-none ${
                           validationErrors.address
                             ? 'border-red-500 focus:border-red-400'
@@ -499,13 +503,13 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
 
                     <div>
                       <label className="block text-[10px] font-semibold text-[#5A6D62] dark:text-[#A3B899] mb-1">
-                        Packaging / Special Notes
+                        {t.rfq?.customPackagingNotes || 'Packaging / Special Notes'}
                       </label>
                       <input
                         type="text"
                         value={orderNotes}
                         onChange={(e) => setOrderNotes(e.target.value)}
-                        placeholder="e.g. 25kg vacuum bags in master cartons, COA required"
+                        placeholder={t.rfq?.notesPlaceholder || 'e.g. 25kg vacuum bags in master cartons, COA required'}
                         className="w-full min-h-[44px] px-2.5 py-2 rounded-xl bg-[#F4EFE6] dark:bg-black/60 border border-[#C87A28]/20 dark:border-white/15 text-xs text-[#11281E] placeholder:text-[#829288] dark:text-[#F9F6F0] dark:placeholder:text-[#64796E] focus:outline-none focus:border-[#C87A28]"
                       />
                     </div>
@@ -520,13 +524,13 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                 {/* Total Summary Row */}
                 <div className="flex items-center justify-between text-xs">
                   <div>
-                    <span className="text-[#5A6D62] dark:text-[#A3B899]">Total B2B Volume:</span>
+                    <span className="text-[#5A6D62] dark:text-[#A3B899]">{t.rfq?.totalVolume || 'Total B2B Volume'}:</span>
                     <div className="text-sm font-bold text-[#9E5714] dark:text-[#E59A4D] font-mono">
                       {totalEstimatedWeightDisplay}
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-[#5A6D62] dark:text-[#A3B899]">Items:</span>
+                    <span className="text-[#5A6D62] dark:text-[#A3B899]">{t.rfq?.lineItemsLabel || 'Items'}:</span>
                     <div className="text-sm font-bold text-[#11281E] dark:text-[#F9F6F0]">
                       {totalUniqueItems} Line {totalUniqueItems === 1 ? 'Item' : 'Items'}
                     </div>
@@ -540,7 +544,7 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                   className="w-full min-h-[50px] inline-flex items-center justify-center gap-2.5 py-3.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold text-sm shadow-xl shadow-[#25D366]/35 active:scale-[0.99] transition-all cursor-pointer"
                 >
                   <WhatsAppIcon className="w-5 h-5 text-white shrink-0" />
-                  <span>Send Quotation via WhatsApp</span>
+                  <span>{t.cart?.requestWhatsApp || 'Send Quotation via WhatsApp'}</span>
                 </button>
 
                 {/* Secondary Action: Copy Inquiry Text */}
@@ -553,12 +557,12 @@ export const CartPanel: React.FC<CartPanelProps> = ({ isRtl = false }) => {
                     {copied ? (
                       <>
                         <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                        <span className="text-emerald-700 dark:text-emerald-400">Quotation Copied!</span>
+                        <span className="text-emerald-700 dark:text-emerald-400">{t.rfq?.copied || 'Quotation Copied!'}</span>
                       </>
                     ) : (
                       <>
                         <Copy className="w-3.5 h-3.5 text-[#9E5714] dark:text-[#E59A4D]" />
-                        <span>Copy Inquiry Text</span>
+                        <span>{t.cart?.copyRfq || 'Copy Inquiry Text'}</span>
                       </>
                     )}
                   </button>
