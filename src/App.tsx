@@ -9,7 +9,6 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { AboutUs } from './components/AboutUs';
 import { ProductCatalog } from './components/ProductCatalog';
-import { WhyChooseUs } from './components/WhyChooseUs';
 import { WhatsAppBuilder } from './components/WhatsAppBuilder';
 import { QualitySpecs } from './components/QualitySpecs';
 import { Logistics } from './components/Logistics';
@@ -108,7 +107,6 @@ export function App() {
               isRtl={isRtl}
             />
             <QualitySpecs t={t} />
-            <WhyChooseUs t={t} currentLang={currentLang} isRtl={isRtl} />
             <Logistics t={t} currentLang={currentLang} isRtl={isRtl} />
             <Gallery t={t} isRtl={isRtl} />
             <WhatsAppBuilder
