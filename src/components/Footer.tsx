@@ -130,10 +130,10 @@ export const Footer: React.FC<FooterProps> = ({ t }) => {
                 <div>
                   <div className="text-[11px] text-[#5A6D62] dark:text-[#A3B899]">{t.footer.email}</div>
                   <a
-                    href="mailto:export@jadecinnamon.com"
+                    href="mailto:jadecinnamon9@gmail.com"
                     className="text-[#11281E] dark:text-[#F9F6F0] hover:text-[#9E5714] dark:hover:text-[#E59A4D] font-medium"
                   >
-                    export@jadecinnamon.com
+                    jadecinnamon9@gmail.com
                   </a>
                 </div>
               </div>
